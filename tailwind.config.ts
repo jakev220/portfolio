@@ -1,0 +1,50 @@
+import type { Config } from "tailwindcss";
+import { typography } from "./src/lib/tokens";
+
+/**
+ * Build Tailwind's `fontSize` scale from the token definitions so the type
+ * utilities (text-h1, text-body, ...) always match `src/lib/tokens.ts`.
+ */
+const fontSize = Object.fromEntries(
+  Object.entries(typography).map(([name, style]) => [
+    name,
+    [
+      style.size,
+      {
+        lineHeight: String(style.lineHeight),
+        letterSpacing: style.letterSpacing,
+        fontWeight: String(style.weight),
+      },
+    ],
+  ])
+) as Config["theme"] & Record<string, unknown>;
+
+const config: Config = {
+  content: ["./src/**/*.{ts,tsx,mdx}"],
+  theme: {
+    // Replace the default type scale entirely so only brief-approved sizes exist.
+    fontSize: fontSize as NonNullable<Config["theme"]>["fontSize"],
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+      },
+      colors: {
+        bg: "var(--color-bg)",
+        surface: "var(--color-surface)",
+        border: "var(--color-border)",
+        accent: "var(--color-accent)",
+        primary: "var(--color-text-primary)",
+        secondary: "var(--color-text-secondary)",
+      },
+      borderColor: {
+        DEFAULT: "var(--color-border)",
+      },
+      // Spacing: using Tailwind's default scale as a placeholder.
+      // TODO: add custom spacing values here later (extend, do not replace).
+      spacing: {},
+    },
+  },
+  plugins: [],
+};
+
+export default config;
