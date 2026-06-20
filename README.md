@@ -89,6 +89,7 @@ The guiding aesthetic — keep every component aligned to this.
 ## Design system quick reference
 
 Use these instead of raw values — the agent will too. Defined in `src/lib/tokens.ts`.
+Full reference: [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md).
 
 **Type utilities** (size · line-height · tracking · weight baked in):
 `text-caption` · `text-label` · `text-body` · `text-h3` · `text-h2` · `text-h1`
