@@ -24,19 +24,22 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] Visual direction documented (see [Visual direction](#visual-direction))
 - [x] MDX parsing utilities (`src/lib/mdx.ts`)
 - [x] MDX render pipeline — `next-mdx-remote/rsc` + `remark-gfm` + `rehype-slug` + `rehype-pretty-code` (`MDXContent.tsx` + `mdx-components.tsx`)
+- [x] `CaseStudyCard` — **stack** variant (home work section); typed `variant` prop reserved for card/inline
 - [x] Repo pushed to GitHub (SSH)
 
 **Next up (in order)**
-1. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
-2. **Build core components**, smallest first: `Container` → `Link` (underlined, `#0066CC`, trailing `↗`) → `ProjectCard` → `WorkGrid` → `CaseStudyHeader`.
-3. **Assemble pages** — home (`work` grid) and `work/[slug]` (case study, renders body via `<MDXContent>`). _(Replaces the placeholder `app/page.tsx`.)_
-4. **Add interactions** — Framer Motion on specific components, only when requested.
-5. **Deploy** — connect the GitHub repo to Vercel.
+1. **`CaseStudyCard` — `card` + `inline` variants**, then the 3-button view toggle that switches between stack/card/inline.
+2. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
+3. **Build remaining components**: `Container`, `Link` (underlined, `#0066CC`, trailing `↗`), `WorkGrid`, `CaseStudyHeader`.
+4. **Assemble pages** — home (work section) and `work/[slug]` (case study, renders body via `<MDXContent>`). _(Replaces the placeholder `app/page.tsx`.)_
+5. **Add interactions** — Framer Motion on specific components, only when requested.
+6. **Deploy** — connect the GitHub repo to Vercel.
 
 **Blocked / decisions needed**
-- Hero accent color undecided (Next-up #1); body text stays neutral regardless.
+- **MDX schema vs `CaseStudyCard` slots:** the card needs a short `name` (preheader) separate from the big `title`, plus `affiliation`. Current frontmatter has `title`, `role`, `year` — decide the field mapping (and any additions) when wiring the home page.
+- Hero accent color undecided (Next-up #2); body text stays neutral regardless.
 - Per-case-study accent: add an `accent` field to the case-study MDX frontmatter when case studies are built (used for backgrounds/visual elements only).
-- `↗` on links + internal/external handling: deferred to the `Link` component (MDX links currently get color + underline only).
+- `↗` on links + internal/external handling: deferred to the `Link` component (the `CaseStudyCard` link uses a plain anchor with color + underline + `↗` for now).
 - Per-case-study accent: add an `accent` field to the case-study MDX frontmatter when case studies are built (used for backgrounds/visual elements only).
 
 ---
