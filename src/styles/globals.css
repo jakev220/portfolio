@@ -52,7 +52,7 @@
   --color-border: #e5e5e5; /* default border — neutral-200 */
   --color-text-primary: #0a0a0a; /* headings and body — neutral-950 */
   --color-text-secondary: #737373; /* muted/helper text — neutral-500 */
-  --color-accent: #171717; /* interactive accent — neutral-900 (placeholder: Neutral has no chromatic accent) */
+  --color-accent: #0066cc; /* interactive accent — link color (underlined, Apple-HIG style). Hero/brand accent still TBD */
 }
 
 @layer base {
