@@ -23,19 +23,20 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] Neutral palette applied (shadcn "Neutral") + link/accent color set to `#0066CC`
 - [x] Visual direction documented (see [Visual direction](#visual-direction))
 - [x] MDX parsing utilities (`src/lib/mdx.ts`)
+- [x] MDX render pipeline — `next-mdx-remote/rsc` + `remark-gfm` + `rehype-slug` + `rehype-pretty-code` (`MDXContent.tsx` + `mdx-components.tsx`)
 - [x] Repo pushed to GitHub (SSH)
 
 **Next up (in order)**
 1. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
-2. **Choose the MDX render pipeline** — `mdx.ts` parses frontmatter + raw body, but the body isn't rendered yet. Pick `next-mdx-remote/rsc` (recommended) so case-study bodies render. _(Ask the agent.)_
-3. **Build core components**, smallest first: `Container` → `Prose`/type primitives → `Link` (underlined, `#0066CC`, trailing `↗`) → `ProjectCard` → `WorkGrid` → `CaseStudyHeader`.
-4. **Assemble pages** — home (`work` grid) and `work/[slug]` (case study). _(Replaces the placeholder `app/page.tsx`.)_
-5. **Add interactions** — Framer Motion on specific components, only when requested.
-6. **Deploy** — connect the GitHub repo to Vercel.
+2. **Build core components**, smallest first: `Container` → `Link` (underlined, `#0066CC`, trailing `↗`) → `ProjectCard` → `WorkGrid` → `CaseStudyHeader`.
+3. **Assemble pages** — home (`work` grid) and `work/[slug]` (case study, renders body via `<MDXContent>`). _(Replaces the placeholder `app/page.tsx`.)_
+4. **Add interactions** — Framer Motion on specific components, only when requested.
+5. **Deploy** — connect the GitHub repo to Vercel.
 
 **Blocked / decisions needed**
-- MDX render library not yet installed (see Next-up #2).
 - Hero accent color undecided (Next-up #1); body text stays neutral regardless.
+- Per-case-study accent: add an `accent` field to the case-study MDX frontmatter when case studies are built (used for backgrounds/visual elements only).
+- `↗` on links + internal/external handling: deferred to the `Link` component (MDX links currently get color + underline only).
 - Per-case-study accent: add an `accent` field to the case-study MDX frontmatter when case studies are built (used for backgrounds/visual elements only).
 
 ---
@@ -123,6 +124,14 @@ Write the case study body here in MDX/Markdown.
 
 3. Put images in `public/work/<slug>/`.
 4. `getAllWork()` auto-lists published studies sorted by `order`; no code change needed.
+
+**How the body renders:** the MDX body is rendered by `<MDXContent source={...} />`
+(`next-mdx-remote/rsc`). Every element is mapped to the design tokens in
+`src/components/mdx-components.tsx`. Supported out of the box: headings (with
+auto-generated `id`s), paragraphs, **bold**/_italic_, links, lists, blockquotes,
+GitHub-flavored tables, horizontal rules, inline code, and syntax-highlighted
+fenced code blocks (Shiki, `github-light`). Custom components (e.g. `<Figure>`,
+`<Callout>`) get registered in that same map as we build them.
 
 ---
 
