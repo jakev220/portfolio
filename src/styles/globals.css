@@ -43,15 +43,16 @@
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
   /*
-   * Color tokens. Provisional neutral placeholders — replace with final hex.
-   * Token roles are fixed by the brief; only the values below should change.
+   * Color tokens — placeholder values from the shadcn/ui "Neutral" palette
+   * (Tailwind neutral grays). Token roles are fixed by the brief; swap only
+   * the values below once the final palette is chosen.
    */
-  --color-bg: #ffffff; /* TODO: page background */
-  --color-surface: #f5f5f5; /* TODO: card/component backgrounds */
-  --color-border: #e5e5e5; /* TODO: default border */
-  --color-text-primary: #111111; /* TODO: headings and body */
-  --color-text-secondary: #6b6b6b; /* TODO: muted/helper text */
-  --color-accent: #2563eb; /* TODO: single interactive accent color */
+  --color-bg: #ffffff; /* page background — neutral / white */
+  --color-surface: #f5f5f5; /* card/component backgrounds — neutral-100 */
+  --color-border: #e5e5e5; /* default border — neutral-200 */
+  --color-text-primary: #0a0a0a; /* headings and body — neutral-950 */
+  --color-text-secondary: #737373; /* muted/helper text — neutral-500 */
+  --color-accent: #171717; /* interactive accent — neutral-900 (placeholder: Neutral has no chromatic accent) */
 }
 
 @layer base {

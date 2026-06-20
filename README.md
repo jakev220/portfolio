@@ -19,19 +19,22 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] Project scaffold (Next.js 16, Tailwind v3, Framer Motion, TypeScript)
 - [x] Design tokens (`src/lib/tokens.ts`) + Tailwind mapping
 - [x] `globals.css` with color CSS vars + `@font-face`
+- [x] Neue Montreal `.woff2` files added & wired (Regular/Italic/Bold/BoldItalic)
+- [x] Provisional colors applied — shadcn "Neutral" palette
 - [x] MDX parsing utilities (`src/lib/mdx.ts`)
+- [x] Repo pushed to GitHub (SSH)
 
 **Next up (in order)**
-1. **Fill in brand values** — real hex in `src/styles/globals.css` (6 vars) + drop Neue Montreal `.woff2` files in `public/fonts/`. _(You — no agent needed.)_
+1. **Finalize the color palette** — currently the shadcn "Neutral" placeholder in `src/styles/globals.css` (6 vars). Pick final values, especially a real `--color-accent` (Neutral has no chromatic accent). _(You — no agent needed.)_
 2. **Choose the MDX render pipeline** — `mdx.ts` parses frontmatter + raw body, but the body isn't rendered yet. Pick `next-mdx-remote/rsc` (recommended) so case-study bodies render. _(Ask the agent.)_
 3. **Build core components**, smallest first: `Container` → `Prose`/type primitives → `ProjectCard` → `WorkGrid` → `CaseStudyHeader`.
 4. **Assemble pages** — home (`work` grid) and `work/[slug]` (case study). _(Replaces the placeholder `app/page.tsx`.)_
 5. **Add interactions** — Framer Motion on specific components, only when requested.
-6. **Deploy** — push to GitHub, connect to Vercel.
+6. **Deploy** — connect the GitHub repo to Vercel.
 
 **Blocked / decisions needed**
 - MDX render library not yet installed (see Next-up #2).
-- Color + font values are provisional placeholders (see Next-up #1).
+- Color palette not finalized — using shadcn "Neutral" as a placeholder, accent is a stand-in (see Next-up #1).
 
 ---
 
