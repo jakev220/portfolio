@@ -23,7 +23,7 @@ export default function CaseStudyPreviewPage() {
 
   const fm = work as unknown as CardFrontmatter;
 
-  const card = (variant: CaseStudyCardVariant) => (
+  const card = (variant: CaseStudyCardVariant, disabled = false) => (
     <CaseStudyCard
       name={fm.name}
       affiliation={fm.affiliation}
@@ -35,6 +35,7 @@ export default function CaseStudyPreviewPage() {
       coverImage={fm.coverImage || undefined}
       coverAlt={fm.title}
       variant={variant}
+      disabled={disabled}
     />
   );
 
@@ -56,6 +57,18 @@ export default function CaseStudyPreviewPage() {
             {card("card")}
             {card("card")}
             {card("card")}
+          </WorkGrid>
+        </section>
+
+        <section>
+          <p className="text-label text-secondary mb-6">
+            In-line (hover a row on desktop; last row disabled)
+          </p>
+          <WorkGrid variant="inline">
+            {card("inline")}
+            {card("inline")}
+            {card("inline")}
+            {card("inline", true)}
           </WorkGrid>
         </section>
       </div>

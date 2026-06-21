@@ -11,11 +11,9 @@ export interface WorkGridProps {
 /**
  * Lays out the home-page work section. The arrangement depends on the active
  * view state (set by the future view toggle):
- * - `stack`  → single column, full-width rows.
- * - `card`   → 2-column grid on large screens.
- *
- * Both use 64px gaps on large screens, scaling down on smaller viewports.
- * `inline` falls back to the single-column layout until implemented.
+ * - `stack`  → single column, full-width rows, 64px gaps (responsive).
+ * - `card`   → 2-column grid on large screens, 64px gaps (responsive).
+ * - `inline` → single column list rows, 32px gaps (responsive).
  */
 export function WorkGrid({ variant = "stack", children }: WorkGridProps) {
   if (variant === "card") {
@@ -24,6 +22,10 @@ export function WorkGrid({ variant = "stack", children }: WorkGridProps) {
         {children}
       </div>
     );
+  }
+
+  if (variant === "inline") {
+    return <div className="flex flex-col gap-6 md:gap-8">{children}</div>;
   }
 
   return <div className="flex flex-col gap-12 lg:gap-16">{children}</div>;

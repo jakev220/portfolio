@@ -24,14 +24,18 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] Visual direction documented (see [Visual direction](#visual-direction))
 - [x] MDX parsing utilities (`src/lib/mdx.ts`)
 - [x] MDX render pipeline — `next-mdx-remote/rsc` + `remark-gfm` + `rehype-slug` + `rehype-pretty-code` (`MDXContent.tsx` + `mdx-components.tsx`)
-- [x] `CaseStudyCard` — **stack** + **card** variants (home work section); typed `variant` prop, `inline` pending
-- [x] `WorkGrid` — arranges cards per variant (stack = 1-col, card = 2-col), 64px gaps responsive
+- [x] `CaseStudyCard` — **stack** + **card** + **inline** variants (home work section)
+- [x] `CaseStudyCardInline` — desktop cursor-following media preview (Framer Motion, portal, hover-capable devices only)
+- [x] `WorkGrid` — arranges cards per variant (stack = 1-col, card = 2-col, inline = 1-col list), responsive gaps
 - [x] Repo pushed to GitHub (SSH)
 
 **Next up (in order)**
-1. **`CaseStudyCard` — `inline` variant**, then the 3-button view toggle that switches between stack/card/inline.
+1. **3-button view toggle** — client control that switches the work section between stack/card/inline (drives both the cards and `WorkGrid`).
 2. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
 3. **Build remaining components**: `Container`, `Link` (underlined, `#0066CC`, trailing `↗`), `CaseStudyHeader`.
+
+**Optional / parked**
+- **In-line mobile "press" preview** — feasible via pointer/touch events but competes with tap-to-navigate + scroll; deferred per discussion. Ask to add it.
 4. **Assemble pages** — home (work section) and `work/[slug]` (case study, renders body via `<MDXContent>`). _(Replaces the placeholder `app/page.tsx`.)_
 5. **Add interactions** — Framer Motion on specific components, only when requested.
 6. **Deploy** — connect the GitHub repo to Vercel.

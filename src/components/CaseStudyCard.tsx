@@ -1,6 +1,7 @@
 import Image from "next/image";
+import { CaseStudyCardInline } from "@/components/CaseStudyCardInline";
 
-/** View states for the home-page work section. `inline` is not implemented yet. */
+/** View states for the home-page work section. */
 export type CaseStudyCardVariant = "stack" | "card" | "inline";
 
 export interface CaseStudyCardProps {
@@ -24,6 +25,8 @@ export interface CaseStudyCardProps {
   coverAlt?: string;
   /** Layout state. Defaults to `stack`. */
   variant?: CaseStudyCardVariant;
+  /** Renders a non-interactive, muted card (used by the `inline` variant). */
+  disabled?: boolean;
 }
 
 export function CaseStudyCard({
@@ -37,7 +40,24 @@ export function CaseStudyCard({
   coverImage,
   coverAlt,
   variant = "stack",
+  disabled = false,
 }: CaseStudyCardProps) {
+  // inline: minimalist list row (the whole row is the link) with hover / pressed
+  // / disabled states and a desktop cursor-following media preview. Uses only
+  // title / year / cover (no preheader, affiliation, description, or link label).
+  if (variant === "inline") {
+    return (
+      <CaseStudyCardInline
+        title={title}
+        year={year}
+        href={href}
+        coverImage={coverImage}
+        coverAlt={coverAlt}
+        disabled={disabled}
+      />
+    );
+  }
+
   // Shared content block (identical across variants): preheader, title,
   // description, then the link. Gaps match the Figma (24 / 16 / 8).
   const content = (
@@ -104,7 +124,7 @@ export function CaseStudyCard({
   }
 
   // stack (default): content (~1/3) beside media (~2/3) on large screens,
-  // stacked on small screens. `inline` falls back here until implemented.
+  // stacked on small screens.
   return (
     <article className="grid grid-cols-1 gap-4 lg:grid-cols-3">
       <div className="lg:col-span-1">{content}</div>
