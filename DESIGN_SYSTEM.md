@@ -10,8 +10,8 @@ truth lives in code:
 > Rule: don't introduce a font size, line-height, or color outside this system. If
 > something is missing, add it to `tokens.ts` / `globals.css` first, then use it.
 
-_Status: foundation. Colors are a provisional placeholder (shadcn "Neutral"); hero
-accent and a custom spacing scale are not yet decided._
+_Status: foundation. Colors are provisional placeholders (shadcn "Neutral", light +
+dark); hero accent and a custom spacing scale are not yet decided._
 
 ---
 
@@ -54,8 +54,34 @@ is a CSS variable in `globals.css`, surfaced as Tailwind utilities.
 | text-secondary | `--color-text-secondary` | `#737373` | `text-secondary` | Muted / helper text (neutral-500) |
 | accent | `--color-accent` | `#0066CC` | `text-accent`, `bg-accent` | Interactive accent / link color |
 
+### Theming (light / dark)
+
+Because every color is a token (CSS variable), the site themes by **overriding the token
+values**, not by adding per-component `dark:` styles. Dark values live under a `.dark`
+selector in `globals.css`; the same Tailwind utilities (`bg-bg`, `text-primary`, …)
+resolve to the dark values whenever `.dark` is present on `<html>`.
+
+| Token | Light | Dark |
+|-------|-------|------|
+| bg | `#ffffff` | `#0a0a0a` (neutral-950) |
+| surface | `#f5f5f5` | `#171717` (neutral-900) |
+| border | `#e5e5e5` | `#262626` (neutral-800) |
+| text-primary | `#0a0a0a` | `#fafafa` (neutral-50) |
+| text-secondary | `#737373` | `#a3a3a3` (neutral-400) |
+| accent | `#0066CC` | `#4c9fff` (lighter for contrast on dark) |
+
+**How the theme is applied:**
+- `ThemeToggle` (in the nav) toggles the `.dark` class on `<html>` and persists the
+  choice to `localStorage`.
+- A tiny inline script in `app/layout.tsx` sets the class **before first paint** (reads
+  `localStorage`, falls back to `prefers-color-scheme`) to avoid a flash of the wrong theme.
+- `color-scheme` is set per theme so native form controls / scrollbars match.
+- For one-off translucency over a theme color, use `color-mix(in srgb, var(--color-…) N%,
+  transparent)` (Tailwind's `/opacity` modifier doesn't work on these var-based colors).
+
 **Open color decisions:**
 - **Hero accent** — not yet chosen.
+- **Dark palette values** — provisional placeholders; finalize alongside the light palette.
 - **Per-case-study accent** — each case study will carry its own theme color (planned
   `accent` frontmatter field), used for backgrounds / visual elements only. Body text
   stays neutral everywhere.

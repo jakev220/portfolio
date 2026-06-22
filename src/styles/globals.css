@@ -53,6 +53,25 @@
   --color-text-primary: #0a0a0a; /* headings and body — neutral-950 */
   --color-text-secondary: #737373; /* muted/helper text — neutral-500 */
   --color-accent: #0066cc; /* interactive accent — link color (underlined, Apple-HIG style). Hero/brand accent still TBD */
+
+  color-scheme: light;
+}
+
+/*
+ * Dark theme — same token roles, dark values (shadcn/ui "Neutral" dark palette).
+ * Activated by the `dark` class on <html> (toggled by ThemeToggle). All
+ * components read the tokens via CSS vars, so they adapt automatically.
+ * NOTE: preview values — finalize alongside the light palette.
+ */
+.dark {
+  --color-bg: #0a0a0a; /* neutral-950 */
+  --color-surface: #171717; /* neutral-900 */
+  --color-border: #262626; /* neutral-800 */
+  --color-text-primary: #fafafa; /* neutral-50 */
+  --color-text-secondary: #a3a3a3; /* neutral-400 */
+  --color-accent: #4c9fff; /* lighter link blue for contrast on dark bg */
+
+  color-scheme: dark;
 }
 
 @layer base {
@@ -66,6 +85,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 

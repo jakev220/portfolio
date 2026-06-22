@@ -13,7 +13,7 @@ This README is the **operating manual** for building the site with the AI agent.
 
 > The agent keeps this section updated after every work session. Read this first.
 
-**Phase: Foundation complete → building components.**
+**Phase: Home page assembled (hero · work · footer · nav · theme) → building case-study pages.**
 
 **Done**
 - [x] Project scaffold (Next.js 16, Tailwind v3, Framer Motion, TypeScript)
@@ -28,28 +28,31 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] `CaseStudyCardInline` — desktop cursor-following media preview (Framer Motion, portal, hover-capable devices only)
 - [x] `WorkGrid` — arranges cards per variant (stack = 1-col, card = 2-col, inline = 1-col list), responsive gaps
 - [x] `WorkViewToggle` — 3 ghost icon buttons (44px, 16px gap); selected = round grey border
-- [x] `Icon` — single `<Icon name>` primitive (path registry, `currentColor`, size/className props)
-- [x] `Hero` — home hero: `text-h2` headline (name/role primary, connector + tagline secondary), avatar + folder **placeholders**, subhero accent links; rendered on `/`
+- [x] `Icon` — single `<Icon name>` primitive (path registry, `currentColor`, size/className props); supports fill **and** stroke icons
+- [x] `Hero` — home hero with interactive avatar (hover-cycles images) + macOS folder; subhero accent links (external get `↗` + new tab via `src/lib/links.ts`)
+- [x] `WorkSection` — home work section: `WorkViewToggle` + `WorkGrid` with 4 preview case studies
+- [x] `Footer` — 3-part (contact links, "explore" media card, meta row) + `FooterClock` (live Pacific time, sun/moon icon)
+- [x] `Nav` — Work/Play/About + theme toggle, right-aligned to the content grid; **auto-hide on scroll-down, reveal on scroll-up / cursor-to-top / keyboard focus**; frosted rounded reveal box (optically outset to align to grid)
+- [x] **Dark mode** — `ThemeToggle` toggles `.dark` on `<html>`; theme-aware token overrides in `globals.css`; persisted to `localStorage` + respects system preference; no-FOUC init script in `layout.tsx`
 - [x] Repo pushed to GitHub (SSH)
 
 **Next up (in order)**
-1. **Hero micro-interactions** — the avatar and macOS folder reveal (will make `Hero` a client component). _(Next.)_
-2. **Hero content** — real link URLs (currently `#`) and a profile photo (`avatarSrc`). _(You.)_
-3. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
-4. **Build remaining components**: `Container`, `Link` (underlined, `#0066CC`, trailing `↗`), `CaseStudyHeader`.
-
-**Optional / parked**
-- **In-line mobile "press" preview** — feasible via pointer/touch events but competes with tap-to-navigate + scroll; deferred per discussion. Ask to add it.
-4. **Assemble pages** — home (work section) and `work/[slug]` (case study, renders body via `<MDXContent>`). _(Replaces the placeholder `app/page.tsx`.)_
+1. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
+2. **Finalize palettes** — dark-mode values are preview placeholders; lock light + dark together once the accent is set. _(You.)_
+3. **Build remaining components**: `Container`, `Link` (underlined, `#0066CC`, trailing `↗` — generalize `src/lib/links.ts`), `CaseStudyHeader`.
+4. **Assemble pages** — `work/[slug]` (case study, renders body via `<MDXContent>`) and retire the temporary preview content.
 5. **Add interactions** — Framer Motion on specific components, only when requested.
 6. **Deploy** — connect the GitHub repo to Vercel.
 
+**Optional / parked**
+- **In-line mobile "press" preview** — feasible via pointer/touch events but competes with tap-to-navigate + scroll; deferred per discussion. Ask to add it.
+
 **Blocked / decisions needed**
-- **MDX schema vs `CaseStudyCard` slots:** the card needs a short `name` (preheader) separate from the big `title`, plus `affiliation`. Current frontmatter has `title`, `role`, `year` — decide the field mapping (and any additions) when wiring the home page.
-- Hero accent color undecided (Next-up #2); body text stays neutral regardless.
+- **MDX schema vs `CaseStudyCard` slots:** the card needs a short `name` (preheader) separate from the big `title`, plus `affiliation`. Current frontmatter has `title`, `role`, `year` — decide the field mapping (and any additions) when wiring real case studies.
+- Hero accent color undecided (Next-up #1); body text stays neutral regardless.
+- Dark palette values are preview placeholders (shadcn Neutral dark + a lighter `#4c9fff` link blue) — finalize with the light palette.
 - Per-case-study accent: add an `accent` field to the case-study MDX frontmatter when case studies are built (used for backgrounds/visual elements only).
-- `↗` on links + internal/external handling: deferred to the `Link` component (the `CaseStudyCard` link uses a plain anchor with color + underline + `↗` for now).
-- Per-case-study accent: add an `accent` field to the case-study MDX frontmatter when case studies are built (used for backgrounds/visual elements only).
+- `↗` on links + internal/external handling currently lives in `src/lib/links.ts`; fold into a dedicated `Link` component when built.
 
 ---
 
@@ -73,12 +76,15 @@ Other scripts: `npm run build` · `npm run start` · `npm run lint` · `npm run 
 src/
   app/                 # routes (layout.tsx, page.tsx, work/[slug]/page.tsx)
   components/          # one component per file, PascalCase
-  content/work/        # one .mdx per case study
+  content/             # data for sections (hero.ts, nav.ts, footer.ts, work-preview.ts)
+    work/              # one .mdx per case study
   lib/
     tokens.ts          # design tokens — single source of truth
     mdx.ts             # frontmatter parsing + work listing
-  styles/globals.css   # color vars, @font-face, base styles
+    links.ts           # internal/external link detection (↗ + new-tab rules)
+  styles/globals.css   # color vars (light + .dark), @font-face, base styles
 public/fonts/          # Neue Montreal .woff2 files
+public/icons/          # standalone SVGs (e.g. mode.svg for the theme toggle)
 tailwind.config.ts     # type scale generated FROM tokens.ts
 ```
 
@@ -97,6 +103,9 @@ The guiding aesthetic — keep every component aligned to this.
   This lives in the case study's MDX frontmatter (planned `accent` field), not in the
   global tokens.
 - **Hero accent:** still TBD — not set yet.
+- **Light & dark mode:** every color is a token, so the site themes by swapping token
+  values under `.dark` on `<html>` (no per-component dark styles). Toggled via the nav's
+  `ThemeToggle`; dark values are provisional placeholders (see `DESIGN_SYSTEM.md`).
 
 ## Design system quick reference
 
