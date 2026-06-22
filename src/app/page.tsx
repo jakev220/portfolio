@@ -1,6 +1,12 @@
+import { Hero } from "@/components/Hero";
+import { hero } from "@/content/hero";
+
 export default function HomePage() {
-  // TODO: replace this placeholder with the composed home page once
-  // components are built. Intentionally empty per the build-at-component-level
-  // workflow — no designed layout or hardcoded content yet.
-  return <main />;
+  // Top padding (pt-64 ≈ 258px) is a Tailwind-default placeholder for the
+  // hero's offset from the top of the page; refine with custom spacing later.
+  return (
+    <main className="mx-auto max-w-7xl px-6 pt-64">
+      <Hero {...hero} />
+    </main>
+  );
 }

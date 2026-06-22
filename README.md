@@ -27,13 +27,16 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] `CaseStudyCard` — **stack** + **card** + **inline** variants (home work section)
 - [x] `CaseStudyCardInline` — desktop cursor-following media preview (Framer Motion, portal, hover-capable devices only)
 - [x] `WorkGrid` — arranges cards per variant (stack = 1-col, card = 2-col, inline = 1-col list), responsive gaps
-- [x] `WorkViewToggle` — 3 ghost icon buttons (44px, 16px gap); selected = round grey border; **placeholder icons** pending real SVGs
+- [x] `WorkViewToggle` — 3 ghost icon buttons (44px, 16px gap); selected = round grey border
+- [x] `Icon` — single `<Icon name>` primitive (path registry, `currentColor`, size/className props)
+- [x] `Hero` — home hero: `text-h2` headline (name/role primary, connector + tagline secondary), avatar + folder **placeholders**, subhero accent links; rendered on `/`
 - [x] Repo pushed to GitHub (SSH)
 
 **Next up (in order)**
-1. **Swap placeholder toggle icons** for the real uploaded SVGs (only the icon block in `WorkViewToggle.tsx` changes). _(You: provide SVGs.)_
-2. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
-3. **Build remaining components**: `Container`, `Link` (underlined, `#0066CC`, trailing `↗`), `CaseStudyHeader`.
+1. **Hero micro-interactions** — the avatar and macOS folder reveal (will make `Hero` a client component). _(Next.)_
+2. **Hero content** — real link URLs (currently `#`) and a profile photo (`avatarSrc`). _(You.)_
+3. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
+4. **Build remaining components**: `Container`, `Link` (underlined, `#0066CC`, trailing `↗`), `CaseStudyHeader`.
 
 **Optional / parked**
 - **In-line mobile "press" preview** — feasible via pointer/touch events but competes with tap-to-navigate + scroll; deferred per discussion. Ask to add it.
