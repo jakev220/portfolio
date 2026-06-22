@@ -90,10 +90,10 @@ export function CaseStudyCard({
         <a
           href={href}
           {...externalLinkProps(href)}
-          className="inline-flex items-center gap-1 text-body text-accent underline underline-offset-2 transition-opacity hover:opacity-70"
+          className="text-body text-accent underline underline-offset-2 transition-opacity hover:opacity-70"
         >
           {linkLabel}
-          {isExternalHref(href) && <span aria-hidden>↗</span>}
+          {isExternalHref(href) && <span aria-hidden> ↗</span>}
         </a>
       </div>
     </div>

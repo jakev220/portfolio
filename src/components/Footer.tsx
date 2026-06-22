@@ -37,10 +37,10 @@ function FooterLinkItem({ label, href }: FooterLink) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1 text-body text-accent underline underline-offset-2 transition-opacity hover:opacity-70"
+      className="text-body text-accent underline underline-offset-2 transition-opacity hover:opacity-70"
     >
       {label}
-      <span aria-hidden>↗</span>
+      <span aria-hidden> ↗</span>
     </a>
   );
 }
