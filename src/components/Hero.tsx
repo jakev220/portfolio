@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { HeroAvatar, type AvatarImage } from "@/components/HeroAvatar";
 import { HeroFolder } from "@/components/HeroFolder";
 
 export interface HeroLink {
@@ -30,27 +30,13 @@ export interface HeroProps {
   current: HeroSubItem;
   /** "Previously …" line. */
   previous: HeroSubItem;
-  /** Optional avatar image; falls back to a neutral placeholder. */
-  avatarSrc?: string;
-  /** Alt text for the avatar. */
-  avatarAlt?: string;
+  /** Avatar cycle frames; first is the resting image. Empty → placeholder. */
+  avatarImages?: AvatarImage[];
 }
 
-/** Avatar slot — 40px circle. Placeholder surface until a photo is provided. */
-function HeroAvatar({ src, alt }: { src?: string; alt?: string }) {
-  return (
-    <span className="inline-flex h-10 w-10 shrink-0 overflow-hidden rounded-full bg-surface align-middle">
-      {src ? (
-        <Image
-          src={src}
-          alt={alt ?? ""}
-          width={40}
-          height={40}
-          className="h-full w-full object-cover"
-        />
-      ) : null}
-    </span>
-  );
+/** External links (other sites) get a trailing ↗ and open in a new tab. */
+function isExternalHref(href: string) {
+  return /^https?:\/\//i.test(href);
 }
 
 /**
@@ -58,15 +44,17 @@ function HeroAvatar({ src, alt }: { src?: string; alt?: string }) {
  * the case-study cards and will be replaced by the shared Link component later.
  */
 function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
+  const external = isExternalHref(link.href);
   return (
     <p>
       {prefix}{" "}
       <a
         href={link.href}
+        {...(external && { target: "_blank", rel: "noopener noreferrer" })}
         className="text-accent underline underline-offset-2 transition-opacity hover:opacity-70"
       >
         {link.label}
-        <span aria-hidden> ↗</span>
+        {external && <span aria-hidden> ↗</span>}
       </a>
       {suffix}
     </p>
@@ -84,16 +72,14 @@ export function Hero({
   tagline,
   current,
   previous,
-  avatarSrc,
-  avatarAlt,
+  avatarImages,
 }: HeroProps) {
   return (
     <section className="flex flex-col gap-4 pt-16">
       {/* hero text — semantic h1, visually text-h2 */}
       <h1 className="text-h2">
         <span className="flex flex-wrap items-center gap-x-[7px] gap-y-1">
-          <span className="text-primary">{name}</span>
-          <HeroAvatar src={avatarSrc} alt={avatarAlt} />
+          <HeroAvatar name={name} images={avatarImages} />
           <span className="text-secondary">{lead}</span>
           <HeroFolder role={role} />
         </span>

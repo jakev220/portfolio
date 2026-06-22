@@ -51,7 +51,7 @@ const DEFAULT_ICONS: [HeroFolderIcon, HeroFolderIcon, HeroFolderIcon] = [
 const REST_PEEK_Y = -2;
 const SLOTS = [
   { rest: { x: -7, y: REST_PEEK_Y }, hover: { x: -44, y: -38, rotate: -15 } }, // figma (left)
-  { rest: { x: 0, y: REST_PEEK_Y }, hover: { x: 0, y: -39, rotate: 0 } }, // claude (center)
+  { rest: { x: 0, y: REST_PEEK_Y }, hover: { x: 0, y: -43, rotate: 0 } }, // claude (center, slightly higher)
   { rest: { x: 7, y: REST_PEEK_Y }, hover: { x: 44, y: -38, rotate: 15 } }, // cursor (right)
 ] as const;
 
