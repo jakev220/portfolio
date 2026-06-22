@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { CaseStudyCardInline } from "@/components/CaseStudyCardInline";
+import { externalLinkProps, isExternalHref } from "@/lib/links";
 
 /** View states for the home-page work section. */
 export type CaseStudyCardVariant = "stack" | "card" | "inline";
@@ -75,22 +76,24 @@ export function CaseStudyCard({
           <span className={affiliation ? "" : "ml-auto"}>{year}</span>
         </div>
 
-        {/* title — visual h2, semantic h3 (subordinate to the work section heading) */}
-        <h3 className="text-h2 text-primary">{title}</h3>
+        {/* title — text-h3 (subordinate to the hero's text-h2) */}
+        <h3 className="text-h3 text-primary">{title}</h3>
 
         {/* description */}
         <p className="text-body text-primary">{description}</p>
       </div>
 
       {/* link container — plain anchor for now; the Link component will add
-          next/link + internal/external handling and own the trailing glyph. */}
+          next/link + internal/external handling and own the trailing glyph.
+          The ↗ + new tab apply only to external (off-site) links. */}
       <div className="flex gap-6">
         <a
           href={href}
+          {...externalLinkProps(href)}
           className="inline-flex items-center gap-1 text-body text-accent underline underline-offset-2 transition-opacity hover:opacity-70"
         >
           {linkLabel}
-          <span aria-hidden>↗</span>
+          {isExternalHref(href) && <span aria-hidden>↗</span>}
         </a>
       </div>
     </div>
@@ -126,7 +129,7 @@ export function CaseStudyCard({
   // stack (default): content (~1/3) beside media (~2/3) on large screens,
   // stacked on small screens.
   return (
-    <article className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+    <article className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-x-8">
       <div className="lg:col-span-1">{content}</div>
       <div className="lg:col-span-2">
         {renderMedia("aspect-[842/540]", "(min-width: 1024px) 66vw, 100vw")}
