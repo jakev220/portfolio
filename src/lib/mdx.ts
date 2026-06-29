@@ -10,12 +10,19 @@ export const WORK_DIR = path.join(process.cwd(), "src", "content", "work");
  * in the design brief — keep these in sync.
  */
 export interface WorkFrontmatter {
+  /** Long descriptive headline — the case-study page subtitle. */
   title: string;
+  /** Project / product name — the case-study page's large heading (e.g. "ScienceJury"). */
+  name: string;
+  /** Org or context line (e.g. "ProtoLab | UC San Diego Design Lab"). Card preheader. */
+  affiliation: string;
+  /** Short results summary — used by cards + page meta description, not the header. */
   description: string;
   year: string;
-  role: string;
   tags: string[];
   coverImage: string;
+  /** Card/link label (e.g. "Read case study"). */
+  linkLabel: string;
   /** Controls sort order on the home page (ascending). */
   order: number;
   published: boolean;
@@ -34,11 +41,13 @@ export interface Work extends WorkMeta {
 
 const DEFAULT_FRONTMATTER: WorkFrontmatter = {
   title: "",
+  name: "",
+  affiliation: "",
   description: "",
   year: "",
-  role: "",
   tags: [],
   coverImage: "",
+  linkLabel: "",
   order: 0,
   published: false,
 };

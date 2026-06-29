@@ -25,7 +25,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="font-sans text-body text-primary bg-bg">
+      <body className="font-sans text-body bg-bg">
         <div className="relative">
           <Nav items={navItems} />
           {children}

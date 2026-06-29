@@ -32,8 +32,13 @@ const config: Config = {
         bg: "var(--color-bg)",
         surface: "var(--color-surface)",
         border: "var(--color-border)",
+        divider: "var(--color-divider)",
         accent: "var(--color-accent)",
         primary: "var(--color-text-primary)",
+        // `heading` = h2/h3 section headers. NOTE: no `body` color token — it
+        // would collide with the `text-body` font-size utility, so body text
+        // simply inherits the base color (--color-text-body) set in globals.css.
+        heading: "var(--color-text-heading)",
         secondary: "var(--color-text-secondary)",
       },
       borderColor: {

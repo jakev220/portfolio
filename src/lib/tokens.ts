@@ -82,7 +82,10 @@ export const colorVar = {
   bg: "var(--color-bg)",
   surface: "var(--color-surface)",
   border: "var(--color-border)",
+  divider: "var(--color-divider)",
   textPrimary: "var(--color-text-primary)",
+  textHeading: "var(--color-text-heading)",
+  textBody: "var(--color-text-body)",
   textSecondary: "var(--color-text-secondary)",
   accent: "var(--color-accent)",
 } as const;

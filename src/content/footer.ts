@@ -30,7 +30,7 @@ export const footer: FooterProps = {
   },
   meta: {
     copyright: "© Jake Villaseñor 2026.",
-    built: "Built with Figma, Cursor, and many iced lemon black teas.",
+    built: "Built with Figma, Cursor, and iced lemon black teas.",
     location: "San Diego, CA",
   },
 };

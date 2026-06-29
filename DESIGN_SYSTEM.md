@@ -45,14 +45,27 @@ letter-spacing · weight are all baked into the utility.
 Provisional palette from **shadcn/ui "Neutral"** (the Tailwind neutral grays). Each token
 is a CSS variable in `globals.css`, surfaced as Tailwind utilities.
 
+The text scale is a **five-step neutral ramp** mapped from the Figma `black-N` shades
+(darkest → lightest): primary (`black-100`) → heading (`black-82`) → body (`black-60`) →
+secondary (`black-40`) → divider (`black-20`).
+
 | Token | CSS variable | Value | Utilities | Role |
 |-------|--------------|-------|-----------|------|
 | bg | `--color-bg` | `#ffffff` | `bg-bg` | Page background |
 | surface | `--color-surface` | `#f5f5f5` | `bg-surface` | Card / component backgrounds (neutral-100) |
-| border | `--color-border` | `#e5e5e5` | `border`, `border-border` | Default border (neutral-200) |
-| text-primary | `--color-text-primary` | `#0a0a0a` | `text-primary` | Headings & body (neutral-950) |
-| text-secondary | `--color-text-secondary` | `#737373` | `text-secondary` | Muted / helper text (neutral-500) |
+| border | `--color-border` | `#e5e5e5` | `border`, `border-border` | Component strokes (neutral-200) |
+| divider | `--color-divider` | `#d4d4d4` | `border-divider` | Content dividers, `black-20` (neutral-300) |
+| text-primary | `--color-text-primary` | `#0a0a0a` | `text-primary` | `h1` / strong / emphasis, `black-100` (neutral-950) |
+| text-heading | `--color-text-heading` | `#262626` | `text-heading` | `h2` / `h3` section headers, `black-82` (neutral-800) |
+| text-body | `--color-text-body` | `#404040` | _(inherited base — see note)_ | Body / default text, `black-60` (neutral-700) |
+| text-secondary | `--color-text-secondary` | `#737373` | `text-secondary` | Labels / captions / pre-headers, `black-40` (neutral-500) |
 | accent | `--color-accent` | `#0066CC` | `text-accent`, `bg-accent` | Interactive accent / link color |
+
+> **No `text-body` color utility.** A color named `body` would collide with the
+> `text-body` **font-size** utility, so body text has no color class — it inherits the
+> base `color: var(--color-text-body)` set on `body` in `globals.css`. Headings, labels,
+> and emphasis opt _up/down_ from there with `text-primary` / `text-heading` /
+> `text-secondary`.
 
 ### Theming (light / dark)
 
@@ -66,7 +79,10 @@ resolve to the dark values whenever `.dark` is present on `<html>`.
 | bg | `#ffffff` | `#0a0a0a` (neutral-950) |
 | surface | `#f5f5f5` | `#171717` (neutral-900) |
 | border | `#e5e5e5` | `#262626` (neutral-800) |
+| divider | `#d4d4d4` (neutral-300) | `#404040` (neutral-700) |
 | text-primary | `#0a0a0a` | `#fafafa` (neutral-50) |
+| text-heading | `#262626` (neutral-800) | `#e5e5e5` (neutral-200) |
+| text-body | `#404040` (neutral-700) | `#d4d4d4` (neutral-300) |
 | text-secondary | `#737373` | `#a3a3a3` (neutral-400) |
 | accent | `#0066CC` | `#4c9fff` (lighter for contrast on dark) |
 
@@ -129,17 +145,26 @@ element mapped to the tokens above in `src/components/mdx-components.tsx`.
 
 | Element | Styling |
 |---------|---------|
-| `h1` / `h2` / `h3` | `text-h1` / `text-h2` / `text-h3`, `text-primary`, auto `id` (rehype-slug) |
-| `p` | `text-body text-primary` |
+| `h1` | `text-h1`, `text-primary`, auto `id` (rehype-slug) |
+| `h2` / `h3` | `text-h2` / `text-h3`, `text-heading`, auto `id` (rehype-slug) |
+| `p` | `text-body` (inherits body color) |
 | `a` | `text-accent` + underline |
-| `ul` / `ol` / `li` | `text-body text-primary`, default list markers |
-| `blockquote` | `text-secondary`, left border (`border` token), italic |
-| `strong` / `em` | weight 700 / italic |
-| `hr` | `border` token |
+| `ul` / `ol` / `li` | `text-body`, default list markers |
+| `blockquote` | `text-secondary`, left border (`divider` token), italic |
+| `strong` / `em` | weight 700 + `text-primary` / italic |
+| `hr` | `divider` token |
 | `img` | full-width, rounded _(upgrade to `<Figure>` planned)_ |
 | inline `code` | `surface` background, rounded (scoped in `globals.css`) |
 | fenced code | syntax-highlighted via `rehype-pretty-code` + Shiki (`github-light`) |
 | tables | GitHub-flavored (`remark-gfm`) |
+
+### Case-study section components (used as JSX in MDX bodies)
+
+| Component | Purpose |
+|-----------|---------|
+| `<CaseStudyHeader>` | Frontmatter-driven: `<hgroup>` (name `h1` + descriptive subtitle), cover media, divider. |
+| `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via `details` prop; brief as MDX prose. |
+| `<SplitSection>` | Two-column section: a left heading (capped at ~half the 400px column) beside body prose. |
 
 ---
 

@@ -77,10 +77,10 @@ export function CaseStudyCard({
         </div>
 
         {/* title — text-h3 (subordinate to the hero's text-h2) */}
-        <h3 className="text-h3 text-primary">{title}</h3>
+        <h3 className="text-h3 text-heading">{title}</h3>
 
         {/* description */}
-        <p className="text-body text-primary">{description}</p>
+        <p className="text-body">{description}</p>
       </div>
 
       {/* link container — plain anchor for now; the Link component will add

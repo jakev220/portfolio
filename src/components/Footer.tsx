@@ -60,7 +60,7 @@ export function Footer({ message, links, explore, meta }: FooterProps) {
         {/* connect */}
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-4">
-            <h2 className="text-h2 text-primary">{message.heading}</h2>
+            <h2 className="text-h2 text-heading">{message.heading}</h2>
             <p className="text-body text-secondary">{message.body}</p>
           </div>
           <nav aria-label="Contact" className="flex flex-col items-start gap-2">
@@ -72,7 +72,7 @@ export function Footer({ message, links, explore, meta }: FooterProps) {
 
         {/* explore */}
         <div className="flex flex-col gap-4 md:col-span-2">
-          <h2 className="text-h2 text-primary">{explore.heading}</h2>
+          <h2 className="text-h2 text-heading">{explore.heading}</h2>
           <a
             href={explore.href}
             {...externalLinkProps(explore.href)}
