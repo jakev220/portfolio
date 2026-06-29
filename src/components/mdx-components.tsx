@@ -1,7 +1,11 @@
 import type { MDXComponents } from "mdx/types";
-import { SplitSection, SplitHeading } from "@/components/case-study/SplitSection";
+import { Section } from "@/components/case-study/Section";
+import { Split } from "@/components/case-study/Split";
+import { MediaRow } from "@/components/case-study/MediaRow";
+import { SplitHeading } from "@/components/case-study/SplitGrid";
 import { Detail, ProjectDetails } from "@/components/case-study/ProjectDetails";
 import { Accent } from "@/components/case-study/Accent";
+import { Figure } from "@/components/case-study/Figure";
 
 /**
  * Maps MDX/Markdown elements to the portfolio design system (see tokens.ts).
@@ -12,15 +16,18 @@ import { Accent } from "@/components/case-study/Accent";
  *   external handling are deferred to the future `Link` component.
  * - `code`/`pre` styling lives in `globals.css` under `.mdx-content` so it can
  *   distinguish inline code from highlighted code blocks (rehype-pretty-code).
- * - Capitalized keys (e.g. `SplitSection`) expose case-study section components
- *   for direct use as JSX inside `.mdx` bodies.
+ * - Capitalized keys (e.g. `Section`, `Split`) expose case-study layout
+ *   components for direct use as JSX inside `.mdx` bodies.
  */
 export const mdxComponents: MDXComponents = {
-  SplitSection,
+  Section,
+  Split,
+  MediaRow,
   SplitHeading,
   ProjectDetails,
   Detail,
   Accent,
+  Figure,
   h1: (props) => <h1 className="text-h1 text-primary mt-12 mb-4" {...props} />,
   h2: (props) => <h2 className="text-h2 text-heading mt-10 mb-3" {...props} />,
   h3: (props) => <h3 className="text-h3 text-heading mt-8 mb-2" {...props} />,

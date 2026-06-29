@@ -163,8 +163,12 @@ element mapped to the tokens above in `src/components/mdx-components.tsx`.
 | Component | Purpose |
 |-----------|---------|
 | `<CaseStudyHeader>` | Frontmatter-driven: `<hgroup>` (name `h1` + descriptive subtitle), cover media, divider. |
-| `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via `details` prop; brief as MDX prose. |
-| `<SplitSection>` | Two-column section: a left heading (capped at ~half the 400px column) beside body prose. |
+| `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
+| `<Section>` | The section unit: `<section>` that stacks its children with a 64px internal gap (128px between sections). Compose rows + media inside. |
+| `<Split>` | Lead row: `h2` heading (via `<SplitHeading>`) on the 400px left column + body prose on the right; optional eyebrow `label`. |
+| `<MediaRow>` | Sub-row: `h3` heading (via `<SplitHeading>`) on the left + a `<Figure>` on the right. Stack several inside a `<Section>` for a goals list. |
+| `<Figure>` | Aspect-locked media (`ratio="W/H"`): `next/image` or a `bg-surface` placeholder when no `src`. |
+| `<Accent>` | Inline span in the darkest neutral (`text-primary`) for emphasizing body text. |
 
 ---
 
@@ -174,8 +178,8 @@ Every component in `src/components/` follows these (see README for the build wor
 
 1. Content via props / MDX only — **no hardcoded strings** in JSX.
 2. One component per file, PascalCase.
-3. Tailwind utilities only — no inline styles (except Framer Motion `style` for dynamic
-   animation values).
+3. Tailwind utilities only — no inline styles (except runtime-dynamic values that can't be
+   a build-time class, e.g. Framer Motion animation `style` or `<Figure>`'s `aspectRatio`).
 4. Mobile-first and responsive by default.
 5. Animation is additive — layout must work without Framer Motion; never affects flow.
 6. Typed props interface at the top of each file.
