@@ -1,6 +1,7 @@
 import type { MDXComponents } from "mdx/types";
-import { SplitSection } from "@/components/case-study/SplitSection";
+import { SplitSection, SplitHeading } from "@/components/case-study/SplitSection";
 import { Detail, ProjectDetails } from "@/components/case-study/ProjectDetails";
+import { Accent } from "@/components/case-study/Accent";
 
 /**
  * Maps MDX/Markdown elements to the portfolio design system (see tokens.ts).
@@ -16,8 +17,10 @@ import { Detail, ProjectDetails } from "@/components/case-study/ProjectDetails";
  */
 export const mdxComponents: MDXComponents = {
   SplitSection,
+  SplitHeading,
   ProjectDetails,
   Detail,
+  Accent,
   h1: (props) => <h1 className="text-h1 text-primary mt-12 mb-4" {...props} />,
   h2: (props) => <h2 className="text-h2 text-heading mt-10 mb-3" {...props} />,
   h3: (props) => <h3 className="text-h3 text-heading mt-8 mb-2" {...props} />,

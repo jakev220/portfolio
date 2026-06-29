@@ -23,7 +23,7 @@ const prettyCodeOptions: RehypePrettyCodeOptions = {
  */
 export function MDXContent({ source }: MDXContentProps) {
   return (
-    <div className="mdx-content">
+    <div className="mdx-content [&>section:not(:first-child)]:mt-32">
       <MDXRemote
         source={source}
         components={mdxComponents}

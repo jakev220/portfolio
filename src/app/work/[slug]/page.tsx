@@ -41,8 +41,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
   // Container width matches the case-study Figma: 1024px content column with
   // 24px gutters (1072 - 2*24 = 1024 → ~208px margins at a 1440 viewport).
+  // pt-64 (≈258px) is shared by every case study and matches the home hero's
+  // top offset (Tailwind-default placeholder; refine with custom spacing later).
   return (
-    <article className="mx-auto max-w-[1072px] px-6 pt-40 pb-24">
+    <article className="mx-auto max-w-[1072px] px-6 pt-64 pb-24">
       <CaseStudyHeader
         name={work.name}
         title={work.title}
