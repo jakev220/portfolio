@@ -76,8 +76,8 @@ Other scripts: `npm run build` · `npm run start` · `npm run lint` · `npm run 
 src/
   app/                 # routes (layout.tsx, page.tsx, work/[slug]/page.tsx)
   components/          # one component per file, PascalCase
-  content/             # data for sections (hero.ts, nav.ts, footer.ts, work-preview.ts)
-    work/              # one .mdx per case study
+  content/             # data for sections (hero.ts, nav.ts, footer.ts)
+    work/              # one .mdx per case study (drives the home work grid)
   lib/
     tokens.ts          # design tokens — single source of truth
     mdx.ts             # frontmatter parsing + work listing
