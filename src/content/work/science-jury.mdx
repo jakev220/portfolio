@@ -28,13 +28,22 @@ As a UI/UX design intern and the primary designer on this project, I was respons
 </ProjectDetails>
 
 <Section>
+    <Callout label="Core design challenge">
+    <CalloutHeading>
+      How do we build a multi-agent feedback system that's *more comprehensive* than a single LLM, but doesn't collapse under the weight of its own output?
+    </CalloutHeading>
+  </Callout>
+</Section>
+
+<Section>
   <Split label="Research foundation">
     <SplitHeading>Does using multiple agents *actually* result in better critique?</SplitHeading>
 
 In a formative study sampling 50 papers from a dataset with real human reviews, we compared single-agent critiques against a three-agent panel, measuring similarity to real human reviews and uniqueness in the issues surfaced per paper.
   </Split>
 
-  <Figure ratio="1024/500" />
+  <ScienceJuryFormativeCallout />
+
 </Section>
 
 <Section>
@@ -107,7 +116,21 @@ We mapped out the following design goals for our system:
 
     Across all five feedback quality dimensions — specificity, constructiveness, justification, diversity, and similarity to real reviews — ScienceJury rated higher. Interaction logs showed that ScienceJury shifted behavior from additive editing (adding more words) to targeted refinement. Writers replaced existing content using "Adopt it" rather than just expanding it.    
     </Split>
-    <Figure ratio="1024/500" />
+
+    <Callout label="Key metrics">
+        <CalloutHeading>
+        Feedback rated significantly more specific, diverse, and aligned with expert review.{" "}
+        <CalloutSubtle>Writers reported deeper engagement with their own drafts.</CalloutSubtle>
+        </CalloutHeading>
+        <CalloutMetrics>
+            <CalloutMetric value="+84%" label="more unique critique points vs. single-agent" />
+            <CalloutMetric value="+40%" label="higher specificity rating vs. single-agent" />
+            <CalloutMetric value="4.7 / 7" label="average draft improvement vs. 3.8 in single-agent" />
+            <CalloutMetric value="3.9" label="feedback threads engaged per session" />
+        </CalloutMetrics>
+    </Callout>
+
+    
     <Split> 
         <SplitHeading>Participants perceived expert agents as authoritative, leading to over-trust.</SplitHeading>
     

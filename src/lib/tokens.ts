@@ -70,6 +70,27 @@ export const typography = {
     letterSpacing: "-0.01em",
     weight: fontWeight.regular,
   },
+  /** Callout card headline — fluid between h2 (32px) and h1 (48px). */
+  "callout-title": {
+    size: "clamp(2rem, 1.25rem + 2.8vw, 3rem)",
+    lineHeight: 1.2,
+    letterSpacing: "-0.01em",
+    weight: fontWeight.regular,
+  },
+  /** Callout secondary headline — fluid between h3 (24px) and h2 (32px). */
+  "callout-heading": {
+    size: "clamp(1.5rem, 0.875rem + 2vw, 2rem)",
+    lineHeight: 1.2,
+    letterSpacing: "-0.01em",
+    weight: fontWeight.regular,
+  },
+  /** Callout supporting copy — fluid between label (14px) and body (16px). */
+  "callout-body": {
+    size: "clamp(0.875rem, 0.75rem + 0.5vw, 1rem)",
+    lineHeight: 1.6,
+    letterSpacing: "0em",
+    weight: fontWeight.regular,
+  },
 } as const satisfies Record<string, TypeStyle>;
 
 export type TypographyToken = keyof typeof typography;

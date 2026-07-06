@@ -125,3 +125,23 @@
 .mdx-content pre > code {
   display: grid; /* enables per-line styling from rehype-pretty-code */
 }
+
+/*
+ * Callout card — fixed dark palette scoped to `.callout` so the card reads as
+ * an inverted island regardless of site theme. Tokens are local to the shell;
+ * children use Tailwind utilities `text-callout`, `text-callout-muted`, etc.
+ */
+.callout {
+  --color-callout-bg: #1e1e1e;
+  --color-callout-text: #fefefe;
+  --color-callout-text-muted: #939393;
+  --color-callout-text-subtle: #cdcdcd;
+  --color-callout-surface: #383838;
+  --color-callout-border: #666666;
+  --callout-padding: clamp(2rem, 1rem + 4vw, 4rem);
+  --callout-gap: clamp(2rem, 1rem + 4vw, 4rem);
+
+  background-color: var(--color-callout-bg);
+  color: var(--color-callout-text);
+  padding: var(--callout-padding);
+}

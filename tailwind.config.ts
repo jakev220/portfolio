@@ -40,6 +40,14 @@ const config: Config = {
         // simply inherits the base color (--color-text-body) set in globals.css.
         heading: "var(--color-text-heading)",
         secondary: "var(--color-text-secondary)",
+        callout: "var(--color-callout-text)",
+        "callout-muted": "var(--color-callout-text-muted)",
+        "callout-subtle": "var(--color-callout-text-subtle)",
+        "callout-surface": "var(--color-callout-surface)",
+        "callout-border": "var(--color-callout-border)",
+      },
+      backgroundColor: {
+        callout: "var(--color-callout-bg)",
       },
       borderColor: {
         DEFAULT: "var(--color-border)",

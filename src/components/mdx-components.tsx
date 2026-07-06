@@ -9,6 +9,11 @@ import { Subtle } from "@/components/case-study/Subtle";
 import { Figure } from "@/components/case-study/Figure";
 import { Accordion } from "@/components/case-study/Accordion";
 import { AccordionItem } from "@/components/case-study/AccordionItem";
+import { Callout, CalloutHeading } from "@/components/case-study/Callout";
+import { CalloutMetric, CalloutMetrics } from "@/components/case-study/CalloutMetrics";
+import { CalloutSubtle } from "@/components/case-study/CalloutSubtle";
+import { CalloutAside } from "@/components/case-study/CalloutAside";
+import { ScienceJuryFormativeCallout } from "@/components/case-study/science-jury/ScienceJuryFormativeCallout";
 
 /**
  * Maps MDX/Markdown elements to the portfolio design system (see tokens.ts).
@@ -34,6 +39,13 @@ export const mdxComponents: MDXComponents = {
   Figure,
   Accordion,
   AccordionItem,
+  Callout,
+  CalloutHeading,
+  CalloutSubtle,
+  CalloutMetric,
+  CalloutMetrics,
+  CalloutAside,
+  ScienceJuryFormativeCallout,
   h1: (props) => <h1 className="text-h1 text-primary mt-12 mb-4" {...props} />,
   h2: (props) => <h2 className="text-h2 text-heading mt-10 mb-3" {...props} />,
   h3: (props) => <h3 className="text-h3 text-heading mt-8 mb-2" {...props} />,
