@@ -4,8 +4,9 @@ export interface DetailProps {
   /** Group label (e.g. "Timeline", "Team", "Venue"). */
   label: string;
   /**
-   * The value(s). Inline text renders on one line; separate the value into
-   * blank-line-delimited paragraphs in MDX to stack multiple lines (e.g. a team).
+   * The value(s). Inline text and components (e.g. `<Subtle>`) stay on one line;
+   * separate the value into blank-line-delimited paragraphs in MDX to stack
+   * multiple lines (e.g. a team list).
    */
   children: ReactNode;
 }
@@ -42,8 +43,7 @@ export interface ProjectDetailsProps {
  *     The brief, as ordinary MDX prose.
  *   </ProjectDetails>
  *
- * `<Detail>` children fill the meta column; everything else is the brief. The
- * meta text is capped at ~half the 400px column so it stays tidy.
+ * `<Detail>` children fill the meta column; everything else is the brief.
  */
 export function ProjectDetails({
   briefLabel = "Project brief",
@@ -64,11 +64,11 @@ export function ProjectDetails({
   return (
     <section className="flex flex-col gap-8 md:flex-row md:gap-16">
       <div className="md:w-[400px] md:flex-none">
-        <div className="flex flex-col gap-4 md:max-w-[200px]">
+        <div className="flex flex-col gap-4">
           {details.map((detail, index) => (
             <div key={index} className="flex flex-col gap-1">
               <p className="text-label text-secondary">{detail.props.label}</p>
-              <div className="flex flex-col gap-1 text-body [&>p]:m-0">
+              <div className="text-body [&>p]:m-0 [&>p+p]:mt-1">
                 {detail.props.children}
               </div>
             </div>

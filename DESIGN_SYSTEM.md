@@ -169,6 +169,9 @@ element mapped to the tokens above in `src/components/mdx-components.tsx`.
 | `<MediaRow>` | Sub-row: `h3` heading (via `<SplitHeading>`) on the left + a `<Figure>` on the right. Stack several inside a `<Section>` for a goals list. |
 | `<Figure>` | Aspect-locked media (`ratio="W/H"`): `next/image` or a `bg-surface` placeholder when no `src`. |
 | `<Accent>` | Inline span in the darkest neutral (`text-primary`) for emphasizing body text. |
+| `<Subtle>` | Inline span in the light grey (`text-secondary` / black-40) for de-emphasizing a phrase within body text — e.g. `1 UI/UX Designer <Subtle>(me!)</Subtle>`. |
+| `<Accordion>` | Stack of collapsible rows; place inside a `<Section>`. Items separated by bottom dividers. |
+| `<AccordionItem>` | One accordion row: `title` (+ optional `subtitle`) as string props; expanded body as MDX children. Multiple items can be open; ease-out 400ms expand/collapse. |
 
 ---
 

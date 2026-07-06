@@ -1,0 +1,148 @@
+"use client";
+
+import { useId, useState, type ReactNode } from "react";
+
+export interface AccordionItemProps {
+  /** Primary trigger label (styled text, not a heading tag). */
+  title: string;
+  /** Optional secondary line beneath the title. */
+  subtitle?: string;
+  /** Expanded body — MDX prose passed as children. */
+  children: ReactNode;
+}
+
+function AccordionIcon({ open }: { open: boolean }) {
+  return (
+    <span
+      aria-hidden
+      className="flex h-[29px] w-[29px] shrink-0 items-center justify-center text-secondary"
+    >
+      <svg
+        viewBox="0 0 14 14"
+        width={14}
+        height={14}
+        fill="currentColor"
+        className={`transition-transform duration-[400ms] ease-out ${
+          open ? "rotate-45" : "group-hover:rotate-[25deg]"
+        }`}
+      >
+        <path d="M6 0h2v6h6v2H8v6H6V8H0V6h6V0z" />
+      </svg>
+    </span>
+  );
+}
+
+function TriggerContent({
+  title,
+  subtitle,
+  open,
+}: {
+  title: string;
+  subtitle?: string;
+  open: boolean;
+}) {
+  return (
+    <>
+      <AccordionIcon open={open} />
+      <span className="flex min-w-0 flex-col gap-2">
+        <span className="text-h3 text-heading">{title}</span>
+        {subtitle ? (
+          <span className="text-body text-secondary">{subtitle}</span>
+        ) : null}
+      </span>
+    </>
+  );
+}
+
+/**
+ * A single collapsible case-study row. Closed: the full row width is the click
+ * target (hover surface + 25° icon tilt). Expanded: mirrors `SplitGrid`
+ * geometry (400 + 64 + 560) so body prose aligns with `Split` / `MediaRow`
+ * body columns; the full-height left column closes the panel so body text stays
+ * selectable. Icon rotates 45° when open. Multiple items can be open at once.
+ */
+export function AccordionItem({ title, subtitle, children }: AccordionItemProps) {
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+  const toggle = () => setOpen((prev) => !prev);
+
+  const triggerClassName =
+    "flex cursor-pointer items-start gap-2 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
+
+  return (
+    <div className="pt-3">
+      <div
+        className={`group flex flex-col gap-6 rounded-xl py-3 ${
+          open ? "" : "transition-colors hover:bg-surface"
+        }`}
+      >
+        <div
+          className={`relative grid md:grid-cols-[400px_minmax(0,1fr)] md:gap-x-16 ${
+            open ? "gap-y-8" : "gap-y-0"
+          }`}
+        >
+          {!open ? (
+            <button
+              type="button"
+              aria-expanded={false}
+              aria-controls={panelId}
+              onClick={toggle}
+              className={`absolute inset-0 z-10 flex w-full flex-col text-left md:flex-row md:gap-x-16 ${triggerClassName} bg-transparent p-0`}
+            >
+              <span className="flex w-full items-start gap-2 md:w-[400px]">
+                <TriggerContent title={title} subtitle={subtitle} open={false} />
+              </span>
+              <span aria-hidden className="hidden flex-1 md:block" />
+            </button>
+          ) : null}
+
+          <div
+            className={`relative min-h-full ${!open ? "pointer-events-none" : ""}`}
+          >
+            {open ? (
+              <>
+                {/* In-flow copy sets minimum cell height when body is short. */}
+                <div
+                  aria-hidden
+                  className="flex items-start gap-2 opacity-0"
+                >
+                  <TriggerContent title={title} subtitle={subtitle} open />
+                </div>
+                <button
+                  type="button"
+                  aria-expanded
+                  aria-controls={panelId}
+                  onClick={toggle}
+                  className={`absolute inset-0 z-10 ${triggerClassName} bg-transparent p-0`}
+                >
+                  <TriggerContent title={title} subtitle={subtitle} open />
+                </button>
+              </>
+            ) : (
+              <div aria-hidden className="flex items-start gap-2">
+                <TriggerContent title={title} subtitle={subtitle} open={false} />
+              </div>
+            )}
+          </div>
+
+          <div className="cursor-text text-body [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+            <div
+              id={panelId}
+              aria-hidden={!open}
+              className="grid transition-[grid-template-rows] duration-[400ms] ease-out"
+              style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+            >
+              <div className="min-h-0 overflow-hidden">
+                <div className="text-body [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                  {children}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr className="border-divider" />
+      </div>
+    </div>
+  );
+}

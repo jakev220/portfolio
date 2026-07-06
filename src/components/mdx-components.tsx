@@ -5,7 +5,10 @@ import { MediaRow } from "@/components/case-study/MediaRow";
 import { SplitHeading } from "@/components/case-study/SplitGrid";
 import { Detail, ProjectDetails } from "@/components/case-study/ProjectDetails";
 import { Accent } from "@/components/case-study/Accent";
+import { Subtle } from "@/components/case-study/Subtle";
 import { Figure } from "@/components/case-study/Figure";
+import { Accordion } from "@/components/case-study/Accordion";
+import { AccordionItem } from "@/components/case-study/AccordionItem";
 
 /**
  * Maps MDX/Markdown elements to the portfolio design system (see tokens.ts).
@@ -27,7 +30,10 @@ export const mdxComponents: MDXComponents = {
   ProjectDetails,
   Detail,
   Accent,
+  Subtle,
   Figure,
+  Accordion,
+  AccordionItem,
   h1: (props) => <h1 className="text-h1 text-primary mt-12 mb-4" {...props} />,
   h2: (props) => <h2 className="text-h2 text-heading mt-10 mb-3" {...props} />,
   h3: (props) => <h3 className="text-h3 text-heading mt-8 mb-2" {...props} />,
