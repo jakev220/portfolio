@@ -55,11 +55,11 @@ function TriggerContent({
 }
 
 /**
- * A single collapsible case-study row. Closed: the full row width is the click
- * target (hover surface + 25° icon tilt). Expanded: mirrors `SplitGrid`
- * geometry (400 + 64 + 560) so body prose aligns with `Split` / `MediaRow`
- * body columns; the full-height left column closes the panel so body text stays
- * selectable. Icon rotates 45° when open. Multiple items can be open at once.
+ * A single collapsible case-study row. Content and divider inset 12px (`px-3`
+ * `py-3`) per the Figma spec. Closed: the full padded row is the click target
+ * (hover surface + 25° icon tilt). Expanded: mirrors `SplitGrid` geometry inside
+ * the inset; the full-height left column closes the panel so body text stays
+ * selectable. Icon rotates 45° when open.
  */
 export function AccordionItem({ title, subtitle, children }: AccordionItemProps) {
   const [open, setOpen] = useState(false);
@@ -70,79 +70,73 @@ export function AccordionItem({ title, subtitle, children }: AccordionItemProps)
     "flex cursor-pointer items-start gap-2 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
 
   return (
-    <div className="pt-3">
+    <div
+      className={`group relative flex flex-col gap-6 rounded-xl px-3 py-3 ${
+        open ? "" : "transition-colors hover:bg-surface"
+      }`}
+    >
+      {!open ? (
+        <button
+          type="button"
+          aria-expanded={false}
+          aria-controls={panelId}
+          onClick={toggle}
+          className={`absolute inset-0 z-10 flex w-full flex-col text-left md:flex-row md:gap-x-16 ${triggerClassName} bg-transparent p-3`}
+        >
+          <span className="flex w-full items-start gap-2 md:w-[400px]">
+            <TriggerContent title={title} subtitle={subtitle} open={false} />
+          </span>
+          <span aria-hidden className="hidden flex-1 md:block" />
+        </button>
+      ) : null}
+
       <div
-        className={`group flex flex-col gap-6 rounded-xl py-3 ${
-          open ? "" : "transition-colors hover:bg-surface"
+        className={`grid md:grid-cols-[400px_minmax(0,1fr)] md:gap-x-16 ${
+          open ? "gap-y-8" : "gap-y-0"
         }`}
       >
         <div
-          className={`relative grid md:grid-cols-[400px_minmax(0,1fr)] md:gap-x-16 ${
-            open ? "gap-y-8" : "gap-y-0"
-          }`}
+          className={`relative min-h-full ${!open ? "pointer-events-none" : ""}`}
         >
-          {!open ? (
-            <button
-              type="button"
-              aria-expanded={false}
-              aria-controls={panelId}
-              onClick={toggle}
-              className={`absolute inset-0 z-10 flex w-full flex-col text-left md:flex-row md:gap-x-16 ${triggerClassName} bg-transparent p-0`}
-            >
-              <span className="flex w-full items-start gap-2 md:w-[400px]">
-                <TriggerContent title={title} subtitle={subtitle} open={false} />
-              </span>
-              <span aria-hidden className="hidden flex-1 md:block" />
-            </button>
-          ) : null}
-
-          <div
-            className={`relative min-h-full ${!open ? "pointer-events-none" : ""}`}
-          >
-            {open ? (
-              <>
-                {/* In-flow copy sets minimum cell height when body is short. */}
-                <div
-                  aria-hidden
-                  className="flex items-start gap-2 opacity-0"
-                >
-                  <TriggerContent title={title} subtitle={subtitle} open />
-                </div>
-                <button
-                  type="button"
-                  aria-expanded
-                  aria-controls={panelId}
-                  onClick={toggle}
-                  className={`absolute inset-0 z-10 ${triggerClassName} bg-transparent p-0`}
-                >
-                  <TriggerContent title={title} subtitle={subtitle} open />
-                </button>
-              </>
-            ) : (
-              <div aria-hidden className="flex items-start gap-2">
-                <TriggerContent title={title} subtitle={subtitle} open={false} />
+          {open ? (
+            <>
+              <div aria-hidden className="invisible flex items-start gap-2">
+                <TriggerContent title={title} subtitle={subtitle} open />
               </div>
-            )}
-          </div>
+              <button
+                type="button"
+                aria-expanded
+                aria-controls={panelId}
+                onClick={toggle}
+                className={`absolute inset-0 z-10 ${triggerClassName} bg-transparent p-0`}
+              >
+                <TriggerContent title={title} subtitle={subtitle} open />
+              </button>
+            </>
+          ) : (
+            <div aria-hidden className="invisible flex items-start gap-2">
+              <TriggerContent title={title} subtitle={subtitle} open={false} />
+            </div>
+          )}
+        </div>
 
-          <div className="cursor-text text-body [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-            <div
-              id={panelId}
-              aria-hidden={!open}
-              className="grid transition-[grid-template-rows] duration-[400ms] ease-out"
-              style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
-            >
-              <div className="min-h-0 overflow-hidden">
-                <div className="text-body [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-                  {children}
-                </div>
+        <div className="cursor-text text-body [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+          <div
+            id={panelId}
+            aria-hidden={!open}
+            className="grid transition-[grid-template-rows] duration-[400ms] ease-out"
+            style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+          >
+            <div className="min-h-0 overflow-hidden">
+              <div className="text-body [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                {children}
               </div>
             </div>
           </div>
         </div>
-
-        <hr className="border-divider" />
       </div>
+
+      <hr className="border-divider" />
     </div>
   );
 }
