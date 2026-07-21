@@ -158,6 +158,16 @@ element mapped to the tokens above in `src/components/mdx-components.tsx`.
 | fenced code | syntax-highlighted via `rehype-pretty-code` + Shiki (`github-light`) |
 | tables | GitHub-flavored (`remark-gfm`) |
 
+### Images (`next/image`)
+
+Optimized images use **quality 90** site-wide. Configured via `images.qualities: [90]`
+in `next.config.mjs` — Next 16 coerces the component default (75) to the closest
+allowed value, so every optimized `<Image>` gets 90 without a per-call `quality`
+prop. Do not add `quality={75}` (or other values); they will be coerced or rejected.
+
+Exceptions: `unoptimized` images (e.g. the hero avatar cycle) skip the optimizer
+and serve the source file as-is.
+
 ### Case-study section components (used as JSX in MDX bodies)
 
 | Component | Purpose |
