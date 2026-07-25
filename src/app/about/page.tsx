@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { about } from "@/content/about";
 import { AboutHero } from "@/components/about/AboutHero";
-import { AboutLede } from "@/components/about/AboutLede";
 import { AboutProse } from "@/components/about/AboutProse";
+import { HangStatement } from "@/components/HangStatement";
 
 export const metadata: Metadata = {
   title: "About",
@@ -18,7 +18,7 @@ export default function AboutPage() {
     <article className="mx-auto max-w-7xl px-6 pt-64 pb-24">
       <div className="flex flex-col gap-40">
         <AboutHero greeting={about.greeting} photos={about.heroPhotos} />
-        <AboutLede label={about.lede.label} body={about.lede.body} />
+        <HangStatement label={about.lede.label} body={about.lede.body} />
 
         {about.blocks.map((block) => (
           <AboutProse
