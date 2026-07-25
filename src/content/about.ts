@@ -1,4 +1,3 @@
-import type { AvatarImage } from "@/components/HeroAvatar";
 import { avatars } from "@/content/avatars";
 
 export interface AboutPhoto {
@@ -7,80 +6,111 @@ export interface AboutPhoto {
   alt: string;
 }
 
-/** Heading + paragraph stack (400 / 64 / 560 split). */
-export interface AboutProseBlock {
-  type: "prose";
-  heading: string;
-  /** One string per paragraph — order here = order on the page. */
-  body: string[];
+/** Hero collage tile — `wide` ≈ 416×200, `square` ≈ 200×200 at desktop. */
+export interface AboutHeroPhoto extends AboutPhoto {
+  variant: "wide" | "square";
 }
 
-/** Variable-count lifestyle photo grid. */
-export interface AboutLifestyleBlock {
-  type: "lifestyle";
-  photos: AboutPhoto[];
+export interface AboutGreeting {
+  /** Primary line (e.g. "Hi, I'm Jake!"). */
+  primary: string;
+  /** Secondary line beneath (e.g. "It's nice to meet you."). */
+  secondary: string;
+}
+
+export interface AboutLede {
+  /** Page title shown in the 2-col pocket (semantic `<h1>`). */
+  label: string;
+  body: string;
 }
 
 /**
- * Discriminated union of About page body blocks. Add a new `type` + component
- * when the page grows; keep the page a thin map over `blocks`.
+ * Heading + body column. `photos` is a strip inside the body column; `gallery`
+ * is a full-width grid below the whole row.
  */
-export type AboutBlock = AboutProseBlock | AboutLifestyleBlock;
+export interface AboutProseBlock {
+  type: "prose";
+  heading: string;
+  body: string[];
+  photos?: AboutPhoto[];
+  gallery?: AboutPhoto[];
+}
+
+export type AboutBlock = AboutProseBlock;
 
 export interface AboutContent {
-  intro: string;
-  photos: AvatarImage[];
+  greeting: AboutGreeting;
+  heroPhotos: AboutHeroPhoto[];
+  lede: AboutLede;
   blocks: AboutBlock[];
 }
 
 /**
- * About page content. Edit copy and lifestyle images here — page components
- * stay content-agnostic. `photos` reuses the shared avatar frames from the hero.
+ * About page content (v3 layout). Edit copy and images here — page components
+ * stay content-agnostic.
  */
 export const about: AboutContent = {
-  intro:
-    "Hey! I'm Jake, a designer captivated by the moment where something complicated finally clicks.",
-  photos: avatars,
+  greeting: {
+    primary: "Hi, I'm Jake!",
+    secondary: "It's nice to meet you.",
+  },
+  heroPhotos: [
+    {
+      src: "/avatar/jake-1-wide.webp",
+      alt: "Jake Villaseñor",
+      variant: "wide",
+    },
+    { ...avatars[2], variant: "square", alt: "" },
+    { ...avatars[1], variant: "square", alt: "" },
+    {
+      src: "/avatar/jake-4-wide.webp",
+      alt: "",
+      variant: "wide",
+    },
+  ],
+  lede: {
+    label: "About",
+    body: "I'm a designer, systems-thinker, and strategist that specializes in untangling messy workflows so people can get on with their day better and faster. Currently designing and building internal developer tools to reduce friction in dashboard production at StepStone Group.",
+  },
   blocks: [
     {
       type: "prose",
-      heading: "Why design draws me in.",
+      heading: "Biography",
       body: [
-        "Growing up, most of my favorite things were centered around technology. From playing Pokémon on my Nintendo DS to using the internet to connect with people I never would have met in real life, I've always been drawn to the things that kept people connected and entertained without really understanding why.",
-        "That changed when I took a course at UC San Diego about the impact of technology and design on cognition. Suddenly, I had a language for something I'd been experiencing my whole life.",
-        "I chose design because it lets me use both sides of my brain: the empathetic one that wants to understand and support people, and the analytical one that sees their problems as puzzles to be solved and constraints as means to a solution.",
+        "I've always been drawn to digital experiences that make life feel a little smoother and keep people connected long before I even considered design as a career.", 
+        "That curiosity led me to study human-computer interaction at UC San Diego, where I learned to look under the hood of how people interact with technology and how we can apply design principles to make those experiences better.",
+        "My work aims to strike a balance between empathy, logic, and innovation. I believe every good solution starts with listening to the people you're designing for and deeply understanding their frustrations. I view problems as puzzles to be solved, and use constraints as a means to a solution that brings value to everyone involved.",
       ],
     },
     {
       type: "prose",
-      heading: "What I've been up to recently.",
+      heading: "What I've been up to recently",
       body: [
-        "I'm currently leading dashboard standardization initiatives and building an internal developer tool to reduce friction in dashboard production at StepStone Group.",
-        "Previously, I designed an end-to-end experience for a multi-agent LLM peer-review system at ProtoLab, a research group within the UC San Diego Design Lab.",
-        "Outside of the workplace, I like to give back to design and product communities at UC San Diego by speaking at panels, providing guidance on client projects, and helping student designers find their footing!",
+        "I'm currently leading dashboard standardization initiatives and building internal developer tools to reduce friction in dashboard production and improve visual consistency at StepStone Group.",
+        "Outside of my 9 to 5, I like to stay connected with my Triton roots and stay involved with the design and product communities at UC San Diego that helped me grow as a designer and as a person. You might find me speaking at panels, giving my two cents on projects, or helping student designers find their footing.",
       ],
-    },
-    {
-      type: "prose",
-      heading: "Me, outside of design.",
-      body: [
-        "When I'm not designing, you can find me sipping an iced lemon black tea, enjoying San Diego with my friends, cycling through genres of music, working out, and documenting my life on BeReal!",
-      ],
-    },
-    {
-      type: "lifestyle",
-      // Variable-length list; omit `src` for surface placeholders until assets land.
       photos: [
-        { alt: "" },
-        { alt: "" },
-        { alt: "" },
-        { alt: "" },
-        { alt: "" },
-        { alt: "" },
-        { alt: "" },
-        { alt: "" },
-        { alt: "" },
+        {
+          src: "/photos/dfa-ux-panel.webp",
+          alt: "Design for America UX Panel",
+        },
+        {
+          src: "/photos/ps-design-dinner.webp",
+          alt: "Dinner with Product Space's design vertical",
+        },
+        {
+          src: "/photos/jake-speaking.webp",
+          alt: "Jake speaking at a design event",
+        },
       ],
+    },
+    {
+      type: "prose",
+      heading: "Me, outside of design",
+      body: [
+        "When I'm not designing, you might find me sipping an iced lemon black tea, getting outdoors with my friends, cycling through genres of music, working out, and documenting my life on BeReal.",
+      ],
+      gallery: [{ alt: "" }, { alt: "" }, { alt: "" }, { alt: "" }],
     },
   ],
 };
