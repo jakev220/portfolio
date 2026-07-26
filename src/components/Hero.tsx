@@ -1,6 +1,15 @@
+"use client";
+
+import { useEffect, useState, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { HeroAvatar, type AvatarImage } from "@/components/HeroAvatar";
 import { HeroFolder } from "@/components/HeroFolder";
 import { externalLinkProps, isExternalHref } from "@/lib/links";
+import {
+  EXIT_EASE,
+  HOME_EXIT_EVENT,
+  HOME_EXIT_MS,
+} from "@/lib/about-transition";
 
 export interface HeroLink {
   /** Visible link text (the trailing ↗ is added by the component). */
@@ -56,9 +65,34 @@ function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
   );
 }
 
+function ExitFade({
+  play,
+  children,
+  className,
+}: {
+  play: boolean;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <motion.span
+      className={className}
+      animate={{ opacity: play ? 0 : 1 }}
+      transition={{
+        duration: play ? HOME_EXIT_MS / 1000 : 0,
+        ease: EXIT_EASE,
+      }}
+    >
+      {children}
+    </motion.span>
+  );
+}
+
 /**
- * Home-page hero. Content arrives via props (no hardcoded copy). Static for now;
- * the avatar and folder micro-interactions are layered on in a later pass.
+ * Home-page hero. Eases in on first paint via CSS (same 0.85s fade/rise as the
+ * About greeting) so refresh doesn’t wait on hydration. On the name→About
+ * transition, surrounding copy fades out while the avatar reel rises and fades
+ * on its own timeline.
  */
 export function Hero({
   name,
@@ -69,24 +103,50 @@ export function Hero({
   previous,
   avatarImages,
 }: HeroProps) {
+  const reduceMotion = useReducedMotion();
+  const [exiting, setExiting] = useState(false);
+
+  useEffect(() => {
+    const onExit = () => setExiting(true);
+    window.addEventListener(HOME_EXIT_EVENT, onExit);
+    return () => window.removeEventListener(HOME_EXIT_EVENT, onExit);
+  }, []);
+
+  const play = exiting && !reduceMotion;
+
   return (
-    <section className="flex flex-col gap-4 pt-16 pb-32 md:pb-48">
+    <section className="hero-enter flex flex-col gap-4 pt-16 pb-32 md:pb-48">
       {/* hero text — semantic h1, visually text-h2 */}
       <h1 className="text-h2">
         <span className="flex flex-wrap items-center gap-x-[7px] gap-y-1">
           <HeroAvatar name={name} images={avatarImages} />
-          <span className="text-secondary">{lead}</span>
-          <HeroFolder role={role} />
+          <ExitFade play={play} className="text-secondary">
+            {lead}
+          </ExitFade>
+          <ExitFade play={play}>
+            <HeroFolder role={role} />
+          </ExitFade>
         </span>
-        <span className="block text-secondary">{tagline[0]}</span>
-        <span className="block text-secondary">{tagline[1]}</span>
+        <ExitFade play={play} className="block text-secondary">
+          {tagline[0]}
+        </ExitFade>
+        <ExitFade play={play} className="block text-secondary">
+          {tagline[1]}
+        </ExitFade>
       </h1>
 
       {/* subhero */}
-      <div className="text-body text-secondary">
+      <motion.div
+        className="text-body text-secondary"
+        animate={{ opacity: play ? 0 : 1 }}
+        transition={{
+          duration: play ? HOME_EXIT_MS / 1000 : 0,
+          ease: EXIT_EASE,
+        }}
+      >
         <SubheroLine {...current} />
         <SubheroLine {...previous} />
-      </div>
+      </motion.div>
     </section>
   );
 }

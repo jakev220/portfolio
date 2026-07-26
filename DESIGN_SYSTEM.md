@@ -5,7 +5,8 @@ truth lives in code:
 
 - `src/lib/tokens.ts` — typography, color-var, and breakpoint constants
 - `tailwind.config.ts` — maps tokens to Tailwind utilities (type scale generated from tokens)
-- `src/styles/globals.css` — color CSS variables, `@font-face`, base + MDX styles
+- `src/styles/globals.css` — color CSS variables, `@font-face`, base + MDX styles, first-paint enter animations
+- `src/lib/about-transition.ts` — home → About exit timing + shared easing curve
 
 > Rule: don't introduce a font size, line-height, or color outside this system. If
 > something is missing, add it to `tokens.ts` / `globals.css` first, then use it.
@@ -135,6 +136,75 @@ Per the visual direction (Apple HIG–inspired):
 
 In MDX bodies, links currently render with color + underline (the `↗` and
 internal/external handling are deferred to the `Link` component).
+
+---
+
+## Motion
+
+Motion is **additive**: layout must read correctly with animations disabled
+(`prefers-reduced-motion: reduce` or no JS). Never animate layout that changes
+document flow (no height collapses for primary content; expand/collapse is the
+accordion exception).
+
+### Principles
+
+| Concern | Tool | Why |
+|---------|------|-----|
+| Page / section **enters** (refresh + soft nav) | **CSS** `@keyframes` in `globals.css` | Starts on first paint — no wait for React hydration |
+| **Exits**, hover micro-interactions, scroll-linked effects | **Framer Motion** | Needs runtime state, scroll progress, or delayed `router.push` |
+| Reduced motion | CSS `@media` and/or `useReducedMotion()` | Skip choreography; show the settled state immediately |
+
+### Shared easing
+
+Default curve for page transitions and hero enters:
+
+`cubic-bezier(0.22, 1, 0.36, 1)` — exported as `EXIT_EASE` from
+`src/lib/about-transition.ts` for Framer; mirrored in CSS animations.
+
+### Timing tokens (`src/lib/about-transition.ts`)
+
+Home → About **exit** (name + avatar click):
+
+| Constant | Value | Role |
+|----------|-------|------|
+| `HOME_EXIT_MS` | 780ms | Fade for hero copy, work grid, footer |
+| `REEL_EXIT_MS` | 900ms | Avatar reel rise + fade duration |
+| `REEL_FADE_DELAY_MS` | 180ms | Reel opacity starts after the rise begins |
+| `NAVIGATE_DELAY_MS` | 780ms | `router.push("/about")` after the home fade settles |
+
+Signal: `beginHomeAboutExit()` dispatches `HOME_EXIT_EVENT`; `HomeExitShell` and
+`Hero` listen and fade; `HeroAvatar` runs the reel exit then navigates.
+
+### CSS enter classes (`globals.css`)
+
+| Class | Duration | Delay | Travel | Used by |
+|-------|----------|-------|--------|---------|
+| `.hero-enter` | 0.85s | — | `translateY(8px)` → 0 | Home `<Hero>` section |
+| `.about-hero-tile` | 0.7s | — | `translateY(10px)` → 0 | About collage tiles (base) |
+| `.about-hero-tile-0` … `-3` | — | 0.12s + n×0.14s | — | Stagger L→R, T→B |
+| `.about-hero-greeting` | 0.85s | 0.8s | `translateY(8px)` → 0 | About “Hi, I'm Jake!” block |
+
+Fill mode is `both` so elements stay at the `from` state until the delay elapses.
+Soft navigations remount the nodes and replay the same CSS animations.
+
+### Other motion in the product
+
+| Pattern | Where | Notes |
+|---------|-------|-------|
+| Scroll color reveal | `HangStatement` | Words interpolate secondary → primary via scroll progress; skipped when reduced motion |
+| Avatar cycle + lift | `HeroAvatar` | Hover/focus cycles frames; slight `-translate-y` lift; accent name color |
+| Folder icons | `HeroFolder` | Hover opens tool icons (Framer) |
+| Accordion | `AccordionItem` | Ease-out **400ms** expand/collapse |
+| Formative bars | `ScienceJuryFormativeCallout` | Bars grow on scroll into view (`whileInView`, once) |
+| Nav chrome | `Nav` | Show/hide + backdrop opacity; `motion-reduce:transition-none` |
+
+### When adding new motion
+
+1. Prefer **CSS enters** for anything that should feel instant on refresh.
+2. Put shared durations / easings in `about-transition.ts` (or a future
+   `motion.ts`) — don’t hardcode one-off milliseconds in multiple files.
+3. Always honor `prefers-reduced-motion`.
+4. Update this section when you add a new first-class choreography.
 
 ---
 

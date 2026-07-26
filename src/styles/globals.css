@@ -145,3 +145,85 @@
   color: var(--color-callout-text);
   padding: var(--callout-padding);
 }
+
+/*
+ * Home hero enter — CSS so the 0.85s fade/rise starts on first paint
+ * (refresh) instead of waiting for React hydration. Soft navigations remount
+ * the node and replay the same animation.
+ */
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-enter {
+  animation: hero-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-enter {
+    animation: none;
+  }
+}
+
+/*
+ * About hero enter — CSS so collage + greeting start on first paint (refresh /
+ * soft nav remount) instead of waiting for Framer hydration. Matches the
+ * previous Motion timing: tiles 0.7s @ 0.12 + n×0.14, greeting 0.85s @ 0.8s.
+ */
+@keyframes about-hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes about-hero-greeting-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.about-hero-tile {
+  animation: about-hero-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.about-hero-tile-0 {
+  animation-delay: 0.12s;
+}
+.about-hero-tile-1 {
+  animation-delay: 0.26s;
+}
+.about-hero-tile-2 {
+  animation-delay: 0.4s;
+}
+.about-hero-tile-3 {
+  animation-delay: 0.54s;
+}
+
+.about-hero-greeting {
+  animation: about-hero-greeting-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1)
+    0.8s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-hero-tile,
+  .about-hero-greeting {
+    animation: none;
+  }
+}

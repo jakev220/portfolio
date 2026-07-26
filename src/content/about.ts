@@ -70,7 +70,7 @@ export const about: AboutContent = {
   ],
   lede: {
     label: "About",
-    body: "I'm a designer, systems-thinker, and strategist that specializes in untangling messy workflows so people can get on with their day better and faster. Currently designing and building internal developer tools to reduce friction in dashboard production at StepStone Group.",
+    body: "I'm a designer, systems-thinker, and strategist that specializes in untangling messy workflows so people can get on with their day better and faster. Currently building internal developer tools to reduce friction and improve visual consistency in dashboard production at StepStone Group.",
   },
   blocks: [
     {
@@ -86,7 +86,7 @@ export const about: AboutContent = {
       type: "prose",
       heading: "What I've been up to recently",
       body: [
-        "I'm currently leading dashboard standardization initiatives and building internal developer tools to reduce friction in dashboard production and improve visual consistency at StepStone Group.",
+        "I'm currently leading dashboard standardization initiatives and building internal developer tools to reduce friction and improve visual consistency in dashboard production at StepStone Group.",
         "Outside of my 9 to 5, I like to stay connected with my Triton roots and stay involved with the design and product communities at UC San Diego that helped me grow as a designer and as a person. You might find me speaking at panels, giving my two cents on projects, or helping student designers find their footing.",
       ],
       photos: [

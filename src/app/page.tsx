@@ -4,6 +4,7 @@ import { WorkSection } from "@/components/WorkSection";
 import { getAllWork } from "@/lib/mdx";
 import { Footer } from "@/components/Footer";
 import { footer } from "@/content/footer";
+import { HomeExitShell } from "@/components/HomeExitShell";
 
 export default function HomePage() {
   // Work cards are driven by the published case-study MDX (sorted by `order`).
@@ -27,9 +28,13 @@ export default function HomePage() {
     <>
       <main className="mx-auto max-w-7xl px-6 pt-64">
         <Hero {...hero} />
-        <WorkSection items={work} />
+        <HomeExitShell>
+          <WorkSection items={work} />
+        </HomeExitShell>
       </main>
-      <Footer {...footer} />
+      <HomeExitShell>
+        <Footer {...footer} />
+      </HomeExitShell>
     </>
   );
 }
