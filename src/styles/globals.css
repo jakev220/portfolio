@@ -221,9 +221,16 @@
     0.8s both;
 }
 
+/* Lede follows the greeting so the hang statement doesn’t pop in early. */
+.about-lede-enter {
+  animation: about-hero-greeting-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1)
+    1.1s both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .about-hero-tile,
-  .about-hero-greeting {
+  .about-hero-greeting,
+  .about-lede-enter {
     animation: none;
   }
 }

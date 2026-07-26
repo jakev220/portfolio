@@ -183,6 +183,7 @@ Signal: `beginHomeAboutExit()` dispatches `HOME_EXIT_EVENT`; `HomeExitShell` and
 | `.about-hero-tile` | 0.7s | — | `translateY(10px)` → 0 | About collage tiles (base) |
 | `.about-hero-tile-0` … `-3` | — | 0.12s + n×0.14s | — | Stagger L→R, T→B |
 | `.about-hero-greeting` | 0.85s | 0.8s | `translateY(8px)` → 0 | About “Hi, I'm Jake!” block |
+| `.about-lede-enter` | 0.85s | 1.1s | `translateY(8px)` → 0 | About hang statement (`HangStatement`) |
 
 Fill mode is `both` so elements stay at the `from` state until the delay elapses.
 Soft navigations remount the nodes and replay the same CSS animations.

@@ -18,7 +18,11 @@ export default function AboutPage() {
     <article className="mx-auto max-w-7xl px-6 pt-64 pb-24">
       <div className="flex flex-col gap-40">
         <AboutHero greeting={about.greeting} photos={about.heroPhotos} />
-        <HangStatement label={about.lede.label} body={about.lede.body} />
+        <HangStatement
+          label={about.lede.label}
+          body={about.lede.body}
+          className="about-lede-enter"
+        />
 
         {about.blocks.map((block) => (
           <AboutProse
