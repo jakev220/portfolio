@@ -36,7 +36,7 @@ function AnimatedBar({
   reduceMotion: boolean | null;
 }) {
   const widthPercent = Math.min((value / max) * 100, 100);
-  const barClass = `h-4 max-w-full rounded-full ${
+  const barClass = `h-4 shrink-0 rounded-full ${
     variant === "primary" ? "bg-primary" : "bg-secondary"
   }`;
 
@@ -98,17 +98,15 @@ export function ComparisonChart({
               {group.rows.map((row, rowIndex) => (
                 <div
                   key={row.label}
-                  className="flex min-w-0 items-center gap-3 sm:gap-6"
+                  className="flex min-w-0 items-center gap-4 sm:gap-6"
                 >
-                  <div className="min-w-0 flex-1">
-                    <AnimatedBar
-                      value={row.value}
-                      max={group.max}
-                      variant={row.variant}
-                      delay={groupIndex * 0.15 + rowIndex * 0.1}
-                      reduceMotion={reduceMotion}
-                    />
-                  </div>
+                  <AnimatedBar
+                    value={row.value}
+                    max={group.max}
+                    variant={row.variant}
+                    delay={groupIndex * 0.15 + rowIndex * 0.1}
+                    reduceMotion={reduceMotion}
+                  />
                   <span
                     className={`shrink-0 text-body ${
                       row.variant === "primary"
