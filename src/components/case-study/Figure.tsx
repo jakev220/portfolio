@@ -31,6 +31,11 @@ export interface FigureProps {
    * Defaults to 16/9.
    */
   ratio?: string;
+  /**
+   * Corner radius. `"xl"` (default) → `rounded-xl`. `"none"` → square corners.
+   * String so MDX can set it (`rounded="none"`).
+   */
+  rounded?: "xl" | "none";
   /** Optional class override (e.g. `my-0` when a parent owns the gap). */
   className?: string;
 }
@@ -46,9 +51,9 @@ function parseRatio(ratio: string): { w: number; h: number } {
 }
 
 /**
- * Case-study media block: a rounded surface for an image (`next/image`), a lazy
- * MP4, or a neutral placeholder. Width is owned by the container; image height
- * follows the asset aspect ratio.
+ * Case-study media block: a surface for an image (`next/image`), a lazy MP4, or
+ * a neutral placeholder. Width is owned by the container; image height follows
+ * the asset aspect ratio. Corner radius defaults to `xl` and can be turned off.
  */
 export function Figure({
   src,
@@ -57,6 +62,7 @@ export function Figure({
   alt = "",
   playbackRate,
   ratio = "16/9",
+  rounded = "xl",
   className = "my-8",
 }: FigureProps) {
   const { w, h } = parseRatio(ratio);
@@ -64,10 +70,11 @@ export function Figure({
   // Keep surface fill for empty / video slots only — image webps often use
   // transparency, and `bg-surface` would show through as a gray plate.
   const surface = lockBox ? "bg-surface" : "";
+  const radiusClass = rounded === "none" ? "" : "rounded-xl";
 
   return (
     <figure
-      className={`relative w-full overflow-hidden rounded-xl ${surface} ${className}`}
+      className={`relative w-full overflow-hidden ${radiusClass} ${surface} ${className}`}
       style={lockBox ? { aspectRatio: `${w} / ${h}` } : undefined}
     >
       {video ? (
