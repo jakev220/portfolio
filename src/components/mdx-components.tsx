@@ -1,19 +1,28 @@
 import type { MDXComponents } from "mdx/types";
 import { Section } from "@/components/case-study/Section";
+import { SectionLead } from "@/components/case-study/SectionLead";
 import { Split } from "@/components/case-study/Split";
 import { MediaRow } from "@/components/case-study/MediaRow";
-import { SplitHeading } from "@/components/case-study/SplitGrid";
-import { Detail, ProjectDetails } from "@/components/case-study/ProjectDetails";
+import { SplitHeading, RightProse, RightRail } from "@/components/case-study/SplitGrid";
+import {
+  Detail,
+  DetailGroup,
+  ProjectDetails,
+} from "@/components/case-study/ProjectDetails";
 import { Accent } from "@/components/case-study/Accent";
 import { Subtle } from "@/components/case-study/Subtle";
 import { Figure } from "@/components/case-study/Figure";
+import { InsetFigure } from "@/components/case-study/InsetFigure";
 import { Accordion } from "@/components/case-study/Accordion";
 import { AccordionItem } from "@/components/case-study/AccordionItem";
-import { Callout, CalloutHeading } from "@/components/case-study/Callout";
-import { CalloutMetric, CalloutMetrics } from "@/components/case-study/CalloutMetrics";
-import { CalloutSubtle } from "@/components/case-study/CalloutSubtle";
-import { CalloutAside } from "@/components/case-study/CalloutAside";
-import { ScienceJuryFormativeCallout } from "@/components/case-study/science-jury/ScienceJuryFormativeCallout";
+import { FullBleedBanner } from "@/components/case-study/FullBleedBanner";
+import {
+  InsightCard,
+  InsightCardGrid,
+} from "@/components/case-study/InsightCard";
+import { Metric, MetricRow } from "@/components/case-study/MetricRow";
+import { FeatureChapter } from "@/components/case-study/FeatureChapter";
+import { ScienceJuryFormativeChart } from "@/components/case-study/science-jury/ScienceJuryFormativeChart";
 
 /**
  * Maps MDX/Markdown elements to the portfolio design system (see tokens.ts).
@@ -24,28 +33,32 @@ import { ScienceJuryFormativeCallout } from "@/components/case-study/science-jur
  *   external handling are deferred to the future `Link` component.
  * - `code`/`pre` styling lives in `globals.css` under `.mdx-content` so it can
  *   distinguish inline code from highlighted code blocks (rehype-pretty-code).
- * - Capitalized keys (e.g. `Section`, `Split`) expose case-study layout
- *   components for direct use as JSX inside `.mdx` bodies.
+ * - Capitalized keys expose case-study layout components for JSX in `.mdx`.
  */
 export const mdxComponents: MDXComponents = {
   Section,
+  SectionLead,
   Split,
   MediaRow,
   SplitHeading,
+  RightProse,
+  RightRail,
   ProjectDetails,
   Detail,
+  DetailGroup,
   Accent,
   Subtle,
   Figure,
+  InsetFigure,
   Accordion,
   AccordionItem,
-  Callout,
-  CalloutHeading,
-  CalloutSubtle,
-  CalloutMetric,
-  CalloutMetrics,
-  CalloutAside,
-  ScienceJuryFormativeCallout,
+  FullBleedBanner,
+  InsightCard,
+  InsightCardGrid,
+  Metric,
+  MetricRow,
+  FeatureChapter,
+  ScienceJuryFormativeChart,
   h1: (props) => <h1 className="text-h1 text-primary mt-12 mb-4" {...props} />,
   h2: (props) => <h2 className="text-h2 text-heading mt-10 mb-3" {...props} />,
   h3: (props) => <h3 className="text-h3 text-heading mt-8 mb-2" {...props} />,
@@ -69,7 +82,7 @@ export const mdxComponents: MDXComponents = {
       {...props}
     />
   ),
-  hr: () => <hr className="border-divider my-10" />,
+  hr: () => <hr className="border-divider my-0" />,
   strong: (props) => <strong className="font-bold text-primary" {...props} />,
   em: (props) => <em className="italic" {...props} />,
   // eslint-disable-next-line @next/next/no-img-element

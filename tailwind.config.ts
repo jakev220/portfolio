@@ -40,14 +40,14 @@ const config: Config = {
         // simply inherits the base color (--color-text-body) set in globals.css.
         heading: "var(--color-text-heading)",
         secondary: "var(--color-text-secondary)",
-        callout: "var(--color-callout-text)",
-        "callout-muted": "var(--color-callout-text-muted)",
-        "callout-subtle": "var(--color-callout-text-subtle)",
-        "callout-surface": "var(--color-callout-surface)",
-        "callout-border": "var(--color-callout-border)",
-      },
-      backgroundColor: {
-        callout: "var(--color-callout-bg)",
+        // Per–case-study palette (set via --cs-* on [data-case-study]).
+        "cs-lavender": "var(--cs-lavender)",
+        "cs-orange": "var(--cs-orange)",
+        "cs-yellow": "var(--cs-yellow)",
+        "cs-blue": "var(--cs-blue)",
+        "cs-purple": "var(--cs-purple)",
+        // Fixed ink for pastel cs surfaces (does not flip in dark mode).
+        "cs-ink": "var(--cs-ink)",
       },
       borderColor: {
         DEFAULT: "var(--color-border)",

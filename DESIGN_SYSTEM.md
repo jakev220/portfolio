@@ -196,7 +196,8 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Avatar cycle + lift | `HeroAvatar` | Hover/focus cycles frames; slight `-translate-y` lift; accent name color |
 | Folder icons | `HeroFolder` | Hover opens tool icons (Framer) |
 | Accordion | `AccordionItem` | Ease-out **400ms** expand/collapse |
-| Formative bars | `ScienceJuryFormativeCallout` | Bars grow on scroll into view (`whileInView`, once) |
+| Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
+| Metric count-up | `Metric` | Value springs from 0 → target when scrolled into view |
 | Nav chrome | `Nav` | Show/hide + backdrop opacity; `motion-reduce:transition-none` |
 
 ### When adding new motion

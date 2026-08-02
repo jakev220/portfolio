@@ -14,20 +14,24 @@ export interface FigureProps {
    * so the media slot doesn't collapse when empty. Defaults to 16/9.
    */
   ratio?: string;
+  /** Optional class override (e.g. `my-0` when a parent owns the gap). */
+  className?: string;
 }
 
 /**
  * Case-study media block: a rounded, aspect-locked surface that shows an image
  * via `next/image` (object-cover) or a neutral `bg-surface` placeholder when no
- * `src` is provided. Layout-agnostic — width is owned by its container (a
- * `Split`/`MediaRow` body column, or a full-width `Section` child). Vertical
- * rhythm (`my-8` → 32px) suits body flow; containers that need a different gap
- * reset it (e.g. `Section` zeroes the margin and spaces via its 64px gap).
+ * `src` is provided. Layout-agnostic — width is owned by its container.
  */
-export function Figure({ src, alt = "", ratio = "16/9" }: FigureProps) {
+export function Figure({
+  src,
+  alt = "",
+  ratio = "16/9",
+  className = "my-8",
+}: FigureProps) {
   return (
     <figure
-      className="relative my-8 w-full overflow-hidden rounded-xl bg-surface"
+      className={`relative w-full overflow-hidden rounded-xl bg-surface ${className}`}
       style={{ aspectRatio: ratio.replace("/", " / ") }}
     >
       {src ? (
@@ -36,7 +40,7 @@ export function Figure({ src, alt = "", ratio = "16/9" }: FigureProps) {
           alt={alt}
           fill
           className="object-cover"
-          sizes="(min-width: 1024px) 1024px, 100vw"
+          sizes="(min-width: 1280px) 1232px, calc(100vw - 48px)"
         />
       ) : null}
     </figure>

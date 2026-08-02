@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllWorkSlugs, getWorkBySlug } from "@/lib/mdx";
+import { caseStudyPaletteStyle } from "@/lib/case-study-palette";
 import { CaseStudyHeader } from "@/components/CaseStudyHeader";
 import { MDXContent } from "@/components/MDXContent";
 
@@ -39,12 +40,17 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   // previewable while writing. Add a `!work.published && notFound()` guard
   // here before launch.
 
-  // Container width matches the case-study Figma: 1024px content column with
-  // 24px gutters (1072 - 2*24 = 1024 → ~208px margins at a 1440 viewport).
-  // pt-64 (≈258px) is shared by every case study and matches the home hero's
-  // top offset (Tailwind-default placeholder; refine with custom spacing later).
+  const paletteStyle = caseStudyPaletteStyle(slug);
+
+  // Shares the home/About page shell: 12 columns with 16px gutters and 80px
+  // outer margins at a 1440px viewport. Per-study `--cs-*` palette vars are
+  // set when the slug has an entry in `caseStudyPalettes`.
   return (
-    <article className="mx-auto max-w-[1072px] px-6 pt-64 pb-24">
+    <article
+      data-case-study={slug}
+      className="mx-auto max-w-7xl px-6 pb-16 pt-32 sm:pb-24 sm:pt-48 lg:pt-64"
+      style={paletteStyle}
+    >
       <CaseStudyHeader
         name={work.name}
         title={work.title}

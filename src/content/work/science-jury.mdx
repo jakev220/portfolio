@@ -14,165 +14,281 @@ published: true
 <ProjectDetails>
   <Detail label="Timeline">October – December 2025</Detail>
   <Detail label="Team">
-    4 Research Scientists
+    1 Project Lead
+
+    1 Principal Investigator
+
+    2 UX Researchers
 
     1 Software Engineer
 
     1 UI/UX Designer <Subtle>(me!)</Subtle>
   </Detail>
-  <Detail label="Research venue">CHI 2027 <Subtle>(Submission pending...)</Subtle></Detail>
+  <Detail label="Venue">CHI 2027 <Subtle>(Submission pending...)</Subtle></Detail>
 
-In late 2025, I collaborated with HCI researchers at the UCSD Design Lab to create a novel system utilizing multiple AI agents to provide diverse, actionable, and intelligently scaffolded feedback to academic writers drafting up research papers. 
+  <DetailGroup label="Project description">
+    ScienceJury replaces the context-switching and window-splitting experience of using AI for writing feedback, providing a structured, specialized document-integrated review experience.
+  </DetailGroup>
+  <DetailGroup label="What I owned">
+    Mapped out the interaction model, information architecture, and user journey.
 
-As a UI/UX design intern and the primary designer on this project, I was responsible for designing our experimental and control systems, working with researchers to translate research findings into design goals, and specifying interaction models for our team to build and test against.
+    Assisted researchers in translating research findings into design goals.
+
+    Design for our experimental and control systems.
+  </DetailGroup>
+  <DetailGroup label="Impact">
+    +84% more unique critique points vs. single-agent baselines.
+
+    +18% alignment of AI-generated feedback with real human peer reviews.
+
+    +24% increase in draft improvements reported by real authors.
+  </DetailGroup>
 </ProjectDetails>
 
 <Section>
-    <Callout label="Core design challenge">
-    <CalloutHeading>
-      How do we build a multi-agent feedback system that's *more comprehensive* than a single LLM, but doesn't collapse under the weight of its own output?
-    </CalloutHeading>
-  </Callout>
+  <SectionLead label="Problem">
+    Using existing AI tools for feedback forces writers to choose between context and range of perspective.
+  </SectionLead>
+
+  <MediaRow>
+    <SplitHeading>Anchored feedback within a text editor offers appropriate context, but limited range of perspective.</SplitHeading>
+
+    AI tools embedded into text editors anchor feedback to your text, but only give you one opinion, positioned exactly where it applies.
+
+    <Figure ratio="740/400" />
+  </MediaRow>
+
+  <MediaRow>
+    <SplitHeading>Prompting a range of perspective offers diverse feedback, but the lack of organization leads to overwhelm.</SplitHeading>
+
+    Prompting an LLM for multiple personas provides range, but outputs disconnected suggestions you have to manually map back to your draft, one by one.
+
+    <Figure ratio="740/400" />
+  </MediaRow>
+</Section>
+
+<FullBleedBanner tone="lavender" glyph="→" preText="Core design challenge:">
+  How do we build an agentic feedback system that offers multiple perspectives and stays anchored to the text it references, without it collapsing under the weight of its own output?
+</FullBleedBanner>
+
+<Section>
+  <SectionLead label="Formative study">
+    Does prompting multiple perspectives actually result in better critique, or does it just create more noise?
+  </SectionLead>
+
+  <RightRail>
+    <RightProse>
+      Our team compared the critiques of single LLM agent against a curated, three-agent panel on **50 real papers with real human reviews**. We measured each framework’s similarity to real human reviews and uniqueness in the issues surfaced.
+    </RightProse>
+
+    <hr />
+
+    <div className="flex flex-col gap-8">
+      <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p]:text-h3 [&_p]:text-heading">
+        The multi-agent approach identified nearly **twice** the unique issues that are more closely reflective of what human experts flagged.
+      </RightProse>
+
+      <ScienceJuryFormativeChart />
+    </div>
+
+    <div className="flex flex-col gap-8">
+      <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p]:text-h3 [&_p]:text-heading">
+        But without structure, more perspectives create more noise.
+      </RightProse>
+
+      <div className="flex flex-col gap-4">
+        <InsightCardGrid>
+          <InsightCard tone="yellow" glyph="*" size="body" minHeight="240">
+            The increased volume and diversity of feedback make it difficult for authors to prioritize and act on suggestions.
+          </InsightCard>
+          <InsightCard tone="yellow" glyph="*" size="body" minHeight="240">
+            Not all feedback is equally actionable or relevant to the author’s intent.
+          </InsightCard>
+          <InsightCard tone="yellow" glyph="*" size="body" minHeight="240">
+            Conflicting critiques require authors to interpret and reconcile feedback from multiple sources.
+          </InsightCard>
+        </InsightCardGrid>
+
+        <InsightCard
+          tone="lavender"
+          glyph="→"
+          size="h3"
+          minHeight="240"
+          preText="This formative study gave me a key insight for the system’s design:"
+        >
+          More feedback volume requires heavy design investment in how the feedback is organized and surfaced.
+        </InsightCard>
+      </div>
+    </div>
+  </RightRail>
 </Section>
 
 <Section>
-  <Split label="Research foundation">
-    <SplitHeading>Does using multiple agents *actually* result in better critique?</SplitHeading>
-
-In a formative study sampling 50 papers from a dataset with real human reviews, we compared single-agent critiques against a three-agent panel, measuring similarity to real human reviews and uniqueness in the issues surfaced per paper.
-  </Split>
-
-  <ScienceJuryFormativeCallout />
-
-</Section>
-
-<Section>
-  <Split label="Design strategy">
-    <SplitHeading>ScienceJury treats feedback as an ongoing conversation living inside the document.</SplitHeading>
-
-Most AI writing tools treat feedback as output, or at best, a static list that lands in a side pane. ScienceJury was designed with the principle that feedback should not leave the context in which it refers to.
-
-We mapped out the following design goals for our system:
-  </Split>
+  <SectionLead label="Design strategy">
+    I designed ScienceJury to support authors in navigating, interpreting, and applying feedback from multiple perspectives.
+  </SectionLead>
 
   <MediaRow>
     <SplitHeading>Support multi-perspective critiques through customizable and specialized reviewers.</SplitHeading>
-    <Figure ratio="1024/364" />
+    <Figure ratio="740/364" />
   </MediaRow>
+
   <MediaRow>
-    <SplitHeading>Let writers debate, question, and reason through feedback instead of passively receiving it.</SplitHeading>
-    <Figure ratio="1024/364" />
+    <SplitHeading>Let authors debate, question, and reason through feedback instead of passively receiving it.</SplitHeading>
+    <Figure ratio="740/364" />
   </MediaRow>
+
   <MediaRow>
     <SplitHeading>Reduce context-switching by anchoring every critique to the exact sentence it refers to.</SplitHeading>
-    <Figure ratio="1024/364" />
+    <Figure ratio="740/364" />
   </MediaRow>
 </Section>
 
-{/* Features section */}
 <Section>
-    <Split label="Features">
-        <SplitHeading>Control who reviews your work.</SplitHeading>
+  <SectionLead label="Solution" />
+  <FeatureChapter title="Configuring the agent panel" subtle="(01)" ratio="1280/640">
+    <Split level="h3">
+      <SplitHeading>Reduce effort to configure a panel while giving authors autonomy and control over their reviewer profiles.</SplitHeading>
 
-    Once the research goals and draft stage are initialized, ScienceJury scans the paper to suggest relevant subject areas, pull potential reviewers, and generate three complementary agent profiles. Writers can customize, regenerate, or remove individual agents before feedback is generated.
+      ScienceJury suggests relevant subject areas, potential references, and three agent profiles. 
+      
+      Authors have full autonomy to customize, regenerate, or remove agent profiles before the feedback is generated.
     </Split>
-    <Figure ratio="1024/500" />
+    <InsetFigure ratio="1064/364" />
+
+    <Split level="h3">
+      <SplitHeading>Position authors to evaluate AI feedback more effectively.</SplitHeading>
+
+      Each agent surfaces a persona with rationale for why their perspective matters, review tasks, and real scholar references. 
+      
+      Outlining the rationale encourages authors to critically evaluate AI-generated feedback and make them less likely to over-trust it.
+    </Split>
+    <InsetFigure ratio="1064/364" />
+  </FeatureChapter>
+
+  <hr />
+
+  <FeatureChapter title="Feedback interaction" subtle="(02)" ratio="1280/640">
+    <Split level="h3">
+      <SplitHeading>Categorizing agent feedback and anchoring it to the relevant text helps authors process critique and take action.</SplitHeading>
+
+      Each piece of feedback is decomposed into discrete, sentence-level items anchored to the exact passage it refers to. 
+      
+      Agent feedback is distinguished by color to help authors see where different perspectives converge or conflict on the same claim.
+    </Split>
+    <InsetFigure ratio="1064/364" />
+
+    <Split level="h3">
+      <SplitHeading>Individual conversation threads with agents make engaging with critique easy.</SplitHeading>
+
+      Each feedback item is a root of a conversation thread where authors can ask follow-ups, request alternatives, or challenge an agent’s reasoning. 
+      
+      ScienceJury encourages authors to interact with agents through dynamic nudges tailored to feedback and inline adoption of generated suggestions.
+    </Split>
+    <InsetFigure ratio="1064/364" />
+  </FeatureChapter>
 </Section>
 
 <Section>
-    <Split>
-        <SplitHeading>Positioning writers to better evaluate AI feedback.</SplitHeading>
-    
-    Each agent surfaces a persona, a rationale for why that perspective matters for this specific paper, a set of concrete review tasks, and references to real scholars in the field. Showing the rationale puts writers in a better position to evaluate AI-generated feedback critically and making them less likely to over-trust it.
-    </Split>
-    <Figure ratio="1024/500" />
+  <SectionLead label="Results">
+    In a between-subjects study with 22 academic authors, ScienceJury positively influenced how they edited their drafts.
+  </SectionLead>
+
+  <RightRail>
+    <RightProse>
+      Participants revised their in-progress papers using either ScienceJury or a single-agent control. The control condition had the same editor and underlying model, but only one agent in a more familiar LLM interface.
+    </RightProse>
+
+    <hr />
+
+    <div className="flex flex-col gap-16">
+      <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p]:text-h3 [&_p]:text-heading">
+        Feedback rated significantly more specific, diverse, and aligned with expert review.
+        
+        Authors reported deeper engagement with their own drafts.
+      </RightProse>
+
+      <MetricRow>
+        <Metric value="84" prefix="+" suffix="%" label="more unique critique points vs. single-agent" />
+        <Metric value="40" prefix="+" suffix="%" label="higher specificity rating vs. single-agent" />
+        <Metric value="4.7" decimals="1" suffix=" / 7" label="average draft improvement vs. 3.8 in single-agent" />
+      </MetricRow>
+
+      <InsightCardGrid>
+        <InsightCard tone="blue" glyph="“" size="body" postText="– Participant 8">
+          Every suggestion and review or comment I leave on my document has potential for a whole conversation to spring from it and has context that I can’t capture with just one comment. 
+          
+          But [ScienceJury] uses the AI to capture all that context per sentence, which is really helpful.
+        </InsightCard>
+        <InsightCard tone="blue" glyph="“" size="body" postText="– Participant 7">
+          [Deconstructed feedback] gave me multiple doors to enter the argument again. Each agent pushed me in a different direction, so I could decide which made the most sense for the story I want to tell.
+        </InsightCard>
+      </InsightCardGrid>
+    </div>
+  </RightRail>
+
+  <SectionLead>
+    However, ScienceJury didn’t fully solve for over-trust.
+  </SectionLead>
+
+  <RightRail>
+    <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p]:text-h3 [&_p]:text-heading">
+      Reviewer personas written to sound credible and domain-specific gave some participants an outsized sense of authority.
+    </RightProse>
+
+    <div className="flex flex-col gap-4">
+      <InsightCardGrid>
+        <InsightCard tone="blue" glyph="“" size="body" postText="– Participant 10">
+          It felt authoritative when it framed things like ‘As an HCI expert, I believe. . . ’ It made me consider the feedback more seriously. But I am also worried I focused too much on this review.
+        </InsightCard>
+        <InsightCard tone="yellow" glyph="*" size="body">
+          This feedback tracks with existing research on how the source framing of the feedback shapes engagement (human vs. AI-generated). 
+          
+          Credibility and trust should have been framed as design problems, rather than side effects of good persona-writing.
+        </InsightCard>
+      </InsightCardGrid>
+
+      <InsightCard
+        tone="lavender"
+        glyph="→"
+        size="h3"
+        preText="This opens up a question for future iterations:"
+        postText="If given more time, I’d explore softer persona framing, explicit uncertainty signals, or confidence indicators surfaced alongside each feedback item."
+      >
+        How do you make AI feedback feel credible enough to be useful, without it becoming so authoritative that it overrides the author’s own agency?
+      </InsightCard>
+    </div>
+  </RightRail>
 </Section>
 
 <Section>
-    <Split>
-        <SplitHeading>Feedback that stays in context, where it belongs.</SplitHeading>
-    
-    ScienceJury decomposes feedback from agents into discrete, sentence-level items and anchors each one to the exact passage it refers to. Each agent's highlights use a distinct color. When multiple agents comment on the same sentence, writers can immediately see where different perspectives converge or conflict on the same claim.
-    </Split>
-    <Figure ratio="1024/500" />
-</Section>
+  <SectionLead label="Constraints and pivots" />
 
-<Section>
-    <Split>
-        <SplitHeading>Shifting from passive reading to active reasoning.</SplitHeading>
-    
-    Each feedback item is the root of a persistent conversation thread where writers can ask follow-ups, request alternatives, or challenge an agent’s reasoning. ScienceJury makes engaging with critique easy with dynamic nudges tailored to feedback and inline adoption of AI-generated suggestions.    
-    </Split>
-    <Figure ratio="1024/500" />
-</Section>
+  <Split>
+    <SplitHeading>What forced us to adapt, and what I learned from it.</SplitHeading>
 
-{/* End features section*/}
+    This project ran from October to December, leaving us with two months to design, build, and run preliminary user studies. **Our project lead needed the paper to defend her PhD thesis before starting an industry job.** That timeline shaped every decision about the system.
+  </Split>
 
-<Section>
-    <Split label="Results">
-        <SplitHeading>In a between-subjects study with 22 academic writers, ScienceJury proved more effective than a single-agent baseline.</SplitHeading>
-    
-   Participants revised their in-progress papers using either ScienceJury or a single-agent control. The control condition had the same editor and underlying model, but a different, more common feedback structure <Subtle>(think ChatGPT or Gemini)</Subtle>. 
-
-    Across all five feedback quality dimensions — specificity, constructiveness, justification, diversity, and similarity to real reviews — ScienceJury rated higher. Interaction logs showed that ScienceJury shifted behavior from additive editing (adding more words) to targeted refinement. Writers replaced existing content using "Adopt it" rather than just expanding it.    
-    </Split>
-
-    <Callout label="Key metrics">
-        <CalloutHeading>
-        Feedback rated significantly more specific, diverse, and aligned with expert review.{" "}
-        <CalloutSubtle>Writers reported deeper engagement with their own drafts.</CalloutSubtle>
-        </CalloutHeading>
-        <CalloutMetrics>
-            <CalloutMetric value="+84%" label="more unique critique points vs. single-agent" />
-            <CalloutMetric value="+40%" label="higher specificity rating vs. single-agent" />
-            <CalloutMetric value="4.7 / 7" label="average draft improvement vs. 3.8 in single-agent" />
-            <CalloutMetric value="3.9" label="feedback threads engaged per session" />
-        </CalloutMetrics>
-    </Callout>
-
-    
-    <Split> 
-        <SplitHeading>Participants perceived expert agents as authoritative, leading to over-trust.</SplitHeading>
-    
-    The study also surfaced a risk the design hadn't fully resolved. Reviewer personas, written to sound credible and domain-specific, created an outsized sense of authority for some participants. One noted that phrasing like "As an HCI expert, I believe..." made them weigh the feedback more seriously than they should have. This finding aligns with known research on how source framing affects engagement.
-
-    It opens up a design question for future iterations: how do you make AI feedback credible enough to be useful without making it so authoritative that it overrides writer agency? Possible directions include softer persona framing, explicit uncertainty signals, or confidence indicators surfaced alongside individual feedback items.
-    </Split>
-</Section>
-
-<Section>
-    <Split label="Constraints and pivots">
-        <SplitHeading>What forced us to adapt, and what I learned from it.</SplitHeading>
-    
-    This project ran from October to December — two months to design, build, and run preliminary user studies. Our project lead needed the paper to defend her PhD thesis before starting an industry job. That timeline shaped every decision about scope, tooling, and what to cut.
-    </Split>
-
-    <Accordion>
-        <AccordionItem title="Google Docs → Quill.js" subtitle="Technical constraints led us to adopt friction in exchange for richer interaction model.">
-            
-            We originally wanted to build ScienceJury as a Google Docs plug-in.  During technical scoping, our engineer discovered that the Google Docs API doesn't support text-anchored inline comments on the front-end, which is a core requirement for contextual decomposition.
-
-            We pivoted to Quill.js, a rich text editor that does support location-anchored highlights and bidirectional linking. This unlocked the design but came with a tradeoff: instead of meeting researchers where they work, they now have to upload their document (PDF or Word) into our system. That added friction is a potential adoption barrier, and one I'd address in future iterations — whether through a browser extension, tighter document import flows, or exploring other native editor integrations as APIs evolve.
-        </AccordionItem>
-    </Accordion>
-
+  <Accordion>
     <AccordionItem title="Simulating real people → Referencing their published work" subtitle="An ethics-driven pivot to preserved scholarly grounding and remove identity impersonation.">
-        An early concept had agents directly emulate named researchers. Users could select a specific person — say, an HCI professor they admired — and an agent would generate feedback in that person's voice, drawing on their published positions. It was an appealing idea: credible, personalized, grounded in real expertise.
+      An early concept of our system had agents directly emulate named researchers. Authors could select an HCI professor they admired, and the agent would generate feedback in that person’s voice, drawing on their published positions.
 
-        However, this concept didn’t sit right with me. Generating feedback on behalf of a real, named individual without their consent crosses an ethical line. It puts words in their mouth, potentially misrepresents their views, and could damage their reputation or mislead writers about what those researchers actually think. I raised this concern to my team, to which they agreed.
+      The more I sat with this concept, the more I felt that it was crossing an ethical line. Generating feedback on behalf of a real, named individual, without their consent, risks putting words in their mouth and misrepresenting their views. I flagged my concern in a team sync, to which everyone quickly agreed to pivot before investing more time into defining the persona logic.
 
-        We pivoted to a model where agents reference a person's published literature as a knowledge source but use generic role-based names ("HCI Expert," "Methods Specialist"). This preserves the grounding in real scholarly expertise without speaking on behalf of any specific person. It's a meaningful distinction that I believe was the right call both ethically and for long-term trust in the system.
+      The alternative logic I proposed is a model where agents reference a person's published literature as a knowledge source but use generic role-based names ("HCI Expert," "Methods Specialist"). This preserves the grounding in real scholarly expertise without speaking on behalf of any specific person. It's a meaningful distinction that I believe was the right call both ethically and for long-term trust in the system.
     </AccordionItem>
 
-    <AccordionItem title="Custom design → Material Design" subtitle="A velocity-driven decision to adopt an existing design system freed up time for interaction model depth.">
-        Given the timeline, building a custom component library wasn't viable. I used Material Design as the foundation for our prototypes because it let me focus design effort on what actually mattered: the interaction model, the information architecture, and the user journey. Pre-built components meant I could spend time on flow and logic rather than building out button states.
+    <AccordionItem title="Google Docs → Quill.js" subtitle="Technical constraints led us to adopt friction in exchange for richer interaction model.">
+      We initially scoped ScienceJury as a Google Docs plug-in, but the Docs API doesn't support text-anchored inline comments on the front-end, a hard requirement for our contextual decomposition model.
 
-        The tradeoff is that the visual language is more generic than I'd produce given more time and creative latitude. However, working within an existing design system taught me something valuable: the fastest path to a well-functioning product isn't always starting from scratch. Knowing when to use the system versus when to push past it, and how to adapt existing components to support novel interaction patterns, is a real skill I came away with sharper from this project.
+      We pivoted to Quill.js, a rich text editor that supports location-anchored highlights and bidirectional linking. This unlocked the design, but came with a tradeoff: instead of meeting researchers where they already work, they now have to upload their document (PDF or Word) into our system. That added friction is a real adoption barrier, one I'd address in future iterations through a browser extension or native editor integrations as APIs evolve.
     </AccordionItem>
 
-    <AccordionItem title="Feature cuts: agent debate, heat maps, discarded comments" subtitle="Reducing the scope for clarity and testability under timeline pressure.">
-        We had a longer list of features we wanted the system to support — inter-agent debate (agents responding to each other's critiques), a revision heat map showing which sections of the paper needed the most work, filtering by agent or feedback type, and a discarded comments bin. All interesting ideas worth exploring!
+    <AccordionItem title="Tight timeline → Lean system" subtitle="Reducing the scope for clarity and testability under timeline pressure.">
+      We had a longer list of features on the table, including inter-agent debate, where agents could respond to each other's critiques directly. With two months on the clock, most of it got cut.
 
-        With two months on the clock, we cut them. The decision framework was straightforward: does this feature directly serve one of the three design goals, and can we build and test it in time? Everything that didn't pass got parked. The result was a tighter, more testable system, and participant feedback confirmed that the features we shipped were the right ones to prioritize.
+      The decision framework was straightforward: does this feature directly serve one of the three design goals, and can we build and test it in time? Inter-agent debate was compelling and novel, but risked adding another layer of noise on top of a system. The result was a tighter, more testable system, and participant feedback confirmed that the features we shipped were the right ones to prioritize.
     </AccordionItem>
+  </Accordion>
 </Section>

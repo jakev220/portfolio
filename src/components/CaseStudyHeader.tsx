@@ -10,10 +10,10 @@ export interface CaseStudyHeaderProps {
 }
 
 /**
- * Frontmatter-driven case-study header. Matches the Figma "header" frame at
- * 1024px: a title block (name + descriptive subtitle), cover media (1024×500,
- * rounded) or a neutral placeholder, then a divider. The project-details meta
- * + brief live in a separate `<ProjectDetails>` MDX section beneath the header.
+ * Frontmatter-driven case-study header. Spans all 12 columns with a title
+ * block, wide cover media (rounded) or neutral placeholder, then a divider.
+ * The project-details meta + brief live in a separate `<ProjectDetails>` MDX
+ * section beneath the header.
  *
  * Accessibility: `name` is the page's single `<h1>`; the descriptive `title`
  * is paired with it via `<hgroup>` as a subheading (rather than a second
@@ -24,13 +24,13 @@ export interface CaseStudyHeaderProps {
  */
 export function CaseStudyHeader({ name, title, coverImage }: CaseStudyHeaderProps) {
   return (
-    <header className="flex flex-col gap-8">
-      <hgroup className="flex flex-col gap-2">
-        <h1 className="text-h1 text-primary">{name}</h1>
-        {title ? <p className="text-h2">{title}</p> : null}
+    <header className="flex min-w-0 flex-col gap-6 sm:gap-8">
+      <hgroup className="flex min-w-0 flex-col gap-2">
+        <h1 className="text-h1 text-primary break-words">{name}</h1>
+        {title ? <p className="text-h2 break-words">{title}</p> : null}
       </hgroup>
 
-      <div className="relative aspect-[1024/500] overflow-hidden rounded-xl bg-surface">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface sm:aspect-[1024/500]">
         {coverImage ? (
           <Image
             src={coverImage}
@@ -38,7 +38,7 @@ export function CaseStudyHeader({ name, title, coverImage }: CaseStudyHeaderProp
             fill
             priority
             className="object-cover"
-            sizes="(min-width: 1024px) 1024px, 100vw"
+            sizes="(min-width: 1280px) 1232px, calc(100vw - 48px)"
           />
         ) : null}
       </div>

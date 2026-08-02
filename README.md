@@ -153,7 +153,7 @@ Write the case study body here in MDX/Markdown.
 auto-generated `id`s), paragraphs, **bold**/_italic_, links, lists, blockquotes,
 GitHub-flavored tables, horizontal rules, inline code, and syntax-highlighted
 fenced code blocks (Shiki, `github-light`). Custom components (e.g. `<Figure>`,
-`<Callout>`) get registered in that same map as we build them.
+`<InsightCard>`, `<FullBleedBanner>`) get registered in that same map as we build them.
 
 ---
 

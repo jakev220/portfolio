@@ -3,7 +3,7 @@
 import { useId, useState, type ReactNode } from "react";
 
 export interface AccordionItemProps {
-  /** Primary trigger label (styled text, not a heading tag). */
+  /** Primary trigger label — rendered as an `h3`. */
   title: string;
   /** Optional secondary line beneath the title. */
   subtitle?: string;
@@ -45,7 +45,7 @@ function TriggerContent({
     <>
       <AccordionIcon open={open} />
       <span className="flex min-w-0 flex-col gap-2">
-        <span className="text-h3 text-heading">{title}</span>
+        <h3 className="text-h3 text-heading m-0">{title}</h3>
         {subtitle ? (
           <span className="text-body text-secondary">{subtitle}</span>
         ) : null}
@@ -57,9 +57,9 @@ function TriggerContent({
 /**
  * A single collapsible case-study row. Content and divider inset 12px (`px-3`
  * `py-3`) per the Figma spec. Closed: the full padded row is the click target
- * (hover surface + 25° icon tilt). Expanded: mirrors `SplitGrid` geometry inside
- * the inset; the full-height left column closes the panel so body text stays
- * selectable. Icon rotates 45° when open.
+ * (hover surface + 25° icon tilt). Expanded: mirrors the shared 4 / 1 / 7 grid
+ * geometry inside the inset; the full-height left column closes the panel so
+ * body text stays selectable. Icon rotates 45° when open.
  */
 export function AccordionItem({ title, subtitle, children }: AccordionItemProps) {
   const [open, setOpen] = useState(false);
@@ -67,7 +67,7 @@ export function AccordionItem({ title, subtitle, children }: AccordionItemProps)
   const toggle = () => setOpen((prev) => !prev);
 
   const triggerClassName =
-    "flex cursor-pointer items-start gap-2 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
+    "cursor-pointer items-start gap-2 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
 
   return (
     <div
@@ -81,22 +81,27 @@ export function AccordionItem({ title, subtitle, children }: AccordionItemProps)
           aria-expanded={false}
           aria-controls={panelId}
           onClick={toggle}
-          className={`absolute inset-0 z-10 flex w-full flex-col text-left md:flex-row md:gap-x-16 ${triggerClassName} bg-transparent p-3`}
+          className={`absolute inset-0 z-10 grid w-full grid-cols-1 text-left lg:grid-cols-12 lg:gap-4 ${triggerClassName} bg-transparent p-3`}
         >
-          <span className="flex w-full items-start gap-2 md:w-[400px]">
+          <span className="flex w-full min-w-0 items-start gap-2 lg:col-span-4">
             <TriggerContent title={title} subtitle={subtitle} open={false} />
           </span>
-          <span aria-hidden className="hidden flex-1 md:block" />
+          <span
+            aria-hidden
+            className="hidden lg:col-span-7 lg:col-start-6 lg:block"
+          />
         </button>
       ) : null}
 
       <div
-        className={`grid md:grid-cols-[400px_minmax(0,1fr)] md:gap-x-16 ${
+        className={`grid grid-cols-1 lg:grid-cols-12 lg:gap-4 ${
           open ? "gap-y-8" : "gap-y-0"
         }`}
       >
         <div
-          className={`relative min-h-full ${!open ? "pointer-events-none" : ""}`}
+          className={`relative min-h-full min-w-0 lg:col-span-4 ${
+            !open ? "pointer-events-none" : ""
+          }`}
         >
           {open ? (
             <>
@@ -108,7 +113,7 @@ export function AccordionItem({ title, subtitle, children }: AccordionItemProps)
                 aria-expanded
                 aria-controls={panelId}
                 onClick={toggle}
-                className={`absolute inset-0 z-10 ${triggerClassName} bg-transparent p-0`}
+                className={`absolute inset-0 z-10 flex ${triggerClassName} bg-transparent p-0`}
               >
                 <TriggerContent title={title} subtitle={subtitle} open />
               </button>
@@ -120,7 +125,7 @@ export function AccordionItem({ title, subtitle, children }: AccordionItemProps)
           )}
         </div>
 
-        <div className="cursor-text text-body [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+        <div className="min-w-0 cursor-text text-body lg:col-span-7 lg:col-start-6 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
           <div
             id={panelId}
             aria-hidden={!open}

@@ -13,8 +13,8 @@ export interface AboutProseProps {
 
 /**
  * 12-col prose row: heading spans cols 1–4, body (+ optional photo strip)
- * spans cols 7–12. An optional `gallery` sits 64px below the text row and
- * spans the full content width. Stacks on small screens.
+ * spans cols 6–12 (4 / 1 / 7). An optional `gallery` sits 64px below the text
+ * row and spans the full content width. Stacks on small screens.
  */
 export function AboutProse({
   heading,
@@ -24,9 +24,11 @@ export function AboutProse({
 }: AboutProseProps) {
   return (
     <section className="flex flex-col gap-16">
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-4">
-        <h2 className="text-h2 text-primary m-0 md:col-span-4">{heading}</h2>
-        <div className="flex flex-col gap-16 md:col-span-6 md:col-start-7">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-4">
+        <h2 className="text-h2 text-primary m-0 min-w-0 lg:col-span-4">
+          {heading}
+        </h2>
+        <div className="flex min-w-0 flex-col gap-16 lg:col-span-7 lg:col-start-6">
           <div className="flex flex-col gap-4">
             {body.map((paragraph) => (
               <p key={paragraph} className="text-body m-0">
