@@ -95,9 +95,21 @@ export function Metric({
       />
       <div className="flex min-w-0 flex-col gap-1 py-4 pl-2">
         <p className="text-h1 m-0 text-primary">
-          <motion.span>{`${prefix}${display}${suffix}`}</motion.span>
+          <motion.span>
+            {prefix}
+            {display}
+            {suffix ? (
+              <span
+                className={
+                  suffix.includes("/") ? "text-secondary" : undefined
+                }
+              >
+                {suffix}
+              </span>
+            ) : null}
+          </motion.span>
         </p>
-        <p className="text-body m-0 text-secondary">{label}</p>
+        <p className="text-caption m-0 text-secondary sm:text-body">{label}</p>
       </div>
     </div>
   );

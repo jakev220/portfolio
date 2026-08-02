@@ -32,9 +32,12 @@ letter-spacing · weight are all baked into the utility.
 | caption | `text-caption` | 0.875rem / 14px | 1.5 | 0em | 400 | Image captions, footnotes, helper text |
 | label | `text-label` | 0.875rem / 14px | 1.5 | 0em | 400 | Section pre-headers, in-page nav anchors |
 | body | `text-body` | 1rem / 16px | 1.6 | 0em | 400 | Default body text |
-| h3 | `text-h3` | 1.5rem / 24px | 1.2 | 0em | 400 | Sub-section headers |
-| h2 | `text-h2` | 2rem / 32px | 1.2 | -0.01em | 400 | Section headers |
-| h1 | `text-h1` | 3rem / 48px | 1.2 | -0.01em | 400 | Case study page titles |
+| h3 | `text-h3` | `clamp` ~20→24px | 1.2 | 0em | 400 | Sub-section headers (fluid) |
+| h2 | `text-h2` | `clamp` ~24→32px | 1.2 | -0.01em | 400 | Section headers (fluid) |
+| h1 | `text-h1` | `clamp` ~32→48px | 1.2 | -0.01em | 400 | Case study page titles (fluid) |
+
+> `h1`–`h3` use viewport-fluid `clamp()` so headings scale down on mobile/tablet
+> while capping at the desktop sizes above. `body` / `label` / `caption` stay fixed.
 
 > `caption` and `label` are identical today but kept as separate tokens so they can
 > diverge later (e.g. `label` may gain tracking or an uppercase treatment).

@@ -1,0 +1,15 @@
+---
+description: Prevent stuck Cursor browser viewport after mobile testing
+alwaysApply: true
+---
+
+# Browser viewport hygiene
+
+The left-pinned / “not responsive” look (content in a narrow column with empty space on the right) is almost always a **stuck CDP device-metrics override** from mobile testing — not a CSS or Next.js bug.
+
+## Required workflow
+
+1. Before diagnosing a layout/responsiveness bug, run `Emulation.clearDeviceMetricsOverride`, then re-check. If the layout fills the panel, it was stuck emulation.
+2. After any `Emulation.setDeviceMetricsOverride` (or equivalent mobile width), **always** call `Emulation.clearDeviceMetricsOverride` before ending the turn — even if verification failed or you navigate away.
+3. Prefer measuring with `Runtime.evaluate` (`window.innerWidth`, `getBoundingClientRect`) over leaving a narrow override active while talking to the user.
+4. Do not tell the user the site “lost responsiveness” until metrics are cleared and the issue still reproduces at a real wide `window.innerWidth`.

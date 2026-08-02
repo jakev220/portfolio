@@ -30,8 +30,8 @@ export interface InsightCardProps extends CalloutFieldsProps {
   /** Palette fill — maps to `--cs-*` on the case-study article. */
   tone?: CaseStudyTone;
   /**
-   * Minimum card height. `"240"` → 200px on small screens, 240px at lg+
-   * (Figma formative / insight card fill height).
+   * Minimum card height. `"240"` → 240px fill at lg+ when cards sit in a row.
+   * Stacked (below lg) sizes to content.
    */
   minHeight?: "240";
 }
@@ -87,9 +87,9 @@ function resolveSize(size: CalloutSize): TypographyToken {
  * banner: glyph → pre-text → callout → post-text.
  *
  * Glyph sits flush on the pre-text (0 gap; glyph uses `leading-none`).
- * Pre and callout are one body line apart (`gap-4`). Post-text (e.g. quote
- * attribution) uses `mt-auto` so it pins to the bottom when the card fills
- * height — matching Figma's auto spacing between callout and author.
+ * Pre / post use `callout-body` so they match body-sized card copy (avoids
+ * `text-body` reading larger than `callout-body` on mobile). Post-text uses
+ * `mt-auto` so attribution pins to the bottom when the card fills height.
  */
 export function CalloutFields({
   glyph,
@@ -108,14 +108,16 @@ export function CalloutFields({
         </p>
       ) : null}
       <div className="flex min-h-0 flex-1 flex-col gap-4">
-        {preText ? <p className="text-body m-0">{preText}</p> : null}
+        {preText ? (
+          <p className="text-callout-body m-0">{preText}</p>
+        ) : null}
         <div
           className={`m-0 ${sizeClass[token]} [&_em]:italic [&_p]:m-0 [&_p+p]:mt-4 [&_strong]:font-bold`}
         >
           {children}
         </div>
         {postText ? (
-          <p className="text-body m-0 mt-auto pt-4">{postText}</p>
+          <p className="text-callout-body m-0 mt-auto pt-4">{postText}</p>
         ) : null}
       </div>
     </div>
@@ -127,7 +129,7 @@ export function CalloutFields({
  * formative and results card grids — tone, glyph, and type size vary by use.
  */
 const minHeightClass = {
-  "240": "min-h-[200px] sm:min-h-[220px] lg:min-h-[240px]",
+  "240": "lg:min-h-[240px]",
 } as const;
 
 export function InsightCard({
@@ -141,7 +143,7 @@ export function InsightCard({
 }: InsightCardProps) {
   return (
     <div
-      className={`flex min-w-0 flex-1 flex-col rounded-xl px-3 pb-6 pt-3 text-cs-ink [&_strong]:text-cs-ink ${toneClass[tone]} ${
+      className={`flex min-w-0 flex-col rounded-xl px-3 pb-6 pt-3 text-cs-ink [&_strong]:text-cs-ink lg:flex-1 ${toneClass[tone]} ${
         minHeight ? minHeightClass[minHeight] : "min-h-0"
       }`}
     >
@@ -159,7 +161,8 @@ export function InsightCard({
 
 /**
  * Lays out `InsightCard` children. `row` distributes them across equal columns
- * once the container is wide enough; `stack` keeps them full-width.
+ * at lg+ (`items-stretch` + card `lg:flex-1`); stacked below lg sizes to content
+ * so quote attributions share the same bottom padding.
  */
 export function InsightCardGrid({
   layout = "row",

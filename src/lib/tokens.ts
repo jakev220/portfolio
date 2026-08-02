@@ -53,19 +53,22 @@ export const typography = {
     weight: fontWeight.regular,
   },
   h3: {
-    size: "1.5rem", // 24px — sub-section headers
+    /** Fluid ~20px → 24px — sub-section headers */
+    size: "clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem)",
     lineHeight: 1.2,
     letterSpacing: "0em",
     weight: fontWeight.regular,
   },
   h2: {
-    size: "2rem", // 32px — section headers
+    /** Fluid ~24px → 32px — section headers */
+    size: "clamp(1.5rem, 1.15rem + 1.2vw, 2rem)",
     lineHeight: 1.2,
     letterSpacing: "-0.01em",
     weight: fontWeight.regular,
   },
   h1: {
-    size: "3rem", // 48px — case study page titles
+    /** Fluid ~32px → 48px — case study page titles */
+    size: "clamp(2rem, 1.25rem + 2.5vw, 3rem)",
     lineHeight: 1.2,
     letterSpacing: "-0.01em",
     weight: fontWeight.regular,
