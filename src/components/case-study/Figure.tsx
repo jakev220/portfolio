@@ -33,9 +33,15 @@ export interface FigureProps {
   ratio?: string;
   /**
    * Corner radius. `"xl"` (default) → `rounded-xl`. `"none"` → square corners.
-   * String so MDX can set it (`rounded="none"`).
+   * String so MDX can set it (`rounded="none"`). Ignored when `frame` is set
+   * (frames use a fixed 12px radius).
    */
   rounded?: "xl" | "none";
+  /**
+   * Optional panel chrome. `"ink-08"` → black-08 fill at 15% opacity
+   * (~#FBFBFB on near-white), black-08 1px stroke, 12px corner radius.
+   */
+  frame?: "ink-08";
   /** Optional class override (e.g. `my-0` when a parent owns the gap). */
   className?: string;
 }
@@ -50,6 +56,13 @@ function parseRatio(ratio: string): { w: number; h: number } {
   };
 }
 
+/** black-08 — primary ink at 8% opacity (~#EAEAEA on near-white). */
+const INK_08 =
+  "color-mix(in srgb, var(--color-text-primary) 8%, transparent)";
+
+/** black-08 brought to 15% opacity (~#FBFBFB on near-white). */
+const INK_08_FILL_15 = `color-mix(in srgb, ${INK_08} 15%, transparent)`;
+
 /**
  * Case-study media block: a surface for an image (`next/image`), a lazy MP4, or
  * a neutral placeholder. Width is owned by the container; image height follows
@@ -63,19 +76,35 @@ export function Figure({
   playbackRate,
   ratio = "16/9",
   rounded = "xl",
+  frame,
   className = "my-8",
 }: FigureProps) {
   const { w, h } = parseRatio(ratio);
   const lockBox = Boolean(video) || !src;
   // Keep surface fill for empty / video slots only — image webps often use
   // transparency, and `bg-surface` would show through as a gray plate.
-  const surface = lockBox ? "bg-surface" : "";
-  const radiusClass = rounded === "none" ? "" : "rounded-xl";
+  // Framed figures supply their own fill instead.
+  const surface = lockBox && !frame ? "bg-surface" : "";
+  const radiusClass = frame ? "" : rounded === "none" ? "" : "rounded-xl";
+
+  const frameStyle =
+    frame === "ink-08"
+      ? {
+          backgroundColor: INK_08_FILL_15,
+          borderWidth: 1,
+          borderStyle: "solid" as const,
+          borderColor: INK_08,
+          borderRadius: 12,
+        }
+      : undefined;
 
   return (
     <figure
       className={`relative w-full overflow-hidden ${radiusClass} ${surface} ${className}`}
-      style={lockBox ? { aspectRatio: `${w} / ${h}` } : undefined}
+      style={{
+        ...(lockBox ? { aspectRatio: `${w} / ${h}` } : null),
+        ...frameStyle,
+      }}
     >
       {video ? (
         <FigureVideo
