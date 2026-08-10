@@ -11,6 +11,13 @@ export interface FigureVideoProps {
    * Passed as a string from MDX (e.g. playbackRate="0.75").
    */
   playbackRate?: string;
+  /**
+   * How the video sits in the figure box.
+   * - `cover` (default) — fill the box, may crop.
+   * - `top-right` — pin to top + right, height fills the box, width follows
+   *   the intrinsic aspect (no vertical crop when the box matches the mp4 ratio).
+   */
+  fit?: "cover" | "top-right";
 }
 
 /**
@@ -22,6 +29,7 @@ export function FigureVideo({
   poster,
   alt = "",
   playbackRate = "1",
+  fit = "cover",
 }: FigureVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const rate = Number.parseFloat(playbackRate);
@@ -31,7 +39,14 @@ export function FigureVideo({
     const node = videoRef.current;
     if (!node) return;
 
+    // Re-load when the file is replaced at the same URL (dev HMR / asset swap).
+    node.load();
     node.playbackRate = resolvedRate;
+
+    const tryPlay = () => {
+      node.playbackRate = resolvedRate;
+      void node.play().catch(() => {});
+    };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -39,26 +54,36 @@ export function FigureVideo({
           node.pause();
           return;
         }
-        node.playbackRate = resolvedRate;
-        void node.play().catch(() => {});
+        tryPlay();
       },
       { rootMargin: "200px 0px", threshold: 0.25 },
     );
 
     observer.observe(node);
-    return () => observer.disconnect();
+    node.addEventListener("loadeddata", tryPlay);
+    return () => {
+      observer.disconnect();
+      node.removeEventListener("loadeddata", tryPlay);
+    };
   }, [src, resolvedRate]);
+
+  const fitClass =
+    fit === "top-right"
+      ? // Nudge up so a thin black letterbox strip in screen recordings is
+        // clipped by the figure’s overflow-hidden.
+        "absolute right-0 -top-1.5 h-[calc(100%+6px)] w-auto max-w-none"
+      : "absolute inset-0 h-full w-full object-cover";
 
   return (
     <video
       ref={videoRef}
-      className="absolute inset-0 h-full w-full object-cover"
+      className={fitClass}
       src={src}
       poster={poster}
       muted
       loop
       playsInline
-      preload="none"
+      preload="metadata"
       aria-label={alt}
     />
   );

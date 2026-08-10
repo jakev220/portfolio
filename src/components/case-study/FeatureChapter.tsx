@@ -12,6 +12,16 @@ export interface FeatureChapterProps {
   subtle?: string;
   /** Optional cover image for the 12-col hero. */
   src?: string;
+  /** Optional cover video — takes precedence over `src` when set. */
+  video?: string;
+  /** Poster frame for the cover video. */
+  poster?: string;
+  /** Cover video playback speed (string for MDX, e.g. "0.75"). */
+  playbackRate?: string;
+  /**
+   * Video fit in the hero figure. `"cover"` (default) or `"top-right"`.
+   */
+  fit?: "cover" | "top-right";
   alt?: string;
   /** Hero aspect ratio. Defaults to the Figma 1280/640 frame. */
   ratio?: string;
@@ -27,6 +37,10 @@ export function FeatureChapter({
   title,
   subtle,
   src,
+  video,
+  poster,
+  playbackRate,
+  fit,
   alt = "",
   ratio = "1280/640",
   children,
@@ -43,7 +57,16 @@ export function FeatureChapter({
             </>
           ) : null}
         </h3>
-        <Figure src={src} alt={alt} ratio={ratio} className="my-0" />
+        <Figure
+          src={src}
+          video={video}
+          poster={poster}
+          playbackRate={playbackRate}
+          fit={fit}
+          alt={alt}
+          ratio={ratio}
+          className="my-0"
+        />
       </div>
       {children ? (
         <div className="flex min-w-0 flex-col gap-10 sm:gap-12 lg:gap-16 [&>*]:my-0">

@@ -25,6 +25,11 @@ export interface FigureProps {
    */
   playbackRate?: string;
   /**
+   * Video fit inside the figure. `"cover"` (default) or `"top-right"` (pin to
+   * top + right, full box height, intrinsic width). String for MDX.
+   */
+  fit?: "cover" | "top-right";
+  /**
    * Aspect ratio as "W/H" (e.g. "16/9", "2128/1304"). For images, sets the
    * intrinsic `width`/`height` so the figure height follows the asset
    * (`h-auto w-full`). For video / empty placeholders, locks the box.
@@ -38,8 +43,8 @@ export interface FigureProps {
    */
   rounded?: "xl" | "none";
   /**
-   * Optional panel chrome. `"ink-08"` → black-08 fill at 15% opacity
-   * (~#FBFBFB on near-white), black-08 1px stroke, 12px corner radius.
+   * Optional panel chrome. `"ink-08"` → light-mode plate (#FBFBFB fill,
+   * #EAEAEA stroke, 12px radius) that stays the same in dark mode.
    */
   frame?: "ink-08";
   /** Optional class override (e.g. `my-0` when a parent owns the gap). */
@@ -56,12 +61,13 @@ function parseRatio(ratio: string): { w: number; h: number } {
   };
 }
 
-/** black-08 — primary ink at 8% opacity (~#EAEAEA on near-white). */
-const INK_08 =
-  "color-mix(in srgb, var(--color-text-primary) 8%, transparent)";
-
-/** black-08 brought to 15% opacity (~#FBFBFB on near-white). */
-const INK_08_FILL_15 = `color-mix(in srgb, ${INK_08} 15%, transparent)`;
+/**
+ * Light-mode ink-08 chrome — fixed solids so dark mode keeps the same plate
+ * (transparent mixes would pick up the dark page bg).
+ * black-08 on #FEFEFE ≈ #EAEAEA; that at 15% opacity ≈ #FBFBFB.
+ */
+const INK_08_STROKE = "#EAEAEA";
+const INK_08_FILL_15 = "#FBFBFB";
 
 /**
  * Case-study media block: a surface for an image (`next/image`), a lazy MP4, or
@@ -74,6 +80,7 @@ export function Figure({
   poster,
   alt = "",
   playbackRate,
+  fit,
   ratio = "16/9",
   rounded = "xl",
   frame,
@@ -93,7 +100,7 @@ export function Figure({
           backgroundColor: INK_08_FILL_15,
           borderWidth: 1,
           borderStyle: "solid" as const,
-          borderColor: INK_08,
+          borderColor: INK_08_STROKE,
           borderRadius: 12,
         }
       : undefined;
@@ -112,6 +119,7 @@ export function Figure({
           poster={poster}
           alt={alt}
           playbackRate={playbackRate}
+          fit={fit}
         />
       ) : src ? (
         <Image
