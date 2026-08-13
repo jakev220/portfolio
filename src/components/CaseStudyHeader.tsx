@@ -30,7 +30,7 @@ export function CaseStudyHeader({ name, title, coverImage }: CaseStudyHeaderProp
         {title ? <p className="text-h2 break-words">{title}</p> : null}
       </hgroup>
 
-      <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-surface sm:aspect-[1024/500]">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-surface sm:aspect-[1024/500]">
         {coverImage ? (
           <Image
             src={coverImage}

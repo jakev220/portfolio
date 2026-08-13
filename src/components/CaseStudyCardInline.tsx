@@ -110,7 +110,7 @@ export function CaseStudyCardInline({
                 <motion.div
                   key="inline-preview"
                   aria-hidden
-                  className="pointer-events-none fixed z-50 w-60 overflow-hidden rounded-xl bg-surface shadow-lg"
+                  className="pointer-events-none fixed z-50 w-60 overflow-hidden rounded-xl border border-border bg-surface shadow-lg"
                   style={{
                     left: point.x + HORIZONTAL_GAP,
                     top: point.y - PREVIEW_HEIGHT - VERTICAL_GAP,

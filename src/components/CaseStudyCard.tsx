@@ -100,20 +100,25 @@ export function CaseStudyCard({
   );
 
   // Media box. Aspect ratio differs per variant (stack is wide, card is squarer).
+  // The cover is the primary hit target into the case study; hover slightly zooms
+  // the image inside the overflow-clipped frame.
   const renderMedia = (aspectClassName: string, sizes: string) => (
-    <div
-      className={`relative ${aspectClassName} overflow-hidden rounded-xl bg-surface`}
+    <a
+      href={href}
+      {...externalLinkProps(href)}
+      aria-label={linkLabel}
+      className={`group relative block ${aspectClassName} overflow-hidden rounded-xl border border-border bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
     >
       {coverImage ? (
         <Image
           src={coverImage}
-          alt={coverAlt ?? title}
+          alt=""
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-500 ease-out motion-reduce:transition-none group-hover:scale-[1.04] motion-reduce:group-hover:scale-100"
           sizes={sizes}
         />
       ) : null}
-    </div>
+    </a>
   );
 
   // card: vertical — media on top, content below (32px gap).
