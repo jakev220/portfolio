@@ -64,6 +64,8 @@ const sizeClass: Record<TypographyToken, string> = {
   caption: "text-caption [&_p]:text-caption [&_p]:leading-[inherit]",
   label: "text-label [&_p]:text-label [&_p]:leading-[inherit]",
   body: "text-body [&_p]:text-body [&_p]:leading-[inherit]",
+  "body-large":
+    "text-body-large [&_p]:text-body-large [&_p]:leading-[inherit]",
   h3: "text-h3 [&_p]:text-h3 [&_p]:leading-[inherit]",
   h2: "text-h2 [&_p]:text-h2 [&_p]:leading-[inherit]",
   h1: "text-h1 [&_p]:text-h1 [&_p]:leading-[inherit]",

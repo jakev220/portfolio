@@ -52,6 +52,12 @@ export const typography = {
     letterSpacing: "0em",
     weight: fontWeight.regular,
   },
+  "body-large": {
+    size: "1.125rem", // 18px — intro / about-page reading copy
+    lineHeight: 1.6,
+    letterSpacing: "0em",
+    weight: fontWeight.regular,
+  },
   h3: {
     /** Fluid ~20px → 24px — sub-section headers */
     size: "clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem)",

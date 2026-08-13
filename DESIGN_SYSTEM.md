@@ -32,6 +32,7 @@ letter-spacing · weight are all baked into the utility.
 | caption | `text-caption` | 0.875rem / 14px | 1.5 | 0em | 400 | Image captions, footnotes, helper text |
 | label | `text-label` | 0.875rem / 14px | 1.5 | 0em | 400 | Section pre-headers, in-page nav anchors |
 | body | `text-body` | 1rem / 16px | 1.6 | 0em | 400 | Default body text |
+| body-large | `text-body-large` | 1.125rem / 18px | 1.6 | 0em | 400 | Intro / about-page reading copy |
 | h3 | `text-h3` | `clamp` ~20→24px | 1.2 | 0em | 400 | Sub-section headers (fluid) |
 | h2 | `text-h2` | `clamp` ~24→32px | 1.2 | -0.01em | 400 | Section headers (fluid) |
 | h1 | `text-h1` | `clamp` ~32→48px | 1.2 | -0.01em | 400 | Case study page titles (fluid) |

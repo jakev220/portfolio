@@ -113,7 +113,7 @@ Use these instead of raw values — the agent will too. Defined in `src/lib/toke
 Full reference: [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md).
 
 **Type utilities** (size · line-height · tracking · weight baked in):
-`text-caption` · `text-label` · `text-body` · `text-h3` · `text-h2` · `text-h1`
+`text-caption` · `text-label` · `text-body` · `text-body-large` · `text-h3` · `text-h2` · `text-h1`
 
 **Color utilities** (map to CSS vars in `globals.css`):
 `bg-bg` · `bg-surface` · `border` / `border-border` · `text-primary` · `text-secondary` · `text-accent` / `bg-accent`

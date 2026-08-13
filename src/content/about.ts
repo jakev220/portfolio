@@ -38,11 +38,27 @@ export interface AboutProseBlock {
 
 export type AboutBlock = AboutProseBlock;
 
+export interface AboutExperienceEntry {
+  organization: string;
+  position: string;
+  duration: string;
+  /** Optional muted italic line (e.g. degree minor). */
+  detail?: string;
+}
+
+export interface AboutResumeSection {
+  title: string;
+  entries: AboutExperienceEntry[];
+}
+
 export interface AboutContent {
   greeting: AboutGreeting;
   heroPhotos: AboutHeroPhoto[];
   lede: AboutLede;
   blocks: AboutBlock[];
+  /** Left-rail heading for the resume stack. */
+  resumeHeading: string;
+  resume: AboutResumeSection[];
 }
 
 /**
@@ -84,33 +100,76 @@ export const about: AboutContent = {
     },
     {
       type: "prose",
-      heading: "What I've been up to recently",
-      body: [
-        "I'm currently leading dashboard standardization initiatives and building internal developer tools to reduce friction and improve visual consistency in dashboard production at StepStone Group.",
-        "Outside of my 9 to 5, I like to stay connected with my Triton roots and stay involved with the design and product communities at UC San Diego that helped me grow as a designer and as a person. You might find me speaking at panels, giving my two cents on projects, or helping student designers find their footing.",
-      ],
-      photos: [
-        {
-          src: "/photos/dfa-ux-panel.webp",
-          alt: "Design for America UX Panel",
-        },
-        {
-          src: "/photos/ps-design-dinner.webp",
-          alt: "Dinner with Product Space's design vertical",
-        },
-        {
-          src: "/photos/jake-speaking.webp",
-          alt: "Jake speaking at a design event",
-        },
-      ],
-    },
-    {
-      type: "prose",
       heading: "Me, outside of design",
       body: [
         "When I'm not designing, you might find me sipping an iced lemon black tea, getting outdoors with my friends, cycling through genres of music, working out, and documenting my life on BeReal.",
       ],
       gallery: [{ alt: "" }, { alt: "" }, { alt: "" }, { alt: "" }],
+    },
+  ],
+  resumeHeading: "Journey",
+  resume: [
+    {
+      title: "Education",
+      entries: [
+        {
+          organization: "University of California, San Diego",
+          position: "B.S. Cognitive Science w/ spec. Design & Interaction (HCI)",
+          detail: "Minor in Computer Science",
+          duration: "Aug 2021 – Jun 2025",
+        },
+      ],
+    },
+    {
+      title: "Experience",
+      entries: [
+        {
+          organization: "StepStone Group",
+          position: "UX/UI Design Analyst → UI/UX Designer I",
+          duration: "Jun 2025 – Present",
+        },
+        {
+          organization: "UC San Diego Design Lab",
+          position: "UI/UX Design Intern",
+          duration: "Jun 2025 – Dec 2025",
+        },
+        {
+          organization: "SPIN",
+          position: "Product Strategy & Research Consultant",
+          duration: "Apr 2025 – Jun 2025",
+        },
+        {
+          organization: "Newco (Stealth)",
+          position: "Contract Product Designer",
+          duration: "Jul 2024 – Oct 2024",
+        },
+      ],
+    },
+    {
+      title: "Communities",
+      entries: [
+        {
+          organization: "Product Space at UC San Diego",
+          position: "Product Design Mentor (UX Designer)",
+          duration: "May 2024 – Jun 2025",
+        },
+        {
+          organization: "CSE Society at UC San Diego",
+          position: "VP Design (Development Branch)",
+          duration: "Apr 2024 – Jun 2025",
+        },
+        {
+          organization: "UC San Diego Cognitive Science Department",
+          position: "Instructional Assistant",
+          detail: "DSGN 100: Prototyping & COGS 187A: Usability & Information Architecture",
+          duration: "Jan 2025 – Jun 2025",
+        },
+        {
+          organization: "Teaching + Learning Commons at UC San Diego",
+          position: "Undergraduate Writing Consultant",
+          duration: "Aug 2022 – Jun 2025",
+        },
+      ],
     },
   ],
 };

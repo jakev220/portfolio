@@ -31,7 +31,7 @@ export function AboutProse({
         <div className="flex min-w-0 flex-col gap-16 lg:col-span-7 lg:col-start-6">
           <div className="flex flex-col gap-4">
             {body.map((paragraph) => (
-              <p key={paragraph} className="text-body m-0">
+              <p key={paragraph} className="text-body-large m-0">
                 {paragraph}
               </p>
             ))}
