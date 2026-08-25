@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FigureVideo } from "@/components/case-study/FigureVideo";
+import { ExpandableMedia } from "@/components/media-lightbox/ExpandableMedia";
 
 export interface FigureProps {
   /**
@@ -19,6 +20,11 @@ export interface FigureProps {
   poster?: string;
   /** Alt / accessible name — required whenever media is set. */
   alt?: string;
+  /**
+   * Visible lightbox caption. Falls back to `alt` when omitted. String prop
+   * so MDX can set it (`caption="…"`).
+   */
+  caption?: string;
   /**
    * Video playback speed as a string for MDX (e.g. "0.75"). `1` = normal.
    * Only applies when `video` is set.
@@ -73,12 +79,14 @@ const INK_08_FILL_15 = "#FBFBFB";
  * Case-study media block: a surface for an image (`next/image`), a lazy MP4, or
  * a neutral placeholder. Width is owned by the container; image height follows
  * the asset aspect ratio. Corner radius defaults to `xl` and can be turned off.
+ * Hover expand opens the page media lightbox.
  */
 export function Figure({
   src,
   video,
   poster,
   alt = "",
+  caption,
   playbackRate,
   fit,
   ratio = "16/9",
@@ -93,6 +101,7 @@ export function Figure({
   // Framed figures supply their own fill instead.
   const surface = lockBox && !frame ? "bg-surface" : "";
   const radiusClass = frame ? "" : rounded === "none" ? "" : "rounded-xl";
+  const hasMedia = Boolean(video || src);
 
   const frameStyle =
     frame === "ink-08"
@@ -105,6 +114,28 @@ export function Figure({
         }
       : undefined;
 
+  const media = video ? (
+    <FigureVideo
+      src={video}
+      poster={poster}
+      alt={alt}
+      playbackRate={playbackRate}
+      fit={fit}
+    />
+  ) : src ? (
+    <Image
+      src={src}
+      alt={alt}
+      width={w}
+      height={h}
+      // Case-study webps are already compressed; skip the optimizer so we
+      // don't re-encode (and soften) UI screenshots / transparent assets.
+      unoptimized
+      className="h-auto w-full"
+      sizes="(min-width: 1280px) 1232px, calc(100vw - 48px)"
+    />
+  ) : null;
+
   return (
     <figure
       className={`relative w-full overflow-hidden ${radiusClass} ${surface} ${className}`}
@@ -113,27 +144,20 @@ export function Figure({
         ...frameStyle,
       }}
     >
-      {video ? (
-        <FigureVideo
-          src={video}
+      {hasMedia ? (
+        <ExpandableMedia
+          src={src}
+          video={video}
           poster={poster}
           alt={alt}
-          playbackRate={playbackRate}
-          fit={fit}
-        />
-      ) : src ? (
-        <Image
-          src={src}
-          alt={alt}
-          width={w}
-          height={h}
-          // Case-study webps are already compressed; skip the optimizer so we
-          // don't re-encode (and soften) UI screenshots / transparent assets.
-          unoptimized
-          className="h-auto w-full"
-          sizes="(min-width: 1280px) 1232px, calc(100vw - 48px)"
-        />
-      ) : null}
+          caption={caption}
+          fill={lockBox}
+        >
+          {media}
+        </ExpandableMedia>
+      ) : (
+        media
+      )}
     </figure>
   );
 }

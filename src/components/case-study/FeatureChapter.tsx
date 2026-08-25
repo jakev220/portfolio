@@ -23,6 +23,8 @@ export interface FeatureChapterProps {
    */
   fit?: "cover" | "top-right";
   alt?: string;
+  /** Lightbox caption; falls back to `alt`. */
+  caption?: string;
   /** Hero aspect ratio. Defaults to the Figma 1280/640 frame. */
   ratio?: string;
   /** Following rows — typically `Split` + `InsetFigure` blocks. */
@@ -42,6 +44,7 @@ export function FeatureChapter({
   playbackRate,
   fit,
   alt = "",
+  caption,
   ratio = "1280/640",
   children,
 }: FeatureChapterProps) {
@@ -64,8 +67,9 @@ export function FeatureChapter({
           playbackRate={playbackRate}
           fit={fit}
           alt={alt}
+          caption={caption}
           ratio={ratio}
-          className="my-0"
+          className="my-0 border border-border"
         />
       </div>
       {children ? (

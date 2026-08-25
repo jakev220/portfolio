@@ -32,6 +32,12 @@ export interface TypeStyle {
  *
  * `caption` and `label` are intentionally identical for now but kept separate so
  * they can diverge later (e.g. `label` may gain tracking or uppercase treatment).
+ *
+ * Media lightbox captions use `text-caption` + `text-secondary` (no new type
+ * tokens). Optional MDX `caption="…"` on case-study `<Figure>` /
+ * `<FeatureChapter>` overrides the visible string; otherwise falls back to `alt`.
+ * Expand / lightbox is case-study pages only (`/work/[slug]`).
+ * Scrim / panel colors: `lightboxScrim`, `lightboxPanel` in `colorVar`.
  */
 export const typography = {
   caption: {
@@ -118,6 +124,16 @@ export const colorVar = {
   textBody: "var(--color-text-body)",
   textSecondary: "var(--color-text-secondary)",
   accent: "var(--color-accent)",
+  /**
+   * Case-study media lightbox scrim — near-opaque inverse of page bg so the
+   * underlying case study is barely visible (`/work/[slug]` only).
+   */
+  lightboxScrim: "var(--color-lightbox-scrim)",
+  /**
+   * Fixed white plate behind lightbox media, caption, and controls. Stays
+   * white in dark mode (product screenshots / UI stills sit on a light plate).
+   */
+  lightboxPanel: "var(--color-lightbox-panel)",
 } as const;
 
 export type ColorToken = keyof typeof colorVar;

@@ -34,6 +34,9 @@ const config: Config = {
         border: "var(--color-border)",
         divider: "var(--color-divider)",
         accent: "var(--color-accent)",
+        // Case-study media lightbox (see tokens.ts / globals.css).
+        "lightbox-scrim": "var(--color-lightbox-scrim)",
+        "lightbox-panel": "var(--color-lightbox-panel)",
         primary: "var(--color-text-primary)",
         // `heading` = h2/h3 section headers. NOTE: no `body` color token — it
         // would collide with the `text-body` font-size utility, so body text

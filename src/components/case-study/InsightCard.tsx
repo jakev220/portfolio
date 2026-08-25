@@ -15,6 +15,12 @@ export interface CalloutFieldsProps {
   glyph?: string;
   /** Optional line above the main statement. */
   preText?: string;
+  /**
+   * Optional card heading at `text-h3`. Sits above the body (`children`) with
+   * 32px gap — use instead of bolding the first line of body copy.
+   * String prop so MDX can set it (`title="…"`).
+   */
+  title?: string;
   /** Optional line below (e.g. attribution or follow-on). */
   postText?: string;
   /**
@@ -86,21 +92,31 @@ function resolveSize(size: CalloutSize): TypographyToken {
 
 /**
  * Shared callout content stack used by insight cards and the full-bleed
- * banner: glyph → pre-text → callout → post-text.
+ * banner: glyph → pre-text → title → callout → post-text.
  *
  * Glyph sits flush on the pre-text (0 gap; glyph uses `leading-none`).
  * Pre / post use `callout-body` so they match body-sized card copy (avoids
- * `text-body` reading larger than `callout-body` on mobile). Post-text uses
- * `mt-auto` so attribution pins to the bottom when the card fills height.
+ * `text-body` reading larger than `callout-body` on mobile). Optional `title`
+ * renders at `h3` with 32px above the body. Post-text uses `mt-auto` so
+ * attribution pins to the bottom when the card fills height.
  */
 export function CalloutFields({
   glyph,
   preText,
+  title,
   postText,
   size = "body",
   children,
 }: CalloutFieldsProps) {
   const token = resolveSize(size);
+
+  const body = (
+    <div
+      className={`m-0 ${sizeClass[token]} [&_em]:italic [&_p]:m-0 [&_p+p]:mt-4 [&_strong]:font-bold`}
+    >
+      {children}
+    </div>
+  );
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -113,11 +129,14 @@ export function CalloutFields({
         {preText ? (
           <p className="text-callout-body m-0">{preText}</p>
         ) : null}
-        <div
-          className={`m-0 ${sizeClass[token]} [&_em]:italic [&_p]:m-0 [&_p+p]:mt-4 [&_strong]:font-bold`}
-        >
-          {children}
-        </div>
+        {title ? (
+          <div className="flex flex-col gap-8">
+            <p className="text-h3 m-0">{title}</p>
+            {body}
+          </div>
+        ) : (
+          body
+        )}
         {postText ? (
           <p className="text-callout-body m-0 mt-auto pt-4">{postText}</p>
         ) : null}
@@ -139,6 +158,7 @@ export function InsightCard({
   glyph,
   size = "body",
   preText,
+  title,
   postText,
   minHeight,
   children,
@@ -152,6 +172,7 @@ export function InsightCard({
       <CalloutFields
         glyph={glyph}
         preText={preText}
+        title={title}
         postText={postText}
         size={size}
       >

@@ -63,6 +63,13 @@
   --color-text-secondary: #737373; /* labels / captions / pre-headers, black-40 — neutral-500 */
   --color-accent: #0066cc; /* interactive accent — link color (underlined, Apple-HIG style). Hero/brand accent still TBD */
 
+  /*
+   * Case-study media lightbox — scrim is near-opaque so the page behind is
+   * barely visible; panel is a fixed white plate for media + caption + controls.
+   */
+  --color-lightbox-scrim: rgb(10 10 10 / 0.72);
+  --color-lightbox-panel: #ffffff;
+
   /* Case-study palette fallbacks — overridden per slug via inline --cs-* on <article>. */
   --cs-lavender: #e9d5ff;
   --cs-orange: #ffa64b;
@@ -91,6 +98,9 @@
   --color-text-body: #d4d4d4; /* neutral-300 */
   --color-text-secondary: #a3a3a3; /* neutral-400 */
   --color-accent: #4c9fff; /* lighter link blue for contrast on dark bg */
+  /* Invert scrim so the page still peeks through; panel stays white. */
+  --color-lightbox-scrim: rgb(250 250 250 / 0.72);
+  --color-lightbox-panel: #ffffff;
   /* Pastel case-study fills don't invert — keep ink dark for contrast. */
   --cs-ink: #0a0a0a;
 

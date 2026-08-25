@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ExpandableMedia } from "@/components/media-lightbox/ExpandableMedia";
 
 export interface CaseStudyHeaderProps {
   /** Large primary heading — the project / product name (e.g. "ScienceJury"). */
@@ -32,14 +33,16 @@ export function CaseStudyHeader({ name, title, coverImage }: CaseStudyHeaderProp
 
       <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-surface sm:aspect-[1024/500]">
         {coverImage ? (
-          <Image
-            src={coverImage}
-            alt={name}
-            fill
-            priority
-            className="object-cover"
-            sizes="(min-width: 1280px) 1232px, calc(100vw - 48px)"
-          />
+          <ExpandableMedia src={coverImage} alt={name} caption={name} fill>
+            <Image
+              src={coverImage}
+              alt={name}
+              fill
+              priority
+              className="object-cover"
+              sizes="(min-width: 1280px) 1232px, calc(100vw - 48px)"
+            />
+          </ExpandableMedia>
         ) : null}
       </div>
 

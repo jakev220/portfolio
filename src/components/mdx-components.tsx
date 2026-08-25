@@ -22,6 +22,10 @@ import {
 } from "@/components/case-study/InsightCard";
 import { Metric, MetricRow } from "@/components/case-study/MetricRow";
 import { FeatureChapter } from "@/components/case-study/FeatureChapter";
+import {
+  MediaCarousel,
+  MediaCarouselSlide,
+} from "@/components/case-study/MediaCarousel";
 import { ScienceJuryFormativeChart } from "@/components/case-study/science-jury/ScienceJuryFormativeChart";
 
 /**
@@ -58,6 +62,8 @@ export const mdxComponents: MDXComponents = {
   Metric,
   MetricRow,
   FeatureChapter,
+  MediaCarousel,
+  MediaCarouselSlide,
   ScienceJuryFormativeChart,
   h1: (props) => <h1 className="text-h1 text-primary mt-12 mb-4" {...props} />,
   h2: (props) => <h2 className="text-h2 text-heading mt-10 mb-3" {...props} />,

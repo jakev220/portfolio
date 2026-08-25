@@ -1,7 +1,15 @@
 import type { SVGProps } from "react";
 
 /** Available icon names. Add new icons by dropping their definition in `ICONS`. */
-export type IconName = "stack" | "grid" | "list" | "mode";
+export type IconName =
+  | "stack"
+  | "grid"
+  | "list"
+  | "mode"
+  | "expand"
+  | "close"
+  | "arrow-left"
+  | "arrow-right";
 
 interface IconDef {
   /** Path data on a 24×24 viewBox. */
@@ -31,6 +39,22 @@ const ICONS: Record<IconName, IconDef> = {
     // scales crisply at icon sizes (no doubled-line artifacts).
     d: "M12 4C13.6744 4 15.229 4.51412 16.5137 5.39355C17.5005 6.06915 18.3287 6.96039 18.9297 7.99902C19.5154 9.01131 19.8854 10.1645 19.9775 11.3945C19.9925 11.5944 20 11.7963 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4ZM12.5 16.2881V18.9805C15.9511 18.7368 18.7093 15.9933 18.9766 12.5488L12.5 16.2881ZM12.5 12.2881V15.1338L18.9727 11.3965C18.8981 10.5219 18.6622 9.69498 18.2959 8.94238L12.5 12.2881ZM12.5 8.28809V11.1338L17.7949 8.07617C17.3146 7.36839 16.7094 6.7522 16.0088 6.26172L12.5 8.28809ZM12.5 7.13379L15.0156 5.68066C14.2449 5.31213 13.3962 5.08071 12.5 5.01758V7.13379ZM5 12C5 15.6978 7.86743 18.724 11.5 18.9805V5.01953C7.86743 5.27597 5 8.30217 5 12Z",
   },
+  expand: {
+    stroke: true,
+    d: "M14.6667 14.6667L20 20M15.5556 20H20V15.5556M14.6667 9.33333L20 4M15.5556 4H20V8.44444M8.44444 20H4V15.5556M4 20L9.33333 14.6667M8.44444 4H4V8.44444M4 4L9.33333 9.33333",
+  },
+  close: {
+    stroke: true,
+    d: "M18 6L6 18M6 6L18 18",
+  },
+  "arrow-left": {
+    stroke: true,
+    d: "M12 5L5 12L12 19M5 12H19",
+  },
+  "arrow-right": {
+    stroke: true,
+    d: "M5 12H19M12 19L19 12L12 5",
+  },
 };
 
 export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {
@@ -55,6 +79,9 @@ export function Icon({ name, size = 20, title, ...props }: IconProps) {
       height={size}
       fill={stroke ? "none" : "currentColor"}
       stroke={stroke ? "currentColor" : undefined}
+      strokeWidth={stroke ? 1 : undefined}
+      strokeLinecap={stroke ? "round" : undefined}
+      strokeLinejoin={stroke ? "round" : undefined}
       role={title ? "img" : undefined}
       aria-label={title}
       aria-hidden={title ? undefined : true}
