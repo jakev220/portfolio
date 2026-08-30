@@ -4,12 +4,18 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 import { MediaLightbox } from "@/components/media-lightbox/MediaLightbox";
 import type { LightboxMediaItem } from "@/components/media-lightbox/types";
+import {
+  MEDIA_LIGHTBOX_CLOSE_EVENT,
+  MEDIA_LIGHTBOX_OPEN_EVENT,
+} from "@/lib/media-lightbox-ui";
 
 interface MediaLightboxContextValue {
   /** Register a media item; returns an unregister function. */
@@ -34,8 +40,13 @@ const MediaLightboxContext = createContext<MediaLightboxContextValue | null>(
  * figures register on mount; the lightbox walks every registered item on the page.
  */
 export function MediaLightboxProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   const [items, setItems] = useState<LightboxMediaItem[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActiveId(null);
+  }, [pathname]);
 
   const register = useCallback((item: LightboxMediaItem) => {
     setItems((prev) => {
@@ -56,6 +67,14 @@ export function MediaLightboxProvider({ children }: { children: ReactNode }) {
     ? items.findIndex((entry) => entry.id === activeId)
     : -1;
   const isOpen = activeIndex >= 0;
+
+  useEffect(() => {
+    if (!isOpen) return;
+    window.dispatchEvent(new Event(MEDIA_LIGHTBOX_OPEN_EVENT));
+    return () => {
+      window.dispatchEvent(new Event(MEDIA_LIGHTBOX_CLOSE_EVENT));
+    };
+  }, [isOpen]);
 
   const open = useCallback((id: string) => {
     setActiveId(id);

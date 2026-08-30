@@ -12,6 +12,9 @@ export interface DetailProps {
   children: ReactNode;
 }
 
+/** MDX-safe role marker — set via `mdxComponents`, not in content files. */
+export type DetailMarkerProps = DetailProps & { "data-detail-role"?: "detail" };
+
 /**
  * A single meta group inside `<ProjectDetails>`. Marker/data component —
  * `ProjectDetails` reads its props to render columns, so `<Detail>` is never
@@ -21,8 +24,8 @@ export interface DetailProps {
  * `next-mdx-remote/rsc` drops JSX *expression* attributes — only string
  * attributes and children survive the MDX compile.
  */
-export function Detail({ children }: DetailProps) {
-  return <>{children}</>;
+export function Detail(_props: DetailProps) {
+  return null;
 }
 
 export interface DetailGroupProps {
@@ -31,12 +34,17 @@ export interface DetailGroupProps {
   children: ReactNode;
 }
 
+/** MDX-safe role marker — set via `mdxComponents`, not in content files. */
+export type DetailGroupMarkerProps = DetailGroupProps & {
+  "data-detail-role"?: "group";
+};
+
 /**
  * A labeled block in the project-details right rail (description / owned /
  * impact). Same marker pattern as `<Detail>`.
  */
-export function DetailGroup({ children }: DetailGroupProps) {
-  return <>{children}</>;
+export function DetailGroup(_props: DetailGroupProps) {
+  return null;
 }
 
 export interface ProjectDetailsProps {
@@ -61,11 +69,11 @@ export function ProjectDetails({ children }: ProjectDetailsProps) {
   const childArray = Children.toArray(children);
   const isDetail = (
     child: ReturnType<typeof Children.toArray>[number],
-  ): child is ReactElement<DetailProps> =>
+  ): child is ReactElement<DetailMarkerProps> =>
     isValidElement(child) && child.type === Detail;
   const isDetailGroup = (
     child: ReturnType<typeof Children.toArray>[number],
-  ): child is ReactElement<DetailGroupProps> =>
+  ): child is ReactElement<DetailGroupMarkerProps> =>
     isValidElement(child) && child.type === DetailGroup;
 
   const details = childArray.filter(isDetail);

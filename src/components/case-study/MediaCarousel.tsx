@@ -12,11 +12,14 @@ import {
   type ReactNode,
 } from "react";
 import { Icon } from "@/components/Icon";
+import { FigureVideo } from "@/components/case-study/FigureVideo";
 import { ExpandableMedia } from "@/components/media-lightbox/ExpandableMedia";
 
 interface CarouselSlideData {
   id: string;
-  src: string;
+  src?: string;
+  video?: string;
+  poster?: string;
   alt: string;
   caption?: string;
   order: number;
@@ -32,12 +35,18 @@ interface CarouselContextValue {
 const CarouselContext = createContext<CarouselContextValue | null>(null);
 
 export interface MediaCarouselSlideProps {
-  /** Image path (e.g. "/work/science-jury/extras-1.webp"). */
-  src: string;
+  /** Still image path. Ignored when `video` is set. */
+  src?: string;
+  /** MP4 (or other) video source — takes precedence over `src`. */
+  video?: string;
+  /** Poster frame for video slides. */
+  poster?: string;
   /** Accessible name; also used as caption fallback. */
   alt: string;
   /** Visible caption under the stage. Falls back to `alt` when omitted. */
   caption?: string;
+  /** Video playback speed (string for MDX, e.g. "0.75"). */
+  playbackRate?: string;
 }
 
 export interface MediaCarouselProps {
@@ -111,7 +120,7 @@ export function MediaCarousel({ ratio = "16/9", children }: MediaCarouselProps) 
       register,
       slides: sorted,
     }),
-    [safeIndex, register, sorted],
+    [safeIndex, setActiveIndex, register, sorted],
   );
 
   return (
@@ -181,20 +190,26 @@ export function MediaCarousel({ ratio = "16/9", children }: MediaCarouselProps) 
  */
 export function MediaCarouselSlide({
   src,
+  video,
+  poster,
   alt,
   caption,
+  playbackRate,
 }: MediaCarouselSlideProps) {
   const id = useId();
   const ctx = useContext(CarouselContext);
+  const hasMedia = Boolean(video || src);
 
   useEffect(() => {
-    if (!ctx) return;
-    return ctx.register({ id, src, alt, caption });
-  }, [ctx, id, src, alt, caption]);
+    if (!ctx?.register || !hasMedia) return;
+    return ctx.register({ id, src, video, poster, alt, caption });
+  }, [ctx?.register, id, src, video, poster, alt, caption, hasMedia]);
 
   if (!ctx) {
     throw new Error("MediaCarouselSlide must be used within MediaCarousel");
   }
+
+  if (!hasMedia) return null;
 
   const slideIndex = ctx.slides.findIndex((slide) => slide.id === id);
   const selected = slideIndex >= 0 && slideIndex === ctx.activeIndex;
@@ -206,16 +221,35 @@ export function MediaCarouselSlide({
       }`}
       aria-hidden={!selected}
     >
-      <ExpandableMedia src={src} alt={alt} caption={caption} fill>
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          unoptimized
-          className="object-contain"
-          sizes="(min-width: 1280px) 1232px, calc(100vw - 48px)"
-          priority={slideIndex === 0}
-        />
+      <ExpandableMedia
+        src={src}
+        video={video}
+        poster={poster}
+        alt={alt}
+        caption={caption}
+        fill
+      >
+        {video ? (
+          selected ? (
+            <FigureVideo
+              src={video}
+              poster={poster}
+              alt={alt}
+              playbackRate={playbackRate}
+              fit="cover"
+            />
+          ) : null
+        ) : src ? (
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            unoptimized
+            className="object-contain"
+            sizes="(min-width: 1280px) 1232px, calc(100vw - 48px)"
+            priority={slideIndex === 0}
+          />
+        ) : null}
       </ExpandableMedia>
     </div>
   );

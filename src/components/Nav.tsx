@@ -4,6 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import {
+  MEDIA_LIGHTBOX_CLOSE_EVENT,
+  MEDIA_LIGHTBOX_OPEN_EVENT,
+} from "@/lib/media-lightbox-ui";
 
 export interface NavItem {
   label: string;
@@ -41,7 +45,21 @@ export function Nav({ items }: NavProps) {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [floating, setFloating] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const lastY = useRef(0);
+
+  useEffect(() => {
+    const onOpen = () => setLightboxOpen(true);
+    const onClose = () => setLightboxOpen(false);
+    window.addEventListener(MEDIA_LIGHTBOX_OPEN_EVENT, onOpen);
+    window.addEventListener(MEDIA_LIGHTBOX_CLOSE_EVENT, onClose);
+    return () => {
+      window.removeEventListener(MEDIA_LIGHTBOX_OPEN_EVENT, onOpen);
+      window.removeEventListener(MEDIA_LIGHTBOX_CLOSE_EVENT, onClose);
+    };
+  }, []);
+
+  const suppressed = lightboxOpen;
 
   useEffect(() => {
     lastY.current = window.scrollY;
@@ -86,9 +104,12 @@ export function Nav({ items }: NavProps) {
 
   return (
     <nav
-      onFocusCapture={() => setHidden(false)}
+      aria-hidden={suppressed || undefined}
+      onFocusCapture={() => {
+        if (!suppressed) setHidden(false);
+      }}
       className={`pointer-events-none fixed inset-x-0 top-0 z-50 transition-transform duration-300 ease-out motion-reduce:transition-none ${
-        hidden ? "-translate-y-full" : "translate-y-0"
+        hidden || suppressed ? "-translate-y-full" : "translate-y-0"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-end px-6 pt-20">
@@ -98,7 +119,7 @@ export function Nav({ items }: NavProps) {
           {/* Frosted box that hugs the nav cluster; fades in once floating. */}
           <div
             aria-hidden
-            className={`absolute inset-0 rounded-xl border border-border bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] backdrop-blur-md transition-opacity duration-300 motion-reduce:transition-none ${
+            className={`pointer-events-none absolute inset-0 rounded-xl border border-border bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] backdrop-blur-md transition-opacity duration-300 motion-reduce:transition-none ${
               floating ? "opacity-100" : "opacity-0"
             }`}
           />

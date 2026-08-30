@@ -146,7 +146,7 @@ export const about: AboutContent = {
       ],
     },
     {
-      title: "Communities",
+      title: "Extras",
       entries: [
         {
           organization: "Product Space at UC San Diego",
