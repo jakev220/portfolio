@@ -51,6 +51,8 @@ const config: Config = {
         "cs-purple": "var(--cs-purple)",
         // Fixed ink for pastel cs surfaces (does not flip in dark mode).
         "cs-ink": "var(--cs-ink)",
+        "chart-orange": "var(--chart-orange)",
+        "chart-orange-muted": "var(--chart-orange-muted)",
       },
       borderColor: {
         DEFAULT: "var(--color-border)",

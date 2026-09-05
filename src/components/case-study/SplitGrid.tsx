@@ -34,7 +34,7 @@ interface SplitGridProps {
 
 /**
  * Shared case-study / About row geometry: four columns for the heading/meta,
- * one column of hang space, and seven columns for the body/media (4 / 1 / 7).
+ * one column of hang space, and seven columns for the body/media rail (4 / 1 / 7).
  * Stacks below lg so intermediate widths don't crush the rails. Both `Split`
  * and `MediaRow` render through this so the geometry stays single-sourced.
  *

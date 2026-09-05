@@ -302,11 +302,14 @@ published: true
         <InsightCard tone="blue" glyph="“" size="body" postText="– Participant 10">
           It felt authoritative when it framed things like ‘As an HCI expert, I believe. . . ’ It made me consider the feedback more seriously. But I am also worried I focused too much on this review.
         </InsightCard>
-        <InsightCard tone="yellow" glyph="*" size="body">
-          This feedback tracks with existing research on how the source framing of the feedback shapes engagement (human vs. AI-generated). 
-          
-          Credibility and trust should have been framed as design problems, rather than side effects of good persona-writing.
-        </InsightCard>
+        <div className="flex min-w-0 flex-col gap-4 lg:flex-1">
+          <InsightCard tone="yellow" glyph="*" size="body">
+            This feedback tracks with existing research on how the source framing of the feedback shapes engagement (human vs. AI-generated).
+          </InsightCard>
+          <InsightCard tone="yellow" glyph="*" size="body">
+            Credibility and trust should have been framed as design problems, rather than side effects of good persona-writing.
+          </InsightCard>
+        </div>
       </InsightCardGrid>
 
       <InsightCard
@@ -332,7 +335,13 @@ published: true
   </Split>
 
   <Accordion>
-    <AccordionItem title="Simulating real people → Referencing their published work" subtitle="An ethics-driven pivot to preserved scholarly grounding and remove identity impersonation.">
+    <AccordionItem
+      title="Simulating real people → Referencing their published work"
+      subtitle="An ethics-driven pivot to preserved scholarly grounding and remove identity impersonation."
+      mediaSrc="/work/science-jury/sj-scholar-references.webp"
+      mediaAlt="Agent persona detail showing scholar references grounding reviewer profiles."
+      mediaRatio="16/9"
+    >
       An early concept of our system had agents directly emulate named researchers. Authors could select an HCI professor they admired, and the agent would generate feedback in that person’s voice, drawing on their published positions.
 
       The more I sat with this concept, the more I felt that it was crossing an ethical line. Generating feedback on behalf of a real, named individual, without their consent, risks putting words in their mouth and misrepresenting their views. I flagged my concern in a team sync, to which everyone quickly agreed to pivot before investing more time into defining the persona logic.
@@ -340,13 +349,25 @@ published: true
       The alternative logic I proposed is a model where agents reference a person's published literature as a knowledge source but use generic role-based names ("HCI Expert," "Methods Specialist"). This preserves the grounding in real scholarly expertise without speaking on behalf of any specific person. It's a meaningful distinction that I believe was the right call both ethically and for long-term trust in the system.
     </AccordionItem>
 
-    <AccordionItem title="Google Docs → Quill.js" subtitle="Technical constraints led us to adopt friction in exchange for richer interaction model.">
+    <AccordionItem
+      title="Google Docs → Quill.js"
+      subtitle="Technical constraints led us to adopt friction in exchange for richer interaction model."
+      mediaVideo="/work/science-jury/sj-google-docs-concept.mp4"
+      mediaAlt="Early ScienceJury concept as a Google Docs plug-in."
+      mediaRatio="16/9"
+    >
       We initially scoped ScienceJury as a Google Docs plug-in, but the Docs API doesn't support text-anchored inline comments on the front-end, a hard requirement for our contextual decomposition model.
 
       We pivoted to Quill.js, a rich text editor that supports location-anchored highlights and bidirectional linking. This unlocked the design, but came with a tradeoff: instead of meeting researchers where they already work, they now have to upload their document (PDF or Word) into our system. That added friction is a real adoption barrier, one I'd address in future iterations through a browser extension or native editor integrations as APIs evolve.
     </AccordionItem>
 
-    <AccordionItem title="Tight timeline → Lean system" subtitle="Reducing the scope for clarity and testability under timeline pressure.">
+    <AccordionItem
+      title="Tight timeline → Lean system"
+      subtitle="Reducing the scope for clarity and testability under timeline pressure."
+      mediaSrc="/work/science-jury/sj-feature-cuts.webp"
+      mediaAlt="Features cut from scope under timeline pressure, including inter-agent debate."
+      mediaRatio="16/9"
+    >
       We had a longer list of features on the table, including inter-agent debate, where agents could respond to each other's critiques directly. With two months on the clock, most of it got cut.
 
       The decision framework was straightforward: does this feature directly serve one of the three design goals, and can we build and test it in time? Inter-agent debate was compelling and novel, but risked adding another layer of noise on top of a system. The result was a tighter, more testable system, and participant feedback confirmed that the features we shipped were the right ones to prioritize.
@@ -356,52 +377,20 @@ published: true
 
 <Section>
   <SectionLead label="Reflection">
-    Insights and lessons I’ve gained from designing ScienceJury.
+    Insights and lessons I’m taking away from designing ScienceJury.
   </SectionLead>
 
-  <div className="flex flex-col gap-16 lg:flex-row lg:items-stretch">
-    <InsightCard
-      tone="yellow"
-      glyph="*"
-      size="body"
-      title="I intentionally gave up the “more impressive” options to protect what the system actually needed."
-    >
-      Named personas could’ve made for a sharper demo, but I chose to prioritize consent over spectacle. A longer feature list would’ve looked more ambitious, which especially matters when pitching something novel, but I chose to subtract unnecessary features and prioritize functionality we could test in the time we had. 
-      
-      After sitting on this project for a while, I realized that my instinct was to prioritize what the system needs to actually work rather than “what looks better.” I hope to keep sharpening this instinct in future projects because the work might not have an obvious “right choice” every time.
-    </InsightCard>
+  <RightRail>
+    <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p:first-child]:text-h3 [&_p:first-child]:text-heading">
+      Under a tight timeline, feature scope should be cut to what's testable in the sprint.
 
-    <InsightCard
-      tone="yellow"
-      glyph="*"
-      size="body"
-      title="I designed for improved findability, but observed a shift in editing behavior as a secondary effect."
-    >
-      Writers were losing time figuring out where a piece of feedback applied to their draft. I designed feedback anchoring as a navigation fix, where the critique is attached to the sentence the feedback is about. I expected the payoff to be speed, but the interaction logs surfaced a different insight. 
-      
-      In addition to reading faster, writers were revising differently by replacing weak passages directly instead of padding around them with more text. Keeping the critique in close proximity to the writer helped save time locating the feedback and lowered the effort required to act on it.
-    </InsightCard>
-  </div>
-</Section>
+      We cut named personas and extra features to protect what the system needed to actually function and test within the timeline. If this were to be monetized or pitched as a start-up concept, a longer list of features would be necessary to demo and sell the idea better.
+    </RightProse>
 
-<Section>
-  <SectionLead label="Extras" />
+    <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p:first-child]:text-h3 [&_p:first-child]:text-heading">
+      Where feedback lives changes what people do with it, not just how fast they find it.
 
-  <MediaCarousel ratio="16/9">
-    <MediaCarouselSlide
-      video="/work/science-jury/sj-google-docs-concept.mp4"
-      alt="Early ScienceJury concept as a Google Docs plug-in."
-      caption="Early ScienceJury concept as a Google Docs plug-in."
-    />
-    <MediaCarouselSlide
-      src="/work/science-jury/sj-feature-cuts.webp"
-      alt="Features cut from scope under timeline pressure, including inter-agent debate."
-      caption="Features cut from scope under timeline pressure, including inter-agent debate."
-    />
-    <MediaCarouselSlide
-      src="/work/science-jury/sj-scholar-references.webp"
-      alt="Agent persona detail showing scholar references grounding reviewer profiles."
-      caption="Agent persona detail showing scholar references grounding reviewer profiles."
-    />
-  </MediaCarousel>
+      Writers stopped padding around weak passages and started replacing them directly once the critique sat next to the sentence it was about. The interaction logs surfaced that shift, even though I hadn't directly designed for it. 
+    </RightProse>
+  </RightRail>
 </Section>

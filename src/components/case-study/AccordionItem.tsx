@@ -1,6 +1,8 @@
 "use client";
 
 import { useId, useState, type ReactNode } from "react";
+import { Figure } from "@/components/case-study/Figure";
+import { RightProse } from "@/components/case-study/SplitGrid";
 
 export interface AccordionItemProps {
   /** Primary trigger label — rendered as an `h3`. */
@@ -9,6 +11,17 @@ export interface AccordionItemProps {
   subtitle?: string;
   /** Expanded body — MDX prose passed as children. */
   children: ReactNode;
+  /** Optional still image below the title/body row (see `Figure`). */
+  mediaSrc?: string;
+  /** Optional video — takes precedence over `mediaSrc`. */
+  mediaVideo?: string;
+  mediaPoster?: string;
+  /** Required when `mediaSrc` or `mediaVideo` is set. */
+  mediaAlt?: string;
+  /** Figure aspect ratio (e.g. `"16/9"`). Defaults to `16/9`. */
+  mediaRatio?: string;
+  /** Video playback speed (string for MDX, e.g. `"0.75"`). */
+  mediaPlaybackRate?: string;
 }
 
 function AccordionIcon({ open }: { open: boolean }) {
@@ -54,17 +67,34 @@ function TriggerContent({
   );
 }
 
+const unfoldClassName =
+  "grid transition-[grid-template-rows] duration-[400ms] ease-out motion-reduce:transition-none";
+
 /**
  * A single collapsible case-study row. Content and divider inset 12px (`px-3`
  * `py-3`) per the Figma spec. Closed: the full padded row is the click target
  * (hover surface + 25° icon tilt). Expanded: mirrors the shared 4 / 1 / 7 grid
  * geometry inside the inset; the full-height left column closes the panel so
- * body text stays selectable. Icon rotates 45° when open.
+ * body text stays selectable. Icon rotates 45° when open. Optional `media*`
+ * props render a {@link Figure} in a centered 10-col band below the title/body
+ * row; body and media share one continuous height unfold.
  */
-export function AccordionItem({ title, subtitle, children }: AccordionItemProps) {
+export function AccordionItem({
+  title,
+  subtitle,
+  children,
+  mediaSrc,
+  mediaVideo,
+  mediaPoster,
+  mediaAlt = "",
+  mediaRatio = "16/9",
+  mediaPlaybackRate,
+}: AccordionItemProps) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const toggle = () => setOpen((prev) => !prev);
+  const hasMedia = Boolean(mediaVideo || mediaSrc);
+  const unfoldStyle = { gridTemplateRows: open ? "1fr" : "0fr" };
 
   const triggerClassName =
     "cursor-pointer items-start gap-2 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
@@ -125,20 +155,38 @@ export function AccordionItem({ title, subtitle, children }: AccordionItemProps)
           )}
         </div>
 
-        <div className="min-w-0 cursor-text text-body lg:col-span-7 lg:col-start-6 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+        <div className="min-w-0 lg:col-span-7 lg:col-start-6">
           <div
             id={panelId}
             aria-hidden={!open}
-            className="grid transition-[grid-template-rows] duration-[400ms] ease-out"
-            style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
+            className={unfoldClassName}
+            style={unfoldStyle}
           >
             <div className="min-h-0 overflow-hidden">
-              <div className="text-body [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-                {children}
-              </div>
+              <RightProse className="cursor-text">{children}</RightProse>
             </div>
           </div>
         </div>
+
+        {hasMedia ? (
+          <div
+            aria-hidden={!open}
+            className={`min-w-0 lg:col-span-10 lg:col-start-2 ${unfoldClassName}`}
+            style={unfoldStyle}
+          >
+            <div className="min-h-0 overflow-hidden">
+              <Figure
+                src={mediaSrc}
+                video={mediaVideo}
+                poster={mediaPoster}
+                alt={mediaAlt}
+                ratio={mediaRatio}
+                playbackRate={mediaPlaybackRate}
+                className="my-0"
+              />
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <hr className="border-divider" />

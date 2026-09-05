@@ -79,6 +79,13 @@
   /* Ink on pastel case-study surfaces — stays dark in both themes for contrast. */
   --cs-ink: #0a0a0a;
 
+  /*
+   * Case-study comparison charts — brand orange + a theme-aware muted tint.
+   * `color-mix` against white keeps bars readable in light and dark.
+   */
+  --chart-orange: var(--cs-orange);
+  --chart-orange-muted: color-mix(in srgb, var(--cs-orange) 58%, #ffffff);
+
   color-scheme: light;
 }
 
@@ -103,6 +110,9 @@
   --color-lightbox-panel: #ffffff;
   /* Pastel case-study fills don't invert — keep ink dark for contrast. */
   --cs-ink: #0a0a0a;
+
+  /* Recomputed for dark `--color-bg`. */
+  --chart-orange-muted: color-mix(in srgb, var(--cs-orange) 70%, #ffffff);
 
   color-scheme: dark;
 }

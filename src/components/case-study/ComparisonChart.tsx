@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 export interface ChartBar {
   label: string;
   value: number;
-  /** `primary` = filled dark bar; `secondary` = muted bar. */
+  /** `primary` = brand orange bar; `secondary` = muted orange bar. */
   variant: "primary" | "secondary";
 }
 
@@ -46,7 +46,7 @@ export function ComparisonChart({
         <div className="flex items-center gap-2.5">
           <span
             aria-hidden
-            className="size-3.5 shrink-0 rounded-full bg-primary sm:size-4"
+            className="size-3.5 shrink-0 rounded-full bg-chart-orange sm:size-4"
           />
           <span className="text-caption text-heading sm:text-body">
             {legend[0]}
@@ -55,7 +55,7 @@ export function ComparisonChart({
         <div className="flex items-center gap-1.5">
           <span
             aria-hidden
-            className="size-3.5 shrink-0 rounded-full bg-secondary sm:size-4"
+            className="size-3.5 shrink-0 rounded-full bg-chart-orange-muted sm:size-4"
           />
           <span className="text-caption text-heading sm:text-body">
             {legend[1]}
@@ -74,7 +74,9 @@ export function ComparisonChart({
                 const widthPercent = Math.min((row.value / group.max) * 100, 100);
                 const delay = groupIndex * 0.15 + rowIndex * 0.1;
                 const barClass = `h-3 min-w-0 rounded-full sm:h-4 ${
-                  row.variant === "primary" ? "bg-primary" : "bg-secondary"
+                  row.variant === "primary"
+                    ? "bg-chart-orange"
+                    : "bg-chart-orange-muted"
                 }`;
 
                 return (
