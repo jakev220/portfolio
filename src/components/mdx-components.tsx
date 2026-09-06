@@ -11,6 +11,7 @@ import {
 } from "@/components/case-study/ProjectDetails";
 import { Accent } from "@/components/case-study/Accent";
 import { Subtle } from "@/components/case-study/Subtle";
+import { Highlight, Underline } from "@/components/case-study/TextMark";
 import { Figure } from "@/components/case-study/Figure";
 import { InsetFigure } from "@/components/case-study/InsetFigure";
 import { Accordion } from "@/components/case-study/Accordion";
@@ -57,6 +58,8 @@ export const mdxComponents: MDXComponents = {
   DetailGroup,
   Accent,
   Subtle,
+  Highlight,
+  Underline,
   Figure,
   InsetFigure,
   Accordion,

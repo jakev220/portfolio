@@ -203,6 +203,8 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) + control-pad buttons to zoom; plain scroll does not zoom. View resets on tab change |
 | Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); handle hover/open `bg-surface`; scroll-spy active dash (`text-primary`, slightly larger) on the SVG handle; open panel uses nav-matching frost (`color-bg` 70% + `backdrop-blur-md`) + sliding `bg-surface` pill |
 | Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
+| Text marks | `Highlight` / `Underline` | Fill / 4px stroke wipe L→R once on enter (**650ms** ease-out); instant on scroll when reduced motion |
+| Tone grain | `ToneGrain` | Living film grain on `InsightCard` / `FullBleedBanner` — lighter `--cs-*` mix via soft-light (preserves fill); static when reduced motion |
 | Metric count-up | `Metric` | Value springs from 0 → target when scrolled into view |
 | Nav chrome | `Nav` | Show/hide + backdrop opacity; `motion-reduce:transition-none` |
 | Lightbox video | `MediaLightbox` | Expanded MP4s: YouTube-style center play/pause flash (click / Space); play stays centered while paused |
@@ -268,6 +270,8 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | `<InsetFigure>` | Same as `<Figure>`, centered on a 10-col band. |
 | `<Accent>` | Inline span in the darkest neutral (`text-primary`) for emphasizing body text. |
 | `<Subtle>` | Inline span in the light grey (`text-secondary`) for de-emphasizing a phrase — e.g. `1 UI/UX Designer <Subtle>(me!)</Subtle>`. |
+| `<Highlight>` | Inline highlight mark. Optional `accent` (`purple` / `orange` / … → `--cs-*`); omit for theme primary. ~2px pad, rounded; ink black/white by contrast. Reveals L→R once on enter. |
+| `<Underline>` | Inline underline mark. Same `accent` rules; ~4px rounded stroke with `box-decoration-break: clone` (continuous on one line, per-line when wrapped). Reveals L→R once on enter. |
 | `<Accordion>` | Stack of collapsible rows; place inside a `<Section>`. |
 | `<AccordionItem>` | One accordion row: `title` (+ optional `subtitle`); body as MDX children. Optional `mediaSrc` / `mediaVideo` (+ `mediaAlt`, `mediaRatio`, …) render a `<Figure>` in a centered 10-col band below the title/body row; body and media share one unfold. |
 | `<FlowDiagram>` | Full-width interactive canvas for **read-only** user-flow diagrams. Optional `title`; `ratio` locks the stage (default `16/9`). White header (title + line tabs) above an ink-08 stage; pan/zoom via drag, pinch, and the control pad. |
@@ -275,7 +279,8 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | `<FlowDiagramImage>` | Diagram WebP/SVG for a tab (`src`, `alt`; optional `width`/`height` strings for MDX). `draggable={false}`; already-compressed files are not re-encoded. |
 | `<MediaCarousel>` / `<MediaCarouselSlide>` | Inline carousel with lightbox-aware slides. |
 | `<FeatureChapter>` | Solution-chapter opener: title (+ optional `<Subtle>`), hero figure/video, then nested rows. |
-| `<InsightCard>` / `<InsightCardGrid>` | Toned callout cards for quotes and insights. |
+| `<InsightCard>` / `<InsightCardGrid>` | Toned callout cards for quotes and insights. Includes living `ToneGrain` (lighter tone mix, soft-light). |
+| `<ToneGrain>` | Noise overlay for toned surfaces; used internally by insight cards and full-bleed banners. |
 
 #### Case study TOC
 

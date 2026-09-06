@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { CaseStudyTone } from "@/lib/case-study-palette";
 import type { TypographyToken } from "@/lib/tokens";
+import { ToneGrain } from "@/components/case-study/ToneGrain";
 
 /** Shorthand aliases kept for existing MDX; prefer a typography token. */
 type CalloutSizeAlias = "title" | "heading" | "body";
@@ -165,19 +166,22 @@ export function InsightCard({
 }: InsightCardProps) {
   return (
     <div
-      className={`flex min-w-0 flex-col rounded-xl px-3 pb-6 pt-3 text-cs-ink [&_strong]:text-cs-ink lg:flex-1 ${toneClass[tone]} ${
+      className={`relative flex min-w-0 flex-col overflow-hidden rounded-xl px-3 pb-6 pt-3 text-cs-ink [&_strong]:text-cs-ink lg:flex-1 ${toneClass[tone]} ${
         minHeight ? minHeightClass[minHeight] : "min-h-0"
       }`}
     >
-      <CalloutFields
-        glyph={glyph}
-        preText={preText}
-        title={title}
-        postText={postText}
-        size={size}
-      >
-        {children}
-      </CalloutFields>
+      <ToneGrain tone={tone} />
+      <div className="relative z-[1] flex min-h-0 flex-1 flex-col">
+        <CalloutFields
+          glyph={glyph}
+          preText={preText}
+          title={title}
+          postText={postText}
+          size={size}
+        >
+          {children}
+        </CalloutFields>
+      </div>
     </div>
   );
 }

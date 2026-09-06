@@ -3,6 +3,7 @@ import {
   CalloutFields,
   type CalloutFieldsProps,
 } from "@/components/case-study/InsightCard";
+import { ToneGrain } from "@/components/case-study/ToneGrain";
 
 export interface FullBleedBannerProps extends CalloutFieldsProps {
   /** Palette tone — maps to `--cs-*` on the case-study article. */
@@ -33,9 +34,10 @@ export function FullBleedBanner({
 }: FullBleedBannerProps) {
   return (
     <div
-      className={`relative left-1/2 w-screen -translate-x-1/2 ${toneClass[tone]}`}
+      className={`relative left-1/2 w-screen -translate-x-1/2 overflow-hidden ${toneClass[tone]}`}
     >
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:py-32">
+      <ToneGrain tone={tone} />
+      <div className="relative z-[1] mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:py-32">
         <div className="text-cs-ink [&_strong]:text-cs-ink">
           <CalloutFields
             glyph={glyph}

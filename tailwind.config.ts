@@ -57,6 +57,9 @@ const config: Config = {
       borderColor: {
         DEFAULT: "var(--color-border)",
       },
+      animation: {
+        "tone-grain": "tone-grain 0.9s steps(1) infinite",
+      },
       // Spacing: using Tailwind's default scale as a placeholder.
       // TODO: add custom spacing values here later (extend, do not replace).
       spacing: {},
