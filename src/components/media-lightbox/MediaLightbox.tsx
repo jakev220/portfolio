@@ -139,7 +139,7 @@ export function MediaLightbox() {
           ) : null}
         </div>
 
-        <p className="text-caption m-0 flex min-h-[3rem] max-w-2xl items-center justify-center text-center text-secondary">
+        <p className="text-h3 m-0 flex min-h-[3rem] max-w-2xl items-center justify-center text-center text-secondary">
           {caption || "\u00a0"}
         </p>
 
