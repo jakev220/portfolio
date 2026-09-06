@@ -180,9 +180,7 @@ export function CaseStudyToc() {
           aria-controls={panelId}
           aria-label={open ? "Close table of contents" : "Open table of contents"}
           onClick={() => setOpen((prev) => !prev)}
-          className={`flex flex-col items-center justify-center gap-2.5 rounded-lg border border-transparent px-3 py-3.5 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-            open ? "bg-surface" : "hover:bg-surface"
-          }`}
+          className="flex flex-col items-center justify-center gap-2.5 rounded-lg border border-transparent bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <svg
             aria-hidden

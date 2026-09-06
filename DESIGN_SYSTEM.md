@@ -201,7 +201,7 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Folder icons | `HeroFolder` | Hover opens tool icons (Framer) |
 | Accordion | `AccordionItem` | Ease-out **400ms** expand/collapse |
 | Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) + control-pad buttons to zoom; plain scroll does not zoom. View resets on tab change |
-| Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); handle hover/open `bg-surface`; scroll-spy active dash (`text-primary`, slightly larger) on the SVG handle; open panel uses nav-matching frost (`color-bg` 70% + `backdrop-blur-md`) + sliding `bg-surface` pill |
+| Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); handle + panel use nav-matching frost (`color-bg` 70% + `backdrop-blur-md`); scroll-spy active dash (`text-primary`, slightly larger); sliding `bg-surface` pill in the panel |
 | Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
 | Text marks | `Highlight` / `Underline` | Fill / 4px stroke wipe L→R once on enter (**650ms** ease-out); instant on scroll when reduced motion |
 | Tone grain | `ToneGrain` | Living film grain on `InsightCard` / `FullBleedBanner` — lighter `--cs-*` mix via soft-light (preserves fill); static when reduced motion |
