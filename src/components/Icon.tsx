@@ -14,7 +14,9 @@ export type IconName =
   | "arrow-down"
   | "refresh"
   | "zoom-in"
-  | "zoom-out";
+  | "zoom-out"
+  | "play"
+  | "pause";
 
 interface IconDef {
   /** Path data on a 24×24 viewBox. Multiple strings render as separate `<path>`s. */
@@ -89,6 +91,12 @@ const ICONS: Record<IconName, IconDef> = {
       "M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z",
       "M21 21L16.65 16.65M8 11H14",
     ],
+  },
+  play: {
+    d: "M8 5.14V18.86L19 12L8 5.14Z",
+  },
+  pause: {
+    d: "M7 5H10V19H7V5ZM14 5H17V19H14V5Z",
   },
 };
 

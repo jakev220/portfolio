@@ -205,6 +205,7 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
 | Metric count-up | `Metric` | Value springs from 0 → target when scrolled into view |
 | Nav chrome | `Nav` | Show/hide + backdrop opacity; `motion-reduce:transition-none` |
+| Lightbox video | `MediaLightbox` | Expanded MP4s: YouTube-style center play/pause flash (click / Space); play stays centered while paused |
 
 ### When adding new motion
 

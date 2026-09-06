@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "@/components/Icon";
 import { useMediaLightbox } from "@/components/media-lightbox/MediaLightboxProvider";
@@ -10,17 +10,55 @@ import { useMediaLightbox } from "@/components/media-lightbox/MediaLightboxProvi
  * Full-viewport media overlay. Near-opaque dark (light theme) / light (dark
  * theme) scrim so the case study is barely visible; white panel holds media,
  * caption, and controls. Esc / scrim click / close to dismiss; scroll locked.
+ * Videos: YouTube-style center play/pause (click, Space); play stays centered
+ * while paused.
  */
 export function MediaLightbox() {
   const { items, activeIndex, isOpen, close, next, prev, goTo } =
     useMediaLightbox();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const flashTimeoutRef = useRef<number | null>(null);
+  const [playing, setPlaying] = useState(true);
+  const [flash, setFlash] = useState<{
+    icon: "play" | "pause";
+    id: number;
+  } | null>(null);
 
   const active = isOpen ? items[activeIndex] : null;
   const caption = active
     ? (active.caption?.trim() || active.alt).trim()
     : "";
   const showNav = items.length > 1;
+
+  const togglePlayback = useCallback(() => {
+    const node = videoRef.current;
+    if (!node) return;
+
+    const willPlay = node.paused;
+    setFlash({ icon: willPlay ? "play" : "pause", id: Date.now() });
+    if (flashTimeoutRef.current !== null) {
+      window.clearTimeout(flashTimeoutRef.current);
+    }
+    flashTimeoutRef.current = window.setTimeout(() => {
+      setFlash(null);
+      flashTimeoutRef.current = null;
+    }, 550);
+
+    if (willPlay) {
+      void node.play().catch(() => {});
+    } else {
+      node.pause();
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (flashTimeoutRef.current !== null) {
+        window.clearTimeout(flashTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -61,6 +99,13 @@ export function MediaLightbox() {
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         prev();
+        return;
+      }
+      if (event.key === " " || event.key === "Spacebar") {
+        if (items[activeIndex]?.video) {
+          event.preventDefault();
+          togglePlayback();
+        }
       }
     };
 
@@ -76,7 +121,32 @@ export function MediaLightbox() {
       window.scrollTo(0, scrollY);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [isOpen, close, next, prev]);
+  }, [isOpen, close, next, prev, items, activeIndex, togglePlayback]);
+
+  useEffect(() => {
+    setFlash(null);
+    if (flashTimeoutRef.current !== null) {
+      window.clearTimeout(flashTimeoutRef.current);
+      flashTimeoutRef.current = null;
+    }
+
+    const node = videoRef.current;
+    if (!node || !active?.video) {
+      setPlaying(true);
+      return;
+    }
+
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+    node.addEventListener("play", onPlay);
+    node.addEventListener("pause", onPause);
+    setPlaying(!node.paused);
+
+    return () => {
+      node.removeEventListener("play", onPlay);
+      node.removeEventListener("pause", onPause);
+    };
+  }, [active?.video, activeIndex]);
 
   if (!isOpen || !active || typeof document === "undefined") return null;
 
@@ -112,18 +182,51 @@ export function MediaLightbox() {
         */}
         <div className="relative flex h-[min(65vh,680px)] w-full items-center justify-center">
           {active.video ? (
-            <video
-              key={active.video}
-              className="h-auto max-h-full w-auto max-w-full rounded-lg object-contain"
-              src={active.video}
-              poster={active.poster}
-              muted
-              loop
-              playsInline
-              autoPlay
-              controls={false}
-              aria-label={active.alt}
-            />
+            <div className="relative inline-flex max-h-full max-w-full">
+              <video
+                ref={videoRef}
+                key={active.video}
+                className="h-auto max-h-[min(65vh,680px)] w-auto max-w-full cursor-pointer rounded-lg object-contain"
+                src={active.video}
+                poster={active.poster}
+                muted
+                loop
+                playsInline
+                autoPlay
+                controls={false}
+                aria-label={active.alt}
+                onClick={togglePlayback}
+              />
+
+              {!playing && !flash ? (
+                <button
+                  type="button"
+                  onClick={togglePlayback}
+                  className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  aria-label="Play video"
+                >
+                  <span className="flex size-[4.5rem] items-center justify-center rounded-full bg-black/55 text-white pl-1">
+                    <Icon name="play" size={32} />
+                  </span>
+                </button>
+              ) : null}
+
+              {flash ? (
+                <div
+                  key={flash.id}
+                  className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                  aria-hidden
+                >
+                  <span className="lightbox-playback-pulse flex size-[4.5rem] items-center justify-center rounded-full bg-black/55 text-white">
+                    <Icon
+                      name={flash.icon}
+                      size={32}
+                      className={flash.icon === "play" ? "ml-1" : undefined}
+                    />
+                  </span>
+                </div>
+              ) : null}
+            </div>
           ) : active.src ? (
             <Image
               key={active.src}
