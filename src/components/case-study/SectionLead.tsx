@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { slugifyLabel } from "@/lib/slugify";
 
 export interface SectionLeadProps {
   /** Eyebrow label — full width above the lead. Omit for a lead-only block. */
@@ -18,16 +19,24 @@ export interface SectionLeadProps {
  * lands below the whole block. Label-only leads mark `data-section-eyebrow` so
  * `Section` can pull the next child up (e.g. "Solution" → feature chapter
  * title) to the same 8px label→heading rhythm as label→lead.
+ *
+ * Labeled leads also expose `data-case-study-toc` + an `id` for
+ * {@link CaseStudyToc} (scroll spy + jump links).
  */
 export function SectionLead({ label, children }: SectionLeadProps) {
   if (!label && !children) return null;
 
   const labelOnly = Boolean(label && !children);
+  const tocId = label ? `toc-${slugifyLabel(label)}` : undefined;
 
   return (
     <div
-      className="flex flex-col gap-2"
+      id={tocId}
+      className="flex scroll-mt-28 flex-col gap-2 sm:scroll-mt-32 lg:scroll-mt-40"
       {...(labelOnly ? { "data-section-eyebrow": "" } : {})}
+      {...(label
+        ? { "data-case-study-toc": label }
+        : {})}
     >
       {label ? <p className="text-label text-secondary m-0">{label}</p> : null}
       {children ? (

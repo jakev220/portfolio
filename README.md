@@ -29,7 +29,7 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] `WorkGrid` — arranges cards per variant (stack = 1-col, card = 2-col, inline = 1-col list), responsive gaps
 - [x] `WorkViewToggle` — 3 ghost icon buttons (44px, 16px gap); selected = round grey border
 - [x] `Icon` — single `<Icon name>` primitive (path registry, `currentColor`, size/className props); supports fill **and** stroke icons (`arrow-*`, `zoom-*`, `refresh`, `expand`, `close`, view toggles, `mode`)
-- [x] Case-study MDX layout — `Section` / `Split` / `Figure` / `Accordion` / `FlowDiagram` (+ tabs & images), lightbox, charts, insight cards (see `DESIGN_SYSTEM.md`)
+- [x] Case-study MDX layout — `Section` / `Split` / `Figure` / `Accordion` / `FlowDiagram` (+ tabs & images), `CaseStudyToc`, lightbox, charts, insight cards (see `DESIGN_SYSTEM.md`)
 - [x] `Hero` — home hero with interactive avatar (hover-cycles images) + macOS folder; subhero accent links (external get `↗` + new tab via `src/lib/links.ts`)
 - [x] `WorkSection` — home work section: `WorkViewToggle` + `WorkGrid` with 4 preview case studies
 - [x] `Footer` — 3-part (contact links, "explore" media card, meta row) + `FooterClock` (live Pacific time, sun/moon icon)

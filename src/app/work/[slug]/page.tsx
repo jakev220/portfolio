@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllWorkSlugs, getWorkBySlug } from "@/lib/mdx";
 import { caseStudyPaletteStyle } from "@/lib/case-study-palette";
 import { CaseStudyHeader } from "@/components/CaseStudyHeader";
+import { CaseStudyToc } from "@/components/case-study/CaseStudyToc";
 import { MDXContent } from "@/components/MDXContent";
 import { MediaLightboxProvider } from "@/components/media-lightbox/MediaLightboxProvider";
 
@@ -50,9 +51,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
     <MediaLightboxProvider>
       <article
         data-case-study={slug}
-        className="mx-auto max-w-7xl px-6 pb-16 pt-32 sm:pb-24 sm:pt-48 lg:pt-64"
+        className="relative mx-auto max-w-7xl px-6 pb-16 pt-32 sm:pb-24 sm:pt-48 lg:pt-64"
         style={paletteStyle}
       >
+        <CaseStudyToc />
         <CaseStudyHeader
           name={work.name}
           title={work.title}

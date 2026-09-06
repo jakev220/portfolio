@@ -201,6 +201,7 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Folder icons | `HeroFolder` | Hover opens tool icons (Framer) |
 | Accordion | `AccordionItem` | Ease-out **400ms** expand/collapse |
 | Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) + control-pad buttons to zoom; plain scroll does not zoom. View resets on tab change |
+| Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); handle hover/open `bg-surface`; scroll-spy active dash (`text-primary`, slightly larger) on the SVG handle; open panel uses nav-matching frost (`color-bg` 70% + `backdrop-blur-md`) + sliding `bg-surface` pill |
 | Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
 | Metric count-up | `Metric` | Value springs from 0 → target when scrolled into view |
 | Nav chrome | `Nav` | Show/hide + backdrop opacity; `motion-reduce:transition-none` |
@@ -257,7 +258,8 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | `<CaseStudyHeader>` | Frontmatter-driven: `<hgroup>` (name `h1` + descriptive subtitle), cover media, divider. |
 | `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
 | `<Section>` | The section unit: `<section>` that stacks its children with a responsive internal gap (128px between sections via `.mdx-content`). Compose rows + media inside. |
-| `<SectionLead>` | Optional eyebrow + lead headline for a section opener. |
+| `<SectionLead>` | Optional eyebrow + lead headline for a section opener. Labeled leads set `id="toc-…"` + `data-case-study-toc` for the sticky TOC (label-less leads are omitted). |
+| `<CaseStudyToc>` | Desktop-only (`lg+`) sticky contents widget. Mounted on the case-study page (not MDX). Auto-discovers labeled `SectionLead`s; click handle to expand; scroll-spy + smooth jump; handle stays viewport-left at all widths. |
 | `<Split>` | Lead row: heading (via `<SplitHeading>`) on the 4-col left + body prose on the right rail. |
 | `<MediaRow>` | Sub-row: `h3` heading (via `<SplitHeading>`) on the left + a `<Figure>` on the right. |
 | `<RightRail>` / `<RightProse>` | Full-width right-rail stack; `RightProse` insets copy to 6 of 7 cols. |
@@ -273,6 +275,13 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | `<MediaCarousel>` / `<MediaCarouselSlide>` | Inline carousel with lightbox-aware slides. |
 | `<FeatureChapter>` | Solution-chapter opener: title (+ optional `<Subtle>`), hero figure/video, then nested rows. |
 | `<InsightCard>` / `<InsightCardGrid>` | Toned callout cards for quotes and insights. |
+
+#### Case study TOC
+
+Mounted once in `src/app/work/[slug]/page.tsx`. Entries come only from
+`<SectionLead label="…">` — omit `label` to keep a lead out of the TOC. Handle
+dashes: inactive `divider` (`black-20`), active `primary` (slightly larger),
+including while the panel is open. Panel chrome matches `Nav` frost.
 
 #### Flow diagram usage
 
