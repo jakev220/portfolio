@@ -9,11 +9,16 @@ export type IconName =
   | "expand"
   | "close"
   | "arrow-left"
-  | "arrow-right";
+  | "arrow-right"
+  | "arrow-up"
+  | "arrow-down"
+  | "refresh"
+  | "zoom-in"
+  | "zoom-out";
 
 interface IconDef {
-  /** Path data on a 24×24 viewBox. */
-  d: string;
+  /** Path data on a 24×24 viewBox. Multiple strings render as separate `<path>`s. */
+  d: string | string[];
   /** Render with `stroke` instead of `fill` (for outline-style icons). */
   stroke?: boolean;
 }
@@ -55,6 +60,36 @@ const ICONS: Record<IconName, IconDef> = {
     stroke: true,
     d: "M5 12H19M12 19L19 12L12 5",
   },
+  "arrow-up": {
+    stroke: true,
+    d: "M19 12L12 5L5 12M12 5V19",
+  },
+  "arrow-down": {
+    stroke: true,
+    d: "M5 12L12 19L19 12M12 19V5",
+  },
+  refresh: {
+    stroke: true,
+    d: [
+      "M3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.516 3.00947 16.931 3.99122 18.74 5.74L21 8",
+      "M21 3V8H16M21 12C21 14.3869 20.0518 16.6761 18.364 18.364C16.6761 20.0518 14.3869 21 12 21C9.48395 20.9905 7.06897 20.0088 5.26 18.26L3 16",
+      "M8 16H3L3 21",
+    ],
+  },
+  "zoom-in": {
+    stroke: true,
+    d: [
+      "M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z",
+      "M21 21L16.65 16.65M11 8V14M8 11H14",
+    ],
+  },
+  "zoom-out": {
+    stroke: true,
+    d: [
+      "M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z",
+      "M21 21L16.65 16.65M8 11H14",
+    ],
+  },
 };
 
 export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {
@@ -72,6 +107,7 @@ export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {
  */
 export function Icon({ name, size = 20, title, ...props }: IconProps) {
   const { d, stroke } = ICONS[name];
+  const paths = Array.isArray(d) ? d : [d];
   return (
     <svg
       viewBox="0 0 24 24"
@@ -88,7 +124,9 @@ export function Icon({ name, size = 20, title, ...props }: IconProps) {
       focusable={false}
       {...props}
     >
-      <path d={d} />
+      {paths.map((pathD) => (
+        <path key={pathD} d={pathD} />
+      ))}
     </svg>
   );
 }

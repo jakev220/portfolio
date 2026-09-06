@@ -26,6 +26,11 @@ import {
   MediaCarousel,
   MediaCarouselSlide,
 } from "@/components/case-study/MediaCarousel";
+import {
+  FlowDiagram,
+  FlowDiagramTab,
+  FlowDiagramImage,
+} from "@/components/case-study/FlowDiagram";
 import { ScienceJuryFormativeChart } from "@/components/case-study/science-jury/ScienceJuryFormativeChart";
 
 /**
@@ -64,6 +69,9 @@ export const mdxComponents: MDXComponents = {
   FeatureChapter,
   MediaCarousel,
   MediaCarouselSlide,
+  FlowDiagram,
+  FlowDiagramTab,
+  FlowDiagramImage,
   ScienceJuryFormativeChart,
   h1: (props) => <h1 className="text-h1 text-primary mt-12 mb-4" {...props} />,
   h2: (props) => <h2 className="text-h2 text-heading mt-10 mb-3" {...props} />,

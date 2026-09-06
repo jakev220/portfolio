@@ -200,6 +200,7 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Avatar cycle + lift | `HeroAvatar` | Hover/focus cycles frames; slight `-translate-y` lift; accent name color |
 | Folder icons | `HeroFolder` | Hover opens tool icons (Framer) |
 | Accordion | `AccordionItem` | Ease-out **400ms** expand/collapse |
+| Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) + control-pad buttons to zoom; plain scroll does not zoom. View resets on tab change |
 | Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
 | Metric count-up | `Metric` | Value springs from 0 → target when scrolled into view |
 | Nav chrome | `Nav` | Show/hide + backdrop opacity; `motion-reduce:transition-none` |
@@ -246,18 +247,52 @@ and serve the source file as-is.
 
 ### Case-study section components (used as JSX in MDX bodies)
 
+Shared geometry is **4 / 1 / 7** on a 12-col grid (`SplitGrid`): heading/meta on
+cols 1–4, one-column hang, body/media rail on cols 6–12. Prose in the rail often
+wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
+10-col band (`<InsetFigure>`, accordion media).
+
 | Component | Purpose |
 |-----------|---------|
 | `<CaseStudyHeader>` | Frontmatter-driven: `<hgroup>` (name `h1` + descriptive subtitle), cover media, divider. |
 | `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
-| `<Section>` | The section unit: `<section>` that stacks its children with a 64px internal gap (128px between sections). Compose rows + media inside. |
-| `<Split>` | Lead row: `h2` heading (via `<SplitHeading>`) on the 400px left column + body prose on the right; optional eyebrow `label`. |
-| `<MediaRow>` | Sub-row: `h3` heading (via `<SplitHeading>`) on the left + a `<Figure>` on the right. Stack several inside a `<Section>` for a goals list. |
-| `<Figure>` | Aspect-locked media (`ratio="W/H"`): `next/image` or a `bg-surface` placeholder when no `src`. |
+| `<Section>` | The section unit: `<section>` that stacks its children with a responsive internal gap (128px between sections via `.mdx-content`). Compose rows + media inside. |
+| `<SectionLead>` | Optional eyebrow + lead headline for a section opener. |
+| `<Split>` | Lead row: heading (via `<SplitHeading>`) on the 4-col left + body prose on the right rail. |
+| `<MediaRow>` | Sub-row: `h3` heading (via `<SplitHeading>`) on the left + a `<Figure>` on the right. |
+| `<RightRail>` / `<RightProse>` | Full-width right-rail stack; `RightProse` insets copy to 6 of 7 cols. |
+| `<Figure>` | Aspect-locked media (`ratio="W/H"`): image, video, or placeholder. Optional `frame="ink-08"` plate. Hover expand opens the page lightbox. |
+| `<InsetFigure>` | Same as `<Figure>`, centered on a 10-col band. |
 | `<Accent>` | Inline span in the darkest neutral (`text-primary`) for emphasizing body text. |
-| `<Subtle>` | Inline span in the light grey (`text-secondary` / black-40) for de-emphasizing a phrase within body text — e.g. `1 UI/UX Designer <Subtle>(me!)</Subtle>`. |
-| `<Accordion>` | Stack of collapsible rows; place inside a `<Section>`. Items separated by bottom dividers. |
-| `<AccordionItem>` | One accordion row: `title` (+ optional `subtitle`) as string props; expanded body as MDX children. Multiple items can be open; ease-out 400ms expand/collapse. |
+| `<Subtle>` | Inline span in the light grey (`text-secondary`) for de-emphasizing a phrase — e.g. `1 UI/UX Designer <Subtle>(me!)</Subtle>`. |
+| `<Accordion>` | Stack of collapsible rows; place inside a `<Section>`. |
+| `<AccordionItem>` | One accordion row: `title` (+ optional `subtitle`); body as MDX children. Optional `mediaSrc` / `mediaVideo` (+ `mediaAlt`, `mediaRatio`, …) render a `<Figure>` in a centered 10-col band below the title/body row; body and media share one unfold. |
+| `<FlowDiagram>` | Full-width interactive canvas for **read-only** user-flow diagrams. Optional `title`; `ratio` locks the stage (default `16/9`). White header (title + line tabs) above an ink-08 stage; pan/zoom via drag, pinch, and the control pad. |
+| `<FlowDiagramTab>` | One diagram tab (`label` + children). Registers with the parent; **content mounts only while selected** so inactive assets stay unloaded. |
+| `<FlowDiagramImage>` | Diagram WebP/SVG for a tab (`src`, `alt`; optional `width`/`height` strings for MDX). `draggable={false}`; already-compressed files are not re-encoded. |
+| `<MediaCarousel>` / `<MediaCarouselSlide>` | Inline carousel with lightbox-aware slides. |
+| `<FeatureChapter>` | Solution-chapter opener: title (+ optional `<Subtle>`), hero figure/video, then nested rows. |
+| `<InsightCard>` / `<InsightCardGrid>` | Toned callout cards for quotes and insights. |
+
+#### Flow diagram usage
+
+```mdx
+<FlowDiagram title="Agent configuration" ratio="16/9">
+  <FlowDiagramTab label="Overview">
+    <FlowDiagramImage
+      src="/work/<slug>/diagrams/overview.webp"
+      alt="…"
+    />
+  </FlowDiagramTab>
+  <FlowDiagramTab label="Step 1">
+    <FlowDiagramImage src="/work/<slug>/diagrams/step-1.webp" alt="…" />
+  </FlowDiagramTab>
+</FlowDiagram>
+```
+
+Put diagram assets in `public/work/<slug>/diagrams/` with URL-safe kebab-case
+names. Prefer ~1600–2400px-wide WebPs for load; the stage zooms a single
+transformed layer (no re-rasterize on pinch).
 
 ---
 

@@ -28,7 +28,8 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] `CaseStudyCardInline` — desktop cursor-following media preview (Framer Motion, portal, hover-capable devices only)
 - [x] `WorkGrid` — arranges cards per variant (stack = 1-col, card = 2-col, inline = 1-col list), responsive gaps
 - [x] `WorkViewToggle` — 3 ghost icon buttons (44px, 16px gap); selected = round grey border
-- [x] `Icon` — single `<Icon name>` primitive (path registry, `currentColor`, size/className props); supports fill **and** stroke icons
+- [x] `Icon` — single `<Icon name>` primitive (path registry, `currentColor`, size/className props); supports fill **and** stroke icons (`arrow-*`, `zoom-*`, `refresh`, `expand`, `close`, view toggles, `mode`)
+- [x] Case-study MDX layout — `Section` / `Split` / `Figure` / `Accordion` / `FlowDiagram` (+ tabs & images), lightbox, charts, insight cards (see `DESIGN_SYSTEM.md`)
 - [x] `Hero` — home hero with interactive avatar (hover-cycles images) + macOS folder; subhero accent links (external get `↗` + new tab via `src/lib/links.ts`)
 - [x] `WorkSection` — home work section: `WorkViewToggle` + `WorkGrid` with 4 preview case studies
 - [x] `Footer` — 3-part (contact links, "explore" media card, meta row) + `FooterClock` (live Pacific time, sun/moon icon)
@@ -144,7 +145,7 @@ published: true     # false = hidden everywhere
 Write the case study body here in MDX/Markdown.
 ```
 
-3. Put images in `public/work/<slug>/`.
+3. Put images in `public/work/<slug>/` (diagram WebPs in `public/work/<slug>/diagrams/` with kebab-case names).
 4. `getAllWork()` auto-lists published studies sorted by `order`; no code change needed.
 
 **How the body renders:** the MDX body is rendered by `<MDXContent source={...} />`
@@ -153,7 +154,8 @@ Write the case study body here in MDX/Markdown.
 auto-generated `id`s), paragraphs, **bold**/_italic_, links, lists, blockquotes,
 GitHub-flavored tables, horizontal rules, inline code, and syntax-highlighted
 fenced code blocks (Shiki, `github-light`). Custom components (e.g. `<Figure>`,
-`<InsightCard>`, `<FullBleedBanner>`) get registered in that same map as we build them.
+`<FlowDiagram>`, `<InsightCard>`, `<Accordion>`) are registered in that same map —
+full list in [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md).
 
 ---
 
