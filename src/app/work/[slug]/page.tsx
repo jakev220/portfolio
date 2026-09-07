@@ -76,6 +76,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             skipLabel={work.skipLabel}
             skipHref={work.skipHref}
             skipTone={resolveSkipTone(work.skipTone)}
+            skipPreview={work.skipPreview}
           />
         </div>
         <div className="case-study-body-enter mt-20">

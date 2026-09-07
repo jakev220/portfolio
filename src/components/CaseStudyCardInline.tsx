@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { CursorFollowPreview } from "@/components/CursorFollowPreview";
 
 export interface CaseStudyCardInlineProps {
   /** Project title (grows to fill the row). */
@@ -19,14 +18,6 @@ export interface CaseStudyCardInlineProps {
   /** Non-interactive, muted state (e.g. a case study that isn't live yet). */
   disabled?: boolean;
 }
-
-/** Hover preview geometry. Width matches the `w-60` class; height is derived
- *  from the `aspect-[842/540]` ratio so the preview can be reliably anchored
- *  above the cursor (top-right) regardless of the scale animation. */
-const PREVIEW_WIDTH = 240; // px (w-60)
-const PREVIEW_HEIGHT = Math.round((PREVIEW_WIDTH * 540) / 842);
-const HORIZONTAL_GAP = 40; // px to the right of the cursor
-const VERTICAL_GAP = 16; // px above the cursor
 
 /** Title/year row, shared between the interactive and disabled renderings. */
 function Row({ title, year }: { title: string; year: string }) {
@@ -54,22 +45,20 @@ export function CaseStudyCardInline({
   coverAlt,
   disabled = false,
 }: CaseStudyCardInlineProps) {
-  const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [point, setPoint] = useState({ x: 0, y: 0 });
   const hoverCapable = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
     hoverCapable.current = window.matchMedia(
-      "(hover: hover) and (pointer: fine)"
+      "(hover: hover) and (pointer: fine)",
     ).matches;
   }, []);
 
   const showPreview = () => {
     if (hoverCapable.current) setVisible(true);
   };
-  const trackCursor = (event: React.MouseEvent) => {
+  const trackCursor = (event: MouseEvent) => {
     if (hoverCapable.current) setPoint({ x: event.clientX, y: event.clientY });
   };
   const hidePreview = () => setVisible(false);
@@ -103,40 +92,17 @@ export function CaseStudyCardInline({
         </div>
       </a>
 
-      {mounted
-        ? createPortal(
-            <AnimatePresence>
-              {visible ? (
-                <motion.div
-                  key="inline-preview"
-                  aria-hidden
-                  className="pointer-events-none fixed z-50 w-60 overflow-hidden rounded-xl border border-border bg-surface shadow-lg"
-                  style={{
-                    left: point.x + HORIZONTAL_GAP,
-                    top: point.y - PREVIEW_HEIGHT - VERTICAL_GAP,
-                  }}
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.15, ease: "easeOut" }}
-                >
-                  <div className="relative aspect-[842/540]">
-                    {coverImage ? (
-                      <Image
-                        src={coverImage}
-                        alt={coverAlt ?? title}
-                        fill
-                        className="object-cover"
-                        sizes="240px"
-                      />
-                    ) : null}
-                  </div>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>,
-            document.body
-          )
-        : null}
+      <CursorFollowPreview visible={visible} point={point}>
+        {coverImage ? (
+          <Image
+            src={coverImage}
+            alt={coverAlt ?? title}
+            fill
+            className="object-cover"
+            sizes="240px"
+          />
+        ) : null}
+      </CursorFollowPreview>
     </>
   );
 }

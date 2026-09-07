@@ -35,6 +35,11 @@ export interface WorkFrontmatter {
    * Maps to `--cs-*` on the case-study article.
    */
   skipTone?: string;
+  /**
+   * Curated still paths for the skip CTA cursor-follow preview
+   * (e.g. solution screenshots). Decorative; omit for button-only.
+   */
+  skipPreview?: string[];
   /** Controls sort order on the home page (ascending). */
   order: number;
   published: boolean;
@@ -78,6 +83,11 @@ function parseFrontmatter(data: Record<string, unknown>): WorkFrontmatter {
     ...DEFAULT_FRONTMATTER,
     ...data,
     tags: Array.isArray(data.tags) ? (data.tags as string[]) : [],
+    skipPreview: Array.isArray(data.skipPreview)
+      ? (data.skipPreview as unknown[]).filter(
+          (item): item is string => typeof item === "string" && item.length > 0,
+        )
+      : undefined,
   };
 }
 

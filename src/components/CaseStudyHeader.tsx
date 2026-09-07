@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/Button";
+import { SkipCta } from "@/components/SkipCta";
 import { ExpandableMedia } from "@/components/media-lightbox/ExpandableMedia";
 import type { CaseStudyTone } from "@/lib/case-study-palette";
 
@@ -21,6 +21,11 @@ export interface CaseStudyHeaderProps {
   skipHref?: string;
   /** Case-study palette tone for the skip button (`purple`, `orange`, …). */
   skipTone?: CaseStudyTone;
+  /**
+   * Curated stills for the skip CTA cursor-follow preview (solution trailer).
+   * Omit for a plain button.
+   */
+  skipPreview?: string[];
 }
 
 /**
@@ -45,6 +50,7 @@ export function CaseStudyHeader({
   skipLabel,
   skipHref,
   skipTone,
+  skipPreview,
 }: CaseStudyHeaderProps) {
   const showSkip = Boolean(skipLabel && skipHref);
 
@@ -58,18 +64,14 @@ export function CaseStudyHeader({
             {title ? <p className="text-h2 break-words">{title}</p> : null}
           </div>
 
-          {showSkip ? (
+          {showSkip && skipLabel && skipHref ? (
             <div className="flex justify-start lg:col-span-4 lg:justify-end">
-              <Button
+              <SkipCta
+                label={skipLabel}
                 href={skipHref}
-                variant="primary"
                 tone={skipTone}
-                size="lg"
-                icon="arrow-down"
-                iconPosition="end"
-              >
-                {skipLabel}
-              </Button>
+                previewImages={skipPreview}
+              />
             </div>
           ) : null}
         </div>
