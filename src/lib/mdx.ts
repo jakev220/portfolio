@@ -28,7 +28,7 @@ export interface WorkFrontmatter {
    * Requires {@link skipHref}.
    */
   skipLabel?: string;
-  /** In-page (or absolute) href for the skip CTA (e.g. "#toc-solution"). */
+  /** In-page (or absolute) href for the skip CTA (e.g. "#solution"). */
   skipHref?: string;
   /**
    * Case-study palette tone for the skip CTA (e.g. `"purple"`).

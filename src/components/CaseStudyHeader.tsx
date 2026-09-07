@@ -14,9 +14,10 @@ export interface CaseStudyHeaderProps {
    * Optional skip CTA (e.g. "Skip to final design").
    * Rendered only when both `skipLabel` and `skipHref` are set.
    * Anchored to the bottom-right of the subtitle row at `lg+`.
+   * Hash targets smooth-scroll (instant when reduced motion).
    */
   skipLabel?: string;
-  /** Target for the skip CTA (typically a section id, e.g. `#toc-solution`). */
+  /** Target for the skip CTA (typically a section id, e.g. `#solution`). */
   skipHref?: string;
   /** Case-study palette tone for the skip button (`purple`, `orange`, …). */
   skipTone?: CaseStudyTone;

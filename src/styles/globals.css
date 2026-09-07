@@ -182,8 +182,23 @@
   animation: hero-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/*
+ * Case-study enter — same fade/rise as the home hero. Applied to header and
+ * body wrappers (not the article) so the fixed TOC isn’t trapped by transform.
+ * Body lags slightly so the page reads as one soft cascade.
+ */
+.case-study-enter {
+  animation: hero-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.case-study-body-enter {
+  animation: hero-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-enter {
+  .hero-enter,
+  .case-study-enter,
+  .case-study-body-enter {
     animation: none;
   }
 }

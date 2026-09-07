@@ -186,6 +186,8 @@ Signal: `beginHomeAboutExit()` dispatches `HOME_EXIT_EVENT`; `HomeExitShell` and
 | Class | Duration | Delay | Travel | Used by |
 |-------|----------|-------|--------|---------|
 | `.hero-enter` | 0.85s | — | `translateY(8px)` → 0 | Home `<Hero>` section |
+| `.case-study-enter` | 0.85s | — | `translateY(8px)` → 0 | Case-study header (same keyframes as `.hero-enter`) |
+| `.case-study-body-enter` | 0.85s | 0.12s | `translateY(8px)` → 0 | Case-study MDX body (soft cascade after header) |
 | `.about-hero-tile` | 0.7s | — | `translateY(10px)` → 0 | About collage tiles (base) |
 | `.about-hero-tile-0` … `-3` | — | 0.12s + n×0.14s | — | Stagger L→R, T→B |
 | `.about-hero-greeting` | 0.85s | 0.8s | `translateY(8px)` → 0 | About “Hi, I'm Jake!” block |
@@ -203,7 +205,8 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Folder icons | `HeroFolder` | Hover opens tool icons (Framer) |
 | Accordion | `AccordionItem` | Ease-out **400ms** expand/collapse |
 | Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) + control-pad buttons to zoom; plain scroll does not zoom. View resets on tab change |
-| Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); handle + panel use nav-matching frost (`color-bg` 70% + `backdrop-blur-md`); scroll-spy active dash (`text-primary`, slightly larger); sliding `bg-surface` pill in the panel |
+| Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); handle + panel use nav-matching frost (`color-bg` 70% + `backdrop-blur-md`); scroll-spy active dash (`text-primary`, slightly larger); sliding `bg-surface` pill in the panel; section jumps via `scrollToId` (smooth / instant for reduced motion) |
+| Skip / hash CTA | `Button` + `scroll-to-id` | Hash `href`s (e.g. header “Skip to final design”) smooth-scroll; instant when `prefers-reduced-motion` |
 | Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
 | Text marks | `Highlight` / `Underline` | Fill / 4px stroke wipe L→R once on enter (**650ms** ease-out); instant on scroll when reduced motion |
 | Tone grain | `ToneGrain` | Living film grain on `InsightCard` / `FullBleedBanner` — lighter `--cs-*` mix via soft-light (preserves fill); static when reduced motion |
@@ -263,7 +266,7 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | `<CaseStudyHeader>` | Frontmatter-driven: full-width name `h1`, 8-col subtitle, optional skip CTA (`skipLabel` + `skipHref` + optional `skipTone`) bottom-right at `lg+`, cover media, divider. |
 | `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
 | `<Section>` | The section unit: `<section>` that stacks its children with the case-study stack rhythm (`gap-12` / `sm:gap-16` / `lg:gap-20`). Between top-level sections, `.mdx-content` uses `gap-24` / `sm:gap-32` / `lg:gap-48`. Compose rows + media inside. |
-| `<SectionLead>` | Optional eyebrow + lead headline for a section opener. Labeled leads set `id="toc-…"` + `data-case-study-toc` for the sticky TOC (label-less leads are omitted). |
+| `<SectionLead>` | Optional eyebrow + lead headline for a section opener. Labeled leads set `id` from the slugified label (or an explicit `id`) + `data-case-study-toc` for the sticky TOC (label-less leads are omitted). |
 | `<CaseStudyToc>` | Desktop-only (`lg+`) sticky contents widget. Mounted on the case-study page (not MDX). Auto-discovers labeled `SectionLead`s; click handle to expand; scroll-spy + smooth jump; handle stays viewport-left at all widths. |
 | `<Split>` | Lead row: heading (via `<SplitHeading>`) on the 4-col left + body prose on the right rail. |
 | `<WideHeading>` | Heading-only row at the same 8-col width as `SectionLead` leads. Default `h3` (optional `level="h2"`). |
@@ -316,7 +319,7 @@ transformed layer (no re-rasterize on pinch).
 
 | Component | Purpose |
 |-----------|---------|
-| `<Button>` | Apple-inspired capsule control (`src/components/Button.tsx`). Variants: `primary` (filled accent), `secondary` (gray + primary label), `destructive` (gray + red label), `plain`, `tinted`. Optional `tone` (`lavender` / `orange` / `yellow` / `blue` / `purple`) remaps primary/plain/tinted to case-study `--cs-*`. Sizes `sm` (40px) / `md` (48px) / `lg` (56px). Label uses `text-body-large` at regular weight. Optional `icon` + `iconPosition` (`start` \| `end`) or `iconOnly` (requires `aria-label`). `fullWidth`, `disabled`, or `href` (Next.js Link). |
+| `<Button>` | Apple-inspired capsule control (`src/components/Button.tsx`). Variants: `primary` (filled accent), `secondary` (gray + primary label), `destructive` (gray + red label), `plain`, `tinted`. Optional `tone` (`lavender` / `orange` / `yellow` / `blue` / `purple`) remaps primary/plain/tinted to case-study `--cs-*`. Sizes `sm` (40px) / `md` (48px) / `lg` (56px). Label uses `text-body-large` at regular weight. Optional `icon` + `iconPosition` (`start` \| `end`) or `iconOnly` (requires `aria-label`). `fullWidth`, `disabled`, or `href` (Next.js Link). Hash `href`s smooth-scroll in-page via `scrollToHash` (instant when reduced motion). |
 
 ```tsx
 <Button variant="primary">Primary Button</Button>

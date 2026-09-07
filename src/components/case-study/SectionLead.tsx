@@ -5,6 +5,11 @@ export interface SectionLeadProps {
   /** Eyebrow label — full width above the lead. Omit for a lead-only block. */
   label?: string;
   /**
+   * Override the auto id from the label slug (e.g. force a shorter fragment).
+   * TOC still discovers the node via `data-case-study-toc`.
+   */
+  id?: string;
+  /**
    * Wide lead headline. Renders at h2 scale and spans 8 of 12 columns at lg+.
    * Omit for a label-only opener (e.g. "Solution" before feature chapters).
    */
@@ -21,13 +26,14 @@ export interface SectionLeadProps {
  * title) to the same 8px label→heading rhythm as label→lead.
  *
  * Labeled leads also expose `data-case-study-toc` + an `id` for
- * {@link CaseStudyToc} (scroll spy + jump links).
+ * {@link CaseStudyToc} (scroll spy + jump links). Default id is the slugified
+ * label (e.g. `"Formative study"` → `formative-study`); pass `id` to override.
  */
-export function SectionLead({ label, children }: SectionLeadProps) {
+export function SectionLead({ label, id, children }: SectionLeadProps) {
   if (!label && !children) return null;
 
   const labelOnly = Boolean(label && !children);
-  const tocId = label ? `toc-${slugifyLabel(label)}` : undefined;
+  const tocId = label ? (id ?? slugifyLabel(label)) : undefined;
 
   return (
     <div

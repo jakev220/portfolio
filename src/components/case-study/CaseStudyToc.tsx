@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { scrollToId } from "@/lib/scroll-to-id";
 
 export interface TocEntry {
   id: string;
@@ -36,7 +37,8 @@ function collectEntries(root: ParentNode = document): TocEntry[] {
  * Desktop-only sticky case-study table of contents. Discovers sections from
  * {@link SectionLead} nodes marked with `data-case-study-toc`. Handle shows
  * one line per section; click toggles the panel. Scroll-spy drives a sliding
- * pill behind the active entry; links smooth-scroll to the section.
+ * pill behind the active entry; links scroll to the section (smooth, or
+ * instant when `prefers-reduced-motion`).
  */
 export function CaseStudyToc() {
   const [entries, setEntries] = useState<TocEntry[]>([]);
@@ -160,9 +162,7 @@ export function CaseStudyToc() {
   }, [open]);
 
   const goTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToId(id);
     setActiveId(id);
   };
 

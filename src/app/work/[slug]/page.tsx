@@ -57,7 +57,9 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
   // Shares the home/About page shell: 12 columns with 16px gutters and 80px
   // outer margins at a 1440px viewport. Per-study `--cs-*` palette vars are
-  // set when the slug has an entry in `caseStudyPalettes`.
+  // set when the slug has an entry in `caseStudyPalettes`. Header + body use
+  // CSS fade/rise enters (same timing as the home hero); TOC stays outside
+  // those wrappers so `position: fixed` isn’t affected by `transform`.
   return (
     <MediaLightboxProvider>
       <article
@@ -66,15 +68,17 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         style={paletteStyle}
       >
         <CaseStudyToc />
-        <CaseStudyHeader
-          name={work.name}
-          title={work.title}
-          coverImage={work.coverImage}
-          skipLabel={work.skipLabel}
-          skipHref={work.skipHref}
-          skipTone={resolveSkipTone(work.skipTone)}
-        />
-        <div className="mt-20">
+        <div className="case-study-enter">
+          <CaseStudyHeader
+            name={work.name}
+            title={work.title}
+            coverImage={work.coverImage}
+            skipLabel={work.skipLabel}
+            skipHref={work.skipHref}
+            skipTone={resolveSkipTone(work.skipTone)}
+          />
+        </div>
+        <div className="case-study-body-enter mt-20">
           <MDXContent source={work.content} />
         </div>
       </article>

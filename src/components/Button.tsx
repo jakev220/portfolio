@@ -1,7 +1,14 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+"use client";
+
+import type {
+  ButtonHTMLAttributes,
+  MouseEvent,
+  ReactNode,
+} from "react";
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/Icon";
 import type { CaseStudyTone } from "@/lib/case-study-palette";
+import { scrollToHash } from "@/lib/scroll-to-id";
 
 export type ButtonVariant =
   | "primary"
@@ -43,8 +50,10 @@ export interface ButtonProps
   /** Stretch to the parent width (alert / form footers). */
   fullWidth?: boolean;
   /**
-   * When set, renders a Next.js `Link` with the same styles (for CTAs).
-   * `disabled` becomes non-interactive + `aria-disabled`.
+   * When set, renders a link with the same styles (for CTAs).
+   * Hash hrefs use a native `<a>` and always smooth-scroll (instant when
+   * reduced motion) — including when the URL already has that hash.
+   * Route hrefs use Next.js `Link`. `disabled` → non-interactive + `aria-disabled`.
    */
   href?: string;
   /** Label text / nodes. Omit when `iconOnly`. */
@@ -116,6 +125,10 @@ const iconPx: Record<ButtonSize, number> = {
   lg: 22,
 };
 
+function isHashHref(href: string): boolean {
+  return href.startsWith("#") && href.length > 1;
+}
+
 /**
  * Apple-inspired capsule button. Labels and icons come from props (no
  * hardcoded copy). Optional `tone` tints primary/plain/tinted from the
@@ -137,6 +150,7 @@ export function Button({
   disabled = false,
   className = "",
   children,
+  onClick,
   "aria-label": ariaLabel,
   ...rest
 }: ButtonProps) {
@@ -188,6 +202,36 @@ export function Button({
       );
     }
 
+    // In-page hash: native <a> so re-clicks still scroll when the hash matches.
+    if (isHashHref(href)) {
+      const handleHashClick = (event: MouseEvent<HTMLAnchorElement>) => {
+        onClick?.(event as unknown as MouseEvent<HTMLButtonElement>);
+        if (event.defaultPrevented) return;
+        if (
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey ||
+          event.button !== 0
+        ) {
+          return;
+        }
+        event.preventDefault();
+        scrollToHash(href);
+      };
+
+      return (
+        <a
+          href={href}
+          className={classes}
+          aria-label={ariaLabel}
+          onClick={handleHashClick}
+        >
+          {content}
+        </a>
+      );
+    }
+
     return (
       <Link href={href} className={classes} aria-label={ariaLabel}>
         {content}
@@ -201,6 +245,7 @@ export function Button({
       disabled={disabled}
       className={classes}
       aria-label={ariaLabel}
+      onClick={onClick}
       {...rest}
     >
       {content}
