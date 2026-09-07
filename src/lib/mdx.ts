@@ -23,6 +23,18 @@ export interface WorkFrontmatter {
   coverImage: string;
   /** Card/link label (e.g. "Read case study"). */
   linkLabel: string;
+  /**
+   * Optional in-header skip CTA label (e.g. "Skip to final design").
+   * Requires {@link skipHref}.
+   */
+  skipLabel?: string;
+  /** In-page (or absolute) href for the skip CTA (e.g. "#toc-solution"). */
+  skipHref?: string;
+  /**
+   * Case-study palette tone for the skip CTA (e.g. `"purple"`).
+   * Maps to `--cs-*` on the case-study article.
+   */
+  skipTone?: string;
   /** Controls sort order on the home page (ascending). */
   order: number;
   published: boolean;

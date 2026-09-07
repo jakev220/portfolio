@@ -64,7 +64,8 @@ secondary (`black-40`) → divider (`black-20`).
 | text-heading | `--color-text-heading` | `#262626` | `text-heading` | `h2` / `h3` section headers, `black-82` (neutral-800) |
 | text-body | `--color-text-body` | `#404040` | _(inherited base — see note)_ | Body / default text, `black-60` (neutral-700) |
 | text-secondary | `--color-text-secondary` | `#737373` | `text-secondary` | Labels / captions / pre-headers, `black-40` (neutral-500) |
-| accent | `--color-accent` | `#0066CC` | `text-accent`, `bg-accent` | Interactive accent / link color |
+| accent | `--color-accent` | `#0066CC` | `text-accent`, `bg-accent` | Interactive accent / link / primary button fill (Apple-HIG blue) |
+| destructive | `--color-destructive` | `#FF3B30` | `text-destructive`, `bg-destructive` | Destructive actions (Apple system red) |
 
 > **No `text-body` color utility.** A color named `body` would collide with the
 > `text-body` **font-size** utility, so body text has no color class — it inherits the
@@ -90,6 +91,7 @@ resolve to the dark values whenever `.dark` is present on `<html>`.
 | text-body | `#404040` (neutral-700) | `#d4d4d4` (neutral-300) |
 | text-secondary | `#737373` | `#a3a3a3` (neutral-400) |
 | accent | `#0066CC` | `#4c9fff` (lighter for contrast on dark) |
+| destructive | `#FF3B30` | `#FF6961` (lighter for contrast on dark) |
 
 **How the theme is applied:**
 - `ThemeToggle` (in the nav) toggles the `.dark` class on `<html>` and persists the
@@ -258,7 +260,7 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 
 | Component | Purpose |
 |-----------|---------|
-| `<CaseStudyHeader>` | Frontmatter-driven: `<hgroup>` (name `h1` + descriptive subtitle), cover media, divider. |
+| `<CaseStudyHeader>` | Frontmatter-driven: full-width name `h1`, 8-col subtitle, optional skip CTA (`skipLabel` + `skipHref` + optional `skipTone`) bottom-right at `lg+`, cover media, divider. |
 | `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
 | `<Section>` | The section unit: `<section>` that stacks its children with the case-study stack rhythm (`gap-12` / `sm:gap-16` / `lg:gap-20`). Between top-level sections, `.mdx-content` uses `gap-24` / `sm:gap-32` / `lg:gap-48`. Compose rows + media inside. |
 | `<SectionLead>` | Optional eyebrow + lead headline for a section opener. Labeled leads set `id="toc-…"` + `data-case-study-toc` for the sticky TOC (label-less leads are omitted). |
@@ -309,6 +311,21 @@ including while the panel is open. Panel chrome matches `Nav` frost.
 Put diagram assets in `public/work/<slug>/diagrams/` with URL-safe kebab-case
 names. Prefer ~1600–2400px-wide WebPs for load; the stage zooms a single
 transformed layer (no re-rasterize on pinch).
+
+### Shared UI
+
+| Component | Purpose |
+|-----------|---------|
+| `<Button>` | Apple-inspired capsule control (`src/components/Button.tsx`). Variants: `primary` (filled accent), `secondary` (gray + primary label), `destructive` (gray + red label), `plain`, `tinted`. Optional `tone` (`lavender` / `orange` / `yellow` / `blue` / `purple`) remaps primary/plain/tinted to case-study `--cs-*`. Sizes `sm` (40px) / `md` (48px) / `lg` (56px). Label uses `text-body-large` at regular weight. Optional `icon` + `iconPosition` (`start` \| `end`) or `iconOnly` (requires `aria-label`). `fullWidth`, `disabled`, or `href` (Next.js Link). |
+
+```tsx
+<Button variant="primary">Primary Button</Button>
+<Button variant="destructive">Destructive Button</Button>
+<Button variant="secondary" icon="arrow-right" iconPosition="end">
+  Continue
+</Button>
+<Button variant="plain" icon="close" iconOnly aria-label="Close" />
+```
 
 ---
 

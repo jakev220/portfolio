@@ -117,7 +117,7 @@ Full reference: [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md).
 `text-caption` · `text-label` · `text-body` · `text-body-large` · `text-h3` · `text-h2` · `text-h1`
 
 **Color utilities** (map to CSS vars in `globals.css`):
-`bg-bg` · `bg-surface` · `border` / `border-border` · `text-primary` · `text-secondary` · `text-accent` / `bg-accent`
+`bg-bg` · `bg-surface` · `border` / `border-border` · `text-primary` · `text-secondary` · `text-accent` / `bg-accent` · `text-destructive` / `bg-destructive` · `<Button>` (Apple-style capsule)
 
 **Spacing:** Tailwind defaults (placeholder until custom scale is added in `tailwind.config.ts`).
 

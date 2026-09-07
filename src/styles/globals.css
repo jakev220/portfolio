@@ -62,6 +62,7 @@
   --color-text-body: #404040; /* body / default text, black-60 — neutral-700 */
   --color-text-secondary: #737373; /* labels / captions / pre-headers, black-40 — neutral-500 */
   --color-accent: #0066cc; /* interactive accent — link color (underlined, Apple-HIG style). Hero/brand accent still TBD */
+  --color-destructive: #ff3b30; /* destructive actions — Apple system red */
 
   /*
    * Case-study media lightbox — scrim is near-opaque so the page behind is
@@ -105,6 +106,7 @@
   --color-text-body: #d4d4d4; /* neutral-300 */
   --color-text-secondary: #a3a3a3; /* neutral-400 */
   --color-accent: #4c9fff; /* lighter link blue for contrast on dark bg */
+  --color-destructive: #ff6961; /* lighter system red for contrast on dark bg */
   /* Invert scrim so the page still peeks through; panel stays white. */
   --color-lightbox-scrim: rgb(250 250 250 / 0.72);
   --color-lightbox-panel: #ffffff;

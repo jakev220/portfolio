@@ -34,6 +34,7 @@ const config: Config = {
         border: "var(--color-border)",
         divider: "var(--color-divider)",
         accent: "var(--color-accent)",
+        destructive: "var(--color-destructive)",
         // Case-study media lightbox (see tokens.ts / globals.css).
         "lightbox-scrim": "var(--color-lightbox-scrim)",
         "lightbox-panel": "var(--color-lightbox-panel)",

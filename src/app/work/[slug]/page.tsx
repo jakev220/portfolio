@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllWorkSlugs, getWorkBySlug } from "@/lib/mdx";
-import { caseStudyPaletteStyle } from "@/lib/case-study-palette";
+import {
+  caseStudyPaletteKeys,
+  caseStudyPaletteStyle,
+  type CaseStudyTone,
+} from "@/lib/case-study-palette";
 import { CaseStudyHeader } from "@/components/CaseStudyHeader";
 import { CaseStudyToc } from "@/components/case-study/CaseStudyToc";
 import { MDXContent } from "@/components/MDXContent";
@@ -14,6 +18,13 @@ export function generateStaticParams() {
 
 interface CaseStudyPageProps {
   params: Promise<{ slug: string }>;
+}
+
+function resolveSkipTone(value: string | undefined): CaseStudyTone | undefined {
+  if (!value) return undefined;
+  return (caseStudyPaletteKeys as readonly string[]).includes(value)
+    ? (value as CaseStudyTone)
+    : undefined;
 }
 
 /**
@@ -59,6 +70,9 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           name={work.name}
           title={work.title}
           coverImage={work.coverImage}
+          skipLabel={work.skipLabel}
+          skipHref={work.skipHref}
+          skipTone={resolveSkipTone(work.skipTone)}
         />
         <div className="mt-20">
           <MDXContent source={work.content} />
