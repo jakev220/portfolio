@@ -63,7 +63,7 @@ export function ComparisonChart({
         </div>
       </div>
 
-      <div className="flex flex-col gap-10 sm:gap-12 lg:gap-16">
+      <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
         {groups.map((group, groupIndex) => (
           <div key={group.title} className="flex min-w-0 flex-col gap-4">
             <p className="text-caption m-0 text-secondary sm:text-body">

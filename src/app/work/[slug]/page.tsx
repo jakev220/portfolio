@@ -60,7 +60,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           title={work.title}
           coverImage={work.coverImage}
         />
-        <div className="mt-16">
+        <div className="mt-20">
           <MDXContent source={work.content} />
         </div>
       </article>

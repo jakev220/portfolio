@@ -51,10 +51,7 @@ published: true
   </SectionLead>
 
   <MediaRow>
-    <SplitHeading>Anchored feedback within a text editor offers appropriate context, but limited range of perspective.</SplitHeading>
-
-    AI tools embedded into text editors anchor feedback to your text, but only give you one opinion, positioned exactly where it applies.
-
+    <SplitHeading>Editor-embedded AI anchors feedback to your text, but gives only one perspective.</SplitHeading>
     <Figure
       ratio="740/400"
       video="/work/science-jury/sj-problem1-edit-compressed.mp4"
@@ -64,10 +61,7 @@ published: true
   </MediaRow>
 
   <MediaRow>
-    <SplitHeading>Prompting a range of perspective offers diverse feedback, but the lack of organization leads to overwhelm.</SplitHeading>
-
-    Prompting an LLM for multiple personas provides range, but outputs disconnected suggestions you have to manually map back to your draft, one by one.
-
+    <SplitHeading>Prompting multiple perspectives gets you range, but nothing stays connected to your draft.</SplitHeading>
     <Figure
       ratio="740/400"
       video="/work/science-jury/sj-problem2-edit-compressed.mp4"
@@ -93,7 +87,7 @@ published: true
 
     <hr />
 
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
       <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p]:text-h3 [&_p]:text-heading">
         The multi-agent approach identified nearly **twice** the unique issues that are more closely reflective of what human experts flagged.
       </RightProse>
@@ -101,7 +95,7 @@ published: true
       <ScienceJuryFormativeChart />
     </div>
 
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
       <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p]:text-h3 [&_p]:text-heading">
         But without structure, more perspectives create more noise.
       </RightProse>
@@ -180,13 +174,9 @@ published: true
     playbackRate="0.75"
     alt="ScienceJury agent panel configuration flow."
   >
-    <Split level="h3">
-      <SplitHeading>Reduce effort to configure a panel while giving authors autonomy and control over their reviewer profiles.</SplitHeading>
-
-      ScienceJury suggests relevant subject areas, potential references, and three agent profiles. 
-      
-      Authors have full autonomy to customize, regenerate, or remove agent profiles before the feedback is generated.
-    </Split>
+    <WideHeading>
+      ScienceJury suggests a starting panel of three reviewer profiles, which authors can customize, regenerate, or remove.
+    </WideHeading>
     <InsetFigure
       src="/work/science-jury/configure-2.webp"
       alt="ScienceJury agent panel configuration with suggested subject areas, references, and three customizable reviewer profiles."
@@ -194,13 +184,9 @@ published: true
       rounded="none"
     />
 
-    <Split level="h3">
-      <SplitHeading>Position authors to evaluate AI feedback more effectively.</SplitHeading>
-
-      Each agent surfaces a persona with rationale for why their perspective matters, review tasks, and real scholar references. 
-      
-      Outlining the rationale encourages authors to critically evaluate AI-generated feedback and make them less likely to over-trust it.
-    </Split>
+    <WideHeading>
+      Every agent shows its rationale, review focus, and cited scholars, so authors can judge the feedback instead of just accepting it.
+    </WideHeading>
     <InsetFigure
       src="/work/science-jury/configure-3.webp"
       alt="ScienceJury agent persona detail showing rationale, review tasks, and scholar references."
@@ -259,13 +245,9 @@ published: true
     playbackRate="0.75"
     alt="ScienceJury feedback interaction showing anchored, color-coded agent critiques."
   >
-    <Split level="h3">
-      <SplitHeading>Categorizing agent feedback and anchoring it to the relevant text helps authors process critique and take action.</SplitHeading>
-
-      Each piece of feedback is decomposed into discrete, sentence-level items anchored to the exact passage it refers to. 
-      
-      Agent feedback is distinguished by color to help authors see where different perspectives converge or conflict on the same claim.
-    </Split>
+    <WideHeading>
+      Feedback is broken into sentence-level items, anchored to the exact passage, and color-coded by agent, so authors can see where perspectives converge or conflict.
+    </WideHeading>
     <InsetFigure
       src="/work/science-jury/feedback-interaction-2.webp"
       alt="ScienceJury feedback items anchored to document text, color-coded by agent perspective."
@@ -273,13 +255,9 @@ published: true
       rounded="none"
     />
 
-    <Split level="h3">
-      <SplitHeading>Individual conversation threads with agents make engaging with critique easy.</SplitHeading>
-
-      Each feedback item is a root of a conversation thread where authors can ask follow-ups, request alternatives, or challenge an agent’s reasoning. 
-      
-      ScienceJury encourages authors to interact with agents through dynamic nudges tailored to feedback and inline adoption of generated suggestions.
-    </Split>
+    <WideHeading>
+      Each feedback item opens into a thread, ask follow-ups, push back, or adopt a suggestion inline, without leaving your draft.
+    </WideHeading>
     <InsetFigure
       src="/work/science-jury/feedback-interaction-3.webp"
       alt="ScienceJury conversation thread with an agent for follow-ups and suggested edits."
@@ -323,7 +301,7 @@ published: true
 
     <hr />
 
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
       <RightProse className="[&_p]:my-0 [&_p+p]:mt-4 [&_p]:text-h3 [&_p]:text-heading">
         Feedback rated significantly more specific, diverse, and aligned with expert review.
         

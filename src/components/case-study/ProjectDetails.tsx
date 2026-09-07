@@ -80,7 +80,7 @@ export function ProjectDetails({ children }: ProjectDetailsProps) {
   const groups = childArray.filter(isDetailGroup);
 
   return (
-    <section className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-4">
+    <section className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-4">
       <div className="min-w-0 lg:col-span-4">
         <div className="flex flex-col gap-4">
           {details.map((detail, index) => (

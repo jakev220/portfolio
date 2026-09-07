@@ -11,6 +11,6 @@ export interface AccordionProps {
  */
 export function Accordion({ children }: AccordionProps) {
   return (
-    <div className="flex flex-col gap-10 sm:gap-12 lg:gap-16">{children}</div>
+    <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20">{children}</div>
   );
 }

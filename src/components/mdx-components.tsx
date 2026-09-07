@@ -4,6 +4,7 @@ import { SectionLead } from "@/components/case-study/SectionLead";
 import { Split } from "@/components/case-study/Split";
 import { MediaRow } from "@/components/case-study/MediaRow";
 import { SplitHeading, RightProse, RightRail } from "@/components/case-study/SplitGrid";
+import { WideHeading } from "@/components/case-study/WideHeading";
 import {
   Detail,
   DetailGroup,
@@ -53,6 +54,7 @@ export const mdxComponents: MDXComponents = {
   SplitHeading,
   RightProse,
   RightRail,
+  WideHeading,
   ProjectDetails,
   Detail,
   DetailGroup,

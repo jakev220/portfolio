@@ -15,7 +15,7 @@ export interface SectionLeadProps {
  * Case-study section opener: optional full-width eyebrow + optional 8-column
  * lead headline.
  *
- * When both label and lead are present, the parent `Section` gap (64px at lg)
+ * When both label and lead are present, the parent `Section` gap (80px at lg)
  * lands below the whole block. Label-only leads mark `data-section-eyebrow` so
  * `Section` can pull the next child up (e.g. "Solution" → feature chapter
  * title) to the same 8px label→heading rhythm as label→lead.

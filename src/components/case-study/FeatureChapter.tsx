@@ -33,7 +33,8 @@ export interface FeatureChapterProps {
 
 /**
  * Solution-chapter opener: full-width title + 12-col hero figure, then any
- * nested body rows. Own vertical gap matches Figma (32px title→hero).
+ * nested body rows. Title→hero stays tighter; chapter body uses the same
+ * stepped gap as `<Section>` so solution points can breathe.
  */
 export function FeatureChapter({
   title,
@@ -49,7 +50,7 @@ export function FeatureChapter({
   children,
 }: FeatureChapterProps) {
   return (
-    <div className="flex min-w-0 flex-col gap-10 sm:gap-12 lg:gap-16">
+    <div className="flex min-w-0 flex-col gap-12 sm:gap-16 lg:gap-20">
       <div className="flex min-w-0 flex-col gap-6 sm:gap-8">
         <h3 className="text-h2 text-heading m-0 break-words">
           {title}
@@ -73,7 +74,7 @@ export function FeatureChapter({
         />
       </div>
       {children ? (
-        <div className="flex min-w-0 flex-col gap-10 sm:gap-12 lg:gap-16 [&>*]:my-0">
+        <div className="flex min-w-0 flex-col gap-12 sm:gap-16 lg:gap-20 [&>*]:my-0">
           {children}
         </div>
       ) : null}

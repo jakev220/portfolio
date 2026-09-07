@@ -21,11 +21,12 @@ export interface CaseStudyHeaderProps {
  * heading). The route also feeds `title`/`description` into the document
  * `<title>` + meta description for screen-reader page naming and SEO.
  *
- * Spacing maps Figma item-spacing to Tailwind defaults (32 / 8 → gap-8 / gap-2).
+ * Spacing maps Figma item-spacing to the case-study stack rhythm
+ * (`gap-12` / `sm:gap-16` at the header block).
  */
 export function CaseStudyHeader({ name, title, coverImage }: CaseStudyHeaderProps) {
   return (
-    <header className="flex min-w-0 flex-col gap-6 sm:gap-8">
+    <header className="flex min-w-0 flex-col gap-12 sm:gap-16">
       <hgroup className="flex min-w-0 flex-col gap-2">
         <h1 className="text-h1 text-primary break-words">{name}</h1>
         {title ? <p className="text-h2 break-words">{title}</p> : null}

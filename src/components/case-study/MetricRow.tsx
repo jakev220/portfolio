@@ -121,6 +121,6 @@ export function Metric({
  */
 export function MetricRow({ children }: MetricRowProps) {
   return (
-    <div className="flex flex-col gap-8 lg:flex-row lg:gap-8">{children}</div>
+    <div className="flex flex-col gap-12 sm:gap-16 lg:flex-row lg:gap-20">{children}</div>
   );
 }

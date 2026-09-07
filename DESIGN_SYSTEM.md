@@ -260,10 +260,11 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 |-----------|---------|
 | `<CaseStudyHeader>` | Frontmatter-driven: `<hgroup>` (name `h1` + descriptive subtitle), cover media, divider. |
 | `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
-| `<Section>` | The section unit: `<section>` that stacks its children with a responsive internal gap (128px between sections via `.mdx-content`). Compose rows + media inside. |
+| `<Section>` | The section unit: `<section>` that stacks its children with the case-study stack rhythm (`gap-12` / `sm:gap-16` / `lg:gap-20`). Between top-level sections, `.mdx-content` uses `gap-24` / `sm:gap-32` / `lg:gap-48`. Compose rows + media inside. |
 | `<SectionLead>` | Optional eyebrow + lead headline for a section opener. Labeled leads set `id="toc-…"` + `data-case-study-toc` for the sticky TOC (label-less leads are omitted). |
 | `<CaseStudyToc>` | Desktop-only (`lg+`) sticky contents widget. Mounted on the case-study page (not MDX). Auto-discovers labeled `SectionLead`s; click handle to expand; scroll-spy + smooth jump; handle stays viewport-left at all widths. |
 | `<Split>` | Lead row: heading (via `<SplitHeading>`) on the 4-col left + body prose on the right rail. |
+| `<WideHeading>` | Heading-only row at the same 8-col width as `SectionLead` leads. Default `h3` (optional `level="h2"`). |
 | `<MediaRow>` | Sub-row: `h3` heading (via `<SplitHeading>`) on the left + a `<Figure>` on the right. |
 | `<RightRail>` / `<RightProse>` | Full-width right-rail stack; `RightProse` insets copy to 6 of 7 cols. |
 | `<Figure>` | Aspect-locked media (`ratio="W/H"`): image, video, or placeholder. Optional `frame="ink-08"` plate. Hover expand opens the page lightbox. |

@@ -23,7 +23,7 @@ const prettyCodeOptions: RehypePrettyCodeOptions = {
  */
 export function MDXContent({ source }: MDXContentProps) {
   return (
-    <div className="mdx-content flex min-w-0 flex-col gap-20 sm:gap-28 lg:gap-40">
+    <div className="mdx-content flex min-w-0 flex-col gap-24 sm:gap-32 lg:gap-48">
       <MDXRemote
         source={source}
         components={mdxComponents}

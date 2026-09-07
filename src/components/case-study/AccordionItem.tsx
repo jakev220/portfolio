@@ -125,7 +125,7 @@ export function AccordionItem({
 
       <div
         className={`grid grid-cols-1 lg:grid-cols-12 lg:gap-4 ${
-          open ? "gap-y-8" : "gap-y-0"
+          open ? "gap-y-12" : "gap-y-0"
         }`}
       >
         <div

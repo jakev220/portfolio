@@ -41,7 +41,7 @@ export function MediaRow({ children }: MediaRowProps) {
         <h3 className="text-h3 text-heading m-0">{headingEl?.props.children}</h3>
       }
       right={
-        <div className="flex flex-col gap-8 [&>*]:my-0">
+        <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20 [&>*]:my-0">
           {prose.length > 0 ? <RightProse>{prose}</RightProse> : null}
           {media}
         </div>
