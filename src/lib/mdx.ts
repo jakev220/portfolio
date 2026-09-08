@@ -112,6 +112,18 @@ export function getAllWorkSlugs(): string[] {
 }
 
 /**
+ * Next published case study after `slug` (by `order`, wrapping). Returns
+ * `null` when there is no other published study to link to.
+ */
+export function getNextWork(slug: string): WorkMeta | null {
+  const all = getAllWork();
+  if (all.length < 2) return null;
+  const index = all.findIndex((work) => work.slug === slug);
+  if (index === -1) return all[0] ?? null;
+  return all[(index + 1) % all.length] ?? null;
+}
+
+/**
  * Reads a single case study (metadata + raw MDX body) by slug.
  * Returns `null` when the file does not exist.
  */

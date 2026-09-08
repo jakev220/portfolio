@@ -9,8 +9,9 @@ import {
 } from "@/lib/about-transition";
 
 /**
- * Fades the home page (hero copy, work, footer) out when the name→About
- * transition begins, so the route change doesn’t hard-cut mid-frame.
+ * Fades home work content out when the name→About transition begins, so the
+ * route change doesn’t hard-cut mid-frame. (Site footer lives in the root
+ * layout and is not part of this exit.)
  */
 export function HomeExitShell({ children }: { children: ReactNode }) {
   const reduceMotion = useReducedMotion();

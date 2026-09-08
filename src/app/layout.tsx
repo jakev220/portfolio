@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
+import { footer } from "@/content/footer";
 import { navItems } from "@/content/nav";
 
 export const metadata: Metadata = {
@@ -25,10 +27,11 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="font-sans text-body bg-bg">
-        <div className="relative">
+      <body className="font-sans text-body min-h-dvh bg-bg">
+        <div className="relative flex min-h-dvh flex-col">
           <Nav items={navItems} />
-          {children}
+          <div className="flex flex-1 flex-col">{children}</div>
+          <Footer {...footer} />
         </div>
       </body>
     </html>

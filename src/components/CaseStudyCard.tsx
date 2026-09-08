@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { CaseStudyCardInline } from "@/components/CaseStudyCardInline";
-import { externalLinkProps, isExternalHref } from "@/lib/links";
+import { Link } from "@/components/Link";
+import { externalLinkProps } from "@/lib/links";
 
 /** View states for the home-page work section. */
 export type CaseStudyCardVariant = "stack" | "card" | "inline";
@@ -83,18 +84,11 @@ export function CaseStudyCard({
         <p className="text-body">{description}</p>
       </div>
 
-      {/* link container — plain anchor for now; the Link component will add
-          next/link + internal/external handling and own the trailing glyph.
-          The ↗ + new tab apply only to external (off-site) links. */}
+      {/* Text CTA — shared Link owns accent style + inbound `→` / outbound `↗`. */}
       <div className="flex gap-6">
-        <a
-          href={href}
-          {...externalLinkProps(href)}
-          className="text-body text-accent underline underline-offset-2 transition-opacity hover:opacity-70"
-        >
+        <Link href={href} className="text-body">
           {linkLabel}
-          {isExternalHref(href) && <span aria-hidden> ↗</span>}
-        </a>
+        </Link>
       </div>
     </div>
   );

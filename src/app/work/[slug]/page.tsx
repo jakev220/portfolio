@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllWorkSlugs, getWorkBySlug } from "@/lib/mdx";
+import { getAllWorkSlugs, getNextWork, getWorkBySlug } from "@/lib/mdx";
 import {
   caseStudyPaletteKeys,
   caseStudyPaletteStyle,
   type CaseStudyTone,
 } from "@/lib/case-study-palette";
+import { keepExploring } from "@/content/keep-exploring";
 import { CaseStudyHeader } from "@/components/CaseStudyHeader";
 import { CaseStudyToc } from "@/components/case-study/CaseStudyToc";
+import { KeepExploring } from "@/components/case-study/KeepExploring";
 import { MDXContent } from "@/components/MDXContent";
 import { MediaLightboxProvider } from "@/components/media-lightbox/MediaLightboxProvider";
 
@@ -54,6 +56,16 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   // here before launch.
 
   const paletteStyle = caseStudyPaletteStyle(slug);
+  const nextWork = getNextWork(slug);
+  const next = nextWork
+    ? {
+        label: nextWork.name,
+        href: `/work/${nextWork.slug}`,
+        image: nextWork.coverImage || undefined,
+      }
+    : {
+        label: keepExploring.nextProjectFallback.label,
+      };
 
   // Shares the home/About page shell: 12 columns with 16px gutters and 80px
   // outer margins at a 1440px viewport. Per-study `--cs-*` palette vars are
@@ -81,6 +93,14 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         </div>
         <div className="case-study-body-enter mt-20">
           <MDXContent source={work.content} />
+        </div>
+        <div className="mt-24 sm:mt-32 lg:mt-48">
+          <KeepExploring
+            heading={keepExploring.heading}
+            about={keepExploring.about}
+            play={keepExploring.play}
+            next={next}
+          />
         </div>
       </article>
     </MediaLightboxProvider>

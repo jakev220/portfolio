@@ -32,7 +32,7 @@ This README is the **operating manual** for building the site with the AI agent.
 - [x] Case-study MDX layout — `Section` / `Split` / `Figure` / `Accordion` / `FlowDiagram` (+ tabs & images), `CaseStudyToc`, lightbox, charts, insight cards (see `DESIGN_SYSTEM.md`)
 - [x] `Hero` — home hero with interactive avatar (hover-cycles images) + macOS folder; subhero accent links (external get `↗` + new tab via `src/lib/links.ts`)
 - [x] `WorkSection` — home work section: `WorkViewToggle` + `WorkGrid` with 4 preview case studies
-- [x] `Footer` — 3-part (contact links, "explore" media card, meta row) + `FooterClock` (live Pacific time, sun/moon icon)
+- [x] `Footer` — minimal row (copyright · outbound `Link`s · `FooterClock`)
 - [x] `Nav` — Work/Play/About + theme toggle, right-aligned to the content grid; **auto-hide on scroll-down, reveal on scroll-up / cursor-to-top / keyboard focus**; frosted rounded reveal box (optically outset to align to grid)
 - [x] **Dark mode** — `ThemeToggle` toggles `.dark` on `<html>`; theme-aware token overrides in `globals.css`; persisted to `localStorage` + respects system preference; no-FOUC init script in `layout.tsx`
 - [x] Repo pushed to GitHub (SSH)
@@ -40,7 +40,7 @@ This README is the **operating manual** for building the site with the AI agent.
 **Next up (in order)**
 1. **Pick the hero accent color** — the one open color decision; everything else neutral. _(You.)_
 2. **Finalize palettes** — dark-mode values are preview placeholders; lock light + dark together once the accent is set. _(You.)_
-3. **Build remaining components**: `Container`, `Link` (underlined, `#0066CC`, trailing `↗` — generalize `src/lib/links.ts`), `CaseStudyHeader`.
+3. **Build remaining components**: `Container`, `CaseStudyHeader` (Link ships as `src/components/Link.tsx`).
 4. **Assemble pages** — `work/[slug]` (case study, renders body via `<MDXContent>`) and retire the temporary preview content.
 5. **Add interactions** — Framer Motion on specific components, only when requested.
 6. **Deploy** — connect the GitHub repo to Vercel.
@@ -53,7 +53,7 @@ This README is the **operating manual** for building the site with the AI agent.
 - Hero accent color undecided (Next-up #1); body text stays neutral regardless.
 - Dark palette values are preview placeholders (shadcn Neutral dark + a lighter `#4c9fff` link blue) — finalize with the light palette.
 - Per-case-study accent: add an `accent` field to the case-study MDX frontmatter when case studies are built (used for backgrounds/visual elements only).
-- `↗` on links + internal/external handling currently lives in `src/lib/links.ts`; fold into a dedicated `Link` component when built.
+- `↗` on outbound links + new-tab rules: `src/components/Link.tsx` (+ `src/lib/links.ts`).
 
 ---
 

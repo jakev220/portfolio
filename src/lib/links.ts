@@ -1,9 +1,10 @@
 /**
  * Link helpers shared across the site so internal/external behavior stays
- * consistent everywhere (and the future shared Link component can reuse them).
+ * consistent. Prefer {@link Link} from `@/components/Link` for text CTAs
+ * (inbound `→`, outbound `↗` + new tab).
  *
- * External links (other sites) get a trailing ↗ and open in a new tab.
- * Internal links (starting with "/" or "#") get neither.
+ * External links (other sites) open in a new tab. Internal links (starting
+ * with "/" or "#") do not.
  */
 export function isExternalHref(href: string): boolean {
   return /^https?:\/\//i.test(href);

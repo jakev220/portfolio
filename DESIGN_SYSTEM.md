@@ -134,15 +134,17 @@ Tailwind defaults — do not customize. Mobile-first: base styles first, then `m
 
 ## Links
 
-Per the visual direction (Apple HIG–inspired):
+Per the visual direction (Apple HIG–inspired), use `<Link>` (`src/components/Link.tsx`):
 
-- Color: `#0066CC` (the `accent` token)
-- **Underlined**
-- End with a `↗` character _(planned — lands with the `Link` component; not yet implemented)_
+- Color: `accent` (`#0066CC`)
+- **Underlined** (`underline underline-offset-2`)
+- Internal paths: trailing `→`, Next.js client navigation
+- External (`http(s)`) and `mailto:`: trailing `↗`; `http(s)` opens in a new tab
 
-In MDX bodies, links currently render with color + underline (the `↗` and
-internal/external handling are deferred to the `Link` component).
+Helpers live in `src/lib/links.ts` (`isExternalHref`, `externalLinkProps`).
 
+In MDX bodies, links currently render with color + underline only; prefer migrating
+call sites to `<Link>` when touching them.
 ---
 
 ## Motion
@@ -173,7 +175,7 @@ Home → About **exit** (name + avatar click):
 
 | Constant | Value | Role |
 |----------|-------|------|
-| `HOME_EXIT_MS` | 780ms | Fade for hero copy, work grid, footer |
+| `HOME_EXIT_MS` | 780ms | Fade for hero copy + work grid |
 | `REEL_EXIT_MS` | 900ms | Avatar reel rise + fade duration |
 | `REEL_FADE_DELAY_MS` | 180ms | Reel opacity starts after the rise begins |
 | `NAVIGATE_DELAY_MS` | 780ms | `router.push("/about")` after the home fade settles |
@@ -207,6 +209,7 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) + control-pad buttons to zoom; plain scroll does not zoom. View resets on tab change |
 | Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); handle + panel use nav-matching frost (`color-bg` 70% + `backdrop-blur-md`); scroll-spy active dash (`text-primary`, slightly larger); sliding `bg-surface` pill in the panel; section jumps via `scrollToId` (smooth / instant for reduced motion) |
 | Skip / hash CTA | `SkipCta` + `scroll-to-id` | Hash smooth-scroll (instant when reduced motion). Optional `skipPreview` stills: cursor-follow trailer centered above cursor; instant cuts @ 400ms (avatar reel); static first frame when reduced motion; hover-fine only |
+| Keep exploring tiles | `ExploreTile` | Card zoom `scale-[1.04]` / 500ms; About/Play hover still-cycle @ 400ms (instant cuts); reduced motion skips cycle |
 | Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
 | Text marks | `Highlight` / `Underline` | Fill / 4px stroke wipe L→R once on enter (**650ms** ease-out); instant on scroll when reduced motion |
 | Tone grain | `ToneGrain` | Living film grain on `InsightCard` / `FullBleedBanner` — lighter `--cs-*` mix via soft-light (preserves fill); static when reduced motion |
@@ -264,6 +267,7 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | Component | Purpose |
 |-----------|---------|
 | `<CaseStudyHeader>` | Frontmatter-driven: full-width name `h1`, 8-col subtitle, optional skip CTA (`skipLabel` + `skipHref` + optional `skipTone` / `skipPreview` stills) bottom-right at `lg+`, cover media, divider. |
+| `<KeepExploring>` | Case-study end collage: “Keep exploring” + About / Play stack (4-col) + next project (8-col). Gutters `gap-4`. Tiles zoom like case-study cards; About/Play cycle stills on hover. |
 | `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
 | `<Section>` | The section unit: `<section>` that stacks its children with the case-study stack rhythm (`gap-12` / `sm:gap-16` / `lg:gap-20`). Between top-level sections, `.mdx-content` uses `gap-24` / `sm:gap-32` / `lg:gap-48`. Compose rows + media inside. |
 | `<SectionLead>` | Optional eyebrow + lead headline for a section opener. Labeled leads set `id` from the slugified label (or an explicit `id`) + `data-case-study-toc` for the sticky TOC (label-less leads are omitted). |
