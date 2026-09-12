@@ -113,9 +113,10 @@ export function Nav({ items }: NavProps) {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-end px-6 pt-20">
-        {/* -mr-4 (= px-4) optically outsets the box into the gutter so the nav
-            controls align to the content grid while padding stays symmetric. */}
-        <div className="relative -mr-4 inline-flex items-center gap-6 rounded-xl px-4 py-2">
+        {/* From sm up, -mr-4 (= px-4) optically outsets the box into the gutter
+            so controls align to the content grid. Keep flush on narrow screens
+            so the theme toggle isn’t clipped by the viewport edge. */}
+        <div className="relative inline-flex items-center gap-6 rounded-xl px-4 py-2 sm:-mr-4">
           {/* Frosted box that hugs the nav cluster; fades in once floating. */}
           <div
             aria-hidden

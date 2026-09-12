@@ -76,11 +76,11 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
     <MediaLightboxProvider>
       <article
         data-case-study={slug}
-        className="relative mx-auto max-w-7xl px-6 pb-16 pt-32 sm:pb-24 sm:pt-48 lg:pt-64"
+        className="relative mx-auto w-full min-w-0 max-w-7xl px-6 pb-16 pt-32 sm:pb-24 sm:pt-48 lg:pt-64"
         style={paletteStyle}
       >
         <CaseStudyToc />
-        <div className="case-study-enter">
+        <div className="case-study-enter min-w-0">
           <CaseStudyHeader
             name={work.name}
             title={work.title}
@@ -91,10 +91,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             skipPreview={work.skipPreview}
           />
         </div>
-        <div className="case-study-body-enter mt-20">
+        <div className="case-study-body-enter mt-20 min-w-0">
           <MDXContent source={work.content} />
         </div>
-        <div className="mt-24 sm:mt-32 lg:mt-48">
+        <div className="mt-24 min-w-0 sm:mt-32 lg:mt-48">
           <KeepExploring
             heading={keepExploring.heading}
             about={keepExploring.about}

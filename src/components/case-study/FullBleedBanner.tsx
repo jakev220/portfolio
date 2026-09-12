@@ -23,6 +23,9 @@ const toneClass: Record<CaseStudyTone, string> = {
  * (glyph → pre-text → callout → post-text), but breaks out of the article
  * shell to the viewport while keeping text inside the shared 12-col / 80px
  * padded content grid.
+ *
+ * Uses `100vw` + centering; ancestors must allow shrink (`min-w-0`) and clip
+ * x-overflow so the breakout never widens the page.
  */
 export function FullBleedBanner({
   tone = "lavender",
@@ -34,7 +37,7 @@ export function FullBleedBanner({
 }: FullBleedBannerProps) {
   return (
     <div
-      className={`relative left-1/2 w-screen -translate-x-1/2 overflow-hidden ${toneClass[tone]}`}
+      className={`relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 overflow-hidden ${toneClass[tone]}`}
     >
       <ToneGrain tone={tone} />
       <div className="relative z-[1] mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:py-32">

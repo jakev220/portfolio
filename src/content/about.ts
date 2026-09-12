@@ -95,7 +95,7 @@ export const about: AboutContent = {
       body: [
         "I've always been drawn to digital experiences that make life feel a little smoother and keep people connected long before I even considered design as a career.", 
         "That curiosity led me to study human-computer interaction at UC San Diego, where I learned to look under the hood of how people interact with technology and how we can apply design principles to make those experiences better.",
-        "My work aims to strike a balance between empathy, logic, and innovation. I believe every good solution starts with listening to the people you're designing for and deeply understanding their frustrations. I view problems as puzzles to be solved, and use constraints as a means to a solution that brings value to everyone involved.",
+        "My work aims to strike a balance between empathy, logic, and innovation. I believe every good solution starts with listening to the people you're designing for and deeply understanding their frustrations and what helps them accomplish their goals. I view problems as puzzles to be solved, and use constraints as a means to a solution that brings value to everyone involved.",
       ],
     },
     {

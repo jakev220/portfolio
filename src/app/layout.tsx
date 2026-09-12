@@ -28,9 +28,9 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="font-sans text-body min-h-dvh bg-bg">
-        <div className="relative flex min-h-dvh flex-col">
+        <div className="relative flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip">
           <Nav items={navItems} />
-          <div className="flex flex-1 flex-col">{children}</div>
+          <div className="flex w-full min-w-0 flex-1 flex-col">{children}</div>
           <Footer {...footer} />
         </div>
       </body>
