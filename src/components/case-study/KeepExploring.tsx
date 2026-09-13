@@ -16,18 +16,18 @@ export interface KeepExploringNext {
 export interface KeepExploringProps {
   heading: string;
   about: KeepExploringTile;
-  play: KeepExploringTile;
+  archive: KeepExploringTile;
   next: KeepExploringNext;
 }
 
 /**
- * Case-study end collage: About + Play stacked on a 4-col rail, next project
+ * Case-study end collage: About + Archive stacked on a 4-col rail, next project
  * spanning 8 cols / both rows. Gutters match case-study rows (`gap-4`).
  */
 export function KeepExploring({
   heading,
   about,
-  play,
+  archive,
   next,
 }: KeepExploringProps) {
   return (
@@ -51,9 +51,9 @@ export function KeepExploring({
           sizes="(min-width: 1024px) 33vw, 100vw"
         />
         <ExploreTile
-          label={play.label}
-          href={play.href}
-          images={play.images}
+          label={archive.label}
+          href={archive.href}
+          images={archive.images}
           className="aspect-[5/3] lg:col-span-4 lg:row-start-2"
           sizes="(min-width: 1024px) 33vw, 100vw"
         />

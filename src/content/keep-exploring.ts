@@ -30,9 +30,9 @@ export const keepExploring = {
       "/photos/jake-speaking.webp",
     ],
   } satisfies ExploreLinkTile,
-  play: {
-    label: "Play",
-    href: "/play",
+  archive: {
+    label: "Archive",
+    href: "/archive",
     images: [
       "/photos/dfa-ux-panel.webp",
       "/photos/ps-design-dinner.webp",

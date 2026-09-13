@@ -98,7 +98,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           <KeepExploring
             heading={keepExploring.heading}
             about={keepExploring.about}
-            play={keepExploring.play}
+            archive={keepExploring.archive}
             next={next}
           />
         </div>
