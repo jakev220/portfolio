@@ -44,7 +44,7 @@ export default function CaseStudyPreviewPage() {
   ];
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16">
+    <main className="mx-auto w-full max-w-7xl px-6 py-16">
       <WorkPreview items={items} />
     </main>
   );

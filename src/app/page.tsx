@@ -23,7 +23,7 @@ export default function HomePage() {
   // The hero, toggle, and grid stack with no extra gap — each section owns its
   // own padding. Site footer lives in the root layout.
   return (
-    <main className="mx-auto max-w-7xl px-6 pt-64">
+    <main className="mx-auto w-full max-w-7xl px-6 pt-64">
       <Hero {...hero} />
       <HomeExitShell>
         <WorkSection items={work} />

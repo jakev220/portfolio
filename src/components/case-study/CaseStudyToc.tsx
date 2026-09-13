@@ -36,9 +36,10 @@ function collectEntries(root: ParentNode = document): TocEntry[] {
 /**
  * Desktop-only sticky case-study table of contents. Discovers sections from
  * {@link SectionLead} nodes marked with `data-case-study-toc`. Handle shows
- * one line per section; click toggles the panel. Scroll-spy drives a sliding
- * pill behind the active entry; links scroll to the section (smooth, or
- * instant when `prefers-reduced-motion`).
+ * one line per section; click toggles the panel. While open, a transparent
+ * backdrop dismisses on outside click (Escape also closes). Scroll-spy drives
+ * a sliding pill behind the active entry; links scroll to the section
+ * (smooth, or instant when `prefers-reduced-motion`).
  */
 export function CaseStudyToc() {
   const [entries, setEntries] = useState<TocEntry[]>([]);
@@ -49,7 +50,6 @@ export function CaseStudyToc() {
     height: 0,
     ready: false,
   });
-  const rootRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
   const panelId = useId();
@@ -141,22 +141,12 @@ export function CaseStudyToc() {
   useEffect(() => {
     if (!open) return;
 
-    const onPointerDown = (event: PointerEvent) => {
-      const root = rootRef.current;
-      if (!root) return;
-      if (event.target instanceof Node && !root.contains(event.target)) {
-        setOpen(false);
-      }
-    };
-
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
 
-    document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open]);
@@ -169,98 +159,107 @@ export function CaseStudyToc() {
   if (entries.length === 0) return null;
 
   return (
-    <div
-      ref={rootRef}
-      className="pointer-events-none fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 lg:left-6 lg:block"
-    >
-      <div className="pointer-events-auto flex items-center">
+    <>
+      {open ? (
         <button
           type="button"
-          aria-expanded={open}
-          aria-controls={panelId}
-          aria-label={open ? "Close table of contents" : "Open table of contents"}
-          onClick={() => setOpen((prev) => !prev)}
-          className="flex flex-col items-center justify-center gap-2.5 rounded-lg border border-transparent bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          <svg
-            aria-hidden
-            width="20"
-            height={entries.length * 12 - 10}
-            viewBox={`0 0 20 ${entries.length * 12 - 10}`}
-            className="overflow-visible text-divider"
+          aria-label="Close table of contents"
+          className="fixed inset-0 z-30 hidden cursor-default bg-transparent lg:block"
+          onClick={() => setOpen(false)}
+        />
+      ) : null}
+      <div
+        className="pointer-events-none fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 lg:left-6 lg:block"
+      >
+        <div className="pointer-events-auto flex items-center">
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls={panelId}
+            aria-label={open ? "Close table of contents" : "Open table of contents"}
+            onClick={() => setOpen((prev) => !prev)}
+            className="flex flex-col items-center justify-center gap-2.5 rounded-lg border border-transparent bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            {entries.map((entry, index) => {
-              const active = entry.id === activeId;
-              return (
-                <rect
-                  key={entry.id}
-                  x={active ? -1 : 0}
-                  y={active ? index * 12 - 0.5 : index * 12}
-                  width={active ? 22 : 20}
-                  height={active ? 3 : 2}
-                  rx={active ? 1.5 : 1}
-                  fill="currentColor"
-                  className={
-                    active ? "text-primary transition-colors duration-300" : "transition-colors duration-300"
-                  }
-                />
-              );
-            })}
-          </svg>
-        </button>
-
-        {open ? (
-          <nav
-            id={panelId}
-            aria-label="Case study contents"
-            className="ml-2 w-56 rounded-xl border border-border bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md"
-          >
-            <p className="text-label text-secondary m-0 px-2">Contents</p>
-            <hr className="border-divider my-3" />
-            <ul
-              ref={listRef}
-              className="relative m-0 flex list-none flex-col gap-0.5 p-0"
+            <svg
+              aria-hidden
+              width="20"
+              height={entries.length * 12 - 10}
+              viewBox={`0 0 20 ${entries.length * 12 - 10}`}
+              className="overflow-visible text-divider"
             >
-              <span
-                aria-hidden
-                className={`pointer-events-none absolute left-0 right-0 rounded-lg bg-surface motion-reduce:transition-none ${
-                  indicator.ready
-                    ? "transition-[top,height,opacity] duration-300 ease-out"
-                    : ""
-                }`}
-                style={{
-                  top: indicator.top,
-                  height: indicator.height,
-                  opacity: indicator.ready ? 1 : 0,
-                }}
-              />
-              {entries.map((entry) => {
+              {entries.map((entry, index) => {
                 const active = entry.id === activeId;
                 return (
-                  <li key={entry.id} className="relative z-10 m-0 min-w-0">
-                    <button
-                      type="button"
-                      ref={(node) => {
-                        if (node) itemRefs.current.set(entry.id, node);
-                        else itemRefs.current.delete(entry.id);
-                      }}
-                      onClick={() => goTo(entry.id)}
-                      aria-current={active ? "true" : undefined}
-                      className={`block w-full cursor-pointer truncate rounded-lg px-2 py-1.5 text-left text-body transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-                        active
-                          ? "text-heading"
-                          : "text-secondary hover:text-heading"
-                      }`}
-                    >
-                      {entry.label}
-                    </button>
-                  </li>
+                  <rect
+                    key={entry.id}
+                    x={active ? -1 : 0}
+                    y={active ? index * 12 - 0.5 : index * 12}
+                    width={active ? 22 : 20}
+                    height={active ? 3 : 2}
+                    rx={active ? 1.5 : 1}
+                    fill="currentColor"
+                    className={
+                      active ? "text-primary transition-colors duration-300" : "transition-colors duration-300"
+                    }
+                  />
                 );
               })}
-            </ul>
-          </nav>
-        ) : null}
+            </svg>
+          </button>
+
+          {open ? (
+            <nav
+              id={panelId}
+              aria-label="Case study contents"
+              className="ml-2 w-56 rounded-xl border border-border bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md"
+            >
+              <p className="text-label text-secondary m-0 px-2">Contents</p>
+              <hr className="border-divider my-3" />
+              <ul
+                ref={listRef}
+                className="relative m-0 flex list-none flex-col gap-0.5 p-0"
+              >
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute left-0 right-0 rounded-lg bg-surface motion-reduce:transition-none ${
+                    indicator.ready
+                      ? "transition-[top,height,opacity] duration-300 ease-out"
+                      : ""
+                  }`}
+                  style={{
+                    top: indicator.top,
+                    height: indicator.height,
+                    opacity: indicator.ready ? 1 : 0,
+                  }}
+                />
+                {entries.map((entry) => {
+                  const active = entry.id === activeId;
+                  return (
+                    <li key={entry.id} className="relative z-10 m-0 min-w-0">
+                      <button
+                        type="button"
+                        ref={(node) => {
+                          if (node) itemRefs.current.set(entry.id, node);
+                          else itemRefs.current.delete(entry.id);
+                        }}
+                        onClick={() => goTo(entry.id)}
+                        aria-current={active ? "true" : undefined}
+                        className={`block w-full cursor-pointer truncate rounded-lg px-2 py-1.5 text-left text-body transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                          active
+                            ? "text-heading"
+                            : "text-secondary hover:text-heading"
+                        }`}
+                      >
+                        {entry.label}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

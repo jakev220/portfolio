@@ -93,15 +93,15 @@ export function CaseStudyCard({
     </div>
   );
 
-  // Media box. Aspect ratio differs per variant (stack is wide, card is squarer).
-  // The cover is the primary hit target into the case study; hover slightly zooms
-  // the image inside the overflow-clipped frame.
-  const renderMedia = (aspectClassName: string, sizes: string) => (
+  // Media box. Same 842/540 frame for stack and card so one cover works in
+  // every view (inline hover preview uses this ratio too). The cover is the
+  // primary hit target; hover slightly zooms the image inside the clipped frame.
+  const renderMedia = (sizes: string) => (
     <a
       href={href}
       {...externalLinkProps(href)}
       aria-label={linkLabel}
-      className={`group relative block ${aspectClassName} overflow-hidden rounded-xl border border-border bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
+      className="group relative block aspect-[842/540] overflow-hidden rounded-xl border border-border bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       {coverImage ? (
         <Image
@@ -119,7 +119,7 @@ export function CaseStudyCard({
   if (variant === "card") {
     return (
       <article className="flex flex-col gap-8">
-        {renderMedia("aspect-[608/540]", "(min-width: 1024px) 50vw, 100vw")}
+        {renderMedia("(min-width: 1024px) 50vw, 100vw")}
         {content}
       </article>
     );
@@ -131,7 +131,7 @@ export function CaseStudyCard({
     <article className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-x-8">
       <div className="lg:col-span-1">{content}</div>
       <div className="lg:col-span-2">
-        {renderMedia("aspect-[842/540]", "(min-width: 1024px) 66vw, 100vw")}
+        {renderMedia("(min-width: 1024px) 66vw, 100vw")}
       </div>
     </article>
   );

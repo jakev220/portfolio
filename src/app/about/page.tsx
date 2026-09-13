@@ -18,7 +18,7 @@ const [biography, ...restBlocks] = about.blocks;
  */
 export default function AboutPage() {
   return (
-    <article className="mx-auto max-w-7xl px-6 pt-64 pb-24">
+    <article className="mx-auto w-full max-w-7xl px-6 pt-64 pb-24">
       <div className="flex flex-col gap-40">
         <AboutHero greeting={about.greeting} photos={about.heroPhotos} />
         <HangStatement
