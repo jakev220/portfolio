@@ -44,6 +44,23 @@ export interface AboutExperienceEntry {
   duration: string;
   /** Optional muted italic line (e.g. degree minor). */
   detail?: string;
+  /**
+   * Optional still shown in the left rail under “Journey” while hovering
+   * this row (fine-pointer desktop only). Path under `/public`.
+   */
+  preview?: string;
+  /** Alt for `preview`; defaults to the organization name. */
+  previewAlt?: string;
+  /**
+   * How the still fills the preview frame. Use `contain` only when the asset
+   * should letterbox; photos and full-bleed logo cards default to `cover`.
+   */
+  previewFit?: "cover" | "contain";
+  /**
+   * Skip Next’s image optimizer (logos / sharp graphics) so a second lossy
+   * pass doesn’t soft-edge the mark.
+   */
+  previewUnoptimized?: boolean;
 }
 
 export interface AboutResumeSection {
@@ -117,6 +134,7 @@ export const about: AboutContent = {
           position: "B.S. Cognitive Science w/ spec. Design & Interaction (HCI)",
           detail: "Minor in Computer Science",
           duration: "Aug 2021 – Jun 2025",
+          preview: "/photos/about-experience/jake-ceremony.webp",
         },
       ],
     },
@@ -127,21 +145,27 @@ export const about: AboutContent = {
           organization: "StepStone Group",
           position: "UX/UI Design Analyst → UI/UX Designer I",
           duration: "Jun 2025 – Present",
+          preview: "/photos/about-experience/ssg-logo.webp",
+          previewUnoptimized: true,
         },
         {
           organization: "UC San Diego Design Lab",
           position: "UI/UX Design Intern",
           duration: "Jun 2025 – Dec 2025",
+          preview: "/photos/about-experience/dlab-photo.webp",
         },
         {
           organization: "SPIN",
           position: "Product Strategy & Research Consultant",
           duration: "Apr 2025 – Jun 2025",
+          preview: "/photos/about-experience/spin-title-slide.webp",
         },
         {
           organization: "Newco (Stealth)",
           position: "Contract Product Designer",
           duration: "Jul 2024 – Oct 2024",
+          preview: "/photos/about-experience/stealth-logo.webp",
+          previewUnoptimized: true,
         },
       ],
     },
@@ -152,22 +176,26 @@ export const about: AboutContent = {
           organization: "Product Space at UC San Diego",
           position: "Product Design Mentor (UX Designer)",
           duration: "May 2024 – Jun 2025",
+          preview: "/photos/about-experience/ps-group-photo.webp",
         },
         {
           organization: "CSE Society at UC San Diego",
           position: "VP Design (Development Branch)",
           duration: "Apr 2024 – Jun 2025",
+          preview: "/photos/about-experience/cses-ceremony.webp",
         },
         {
           organization: "UC San Diego Cognitive Science Department",
           position: "Instructional Assistant",
           detail: "DSGN 100: Prototyping & COGS 187A: Usability & Information Architecture",
           duration: "Jan 2025 – Jun 2025",
+          preview: "/photos/about-experience/dsgn100-team.webp",
         },
         {
           organization: "Teaching + Learning Commons at UC San Diego",
           position: "Undergraduate Writing Consultant",
           duration: "Aug 2022 – Jun 2025",
+          preview: "/photos/about-experience/writing-hub-group.webp",
         },
       ],
     },

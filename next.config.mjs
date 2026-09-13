@@ -9,7 +9,7 @@ const nextConfig = {
     // Site-wide photography quality. Next's Image default is still 75, but
     // Next 16 coerces to the closest allowed value — with only 90 listed,
     // every optimized <Image> lands at 90 without per-call `quality` props.
-    qualities: [90],
+    qualities: [90, 100],
   },
 };
 
