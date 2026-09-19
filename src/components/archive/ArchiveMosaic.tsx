@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
+import { ArchiveCycleTile } from "@/components/archive/ArchiveCycleTile";
 import {
   archiveMediaKind,
   type ArchiveItem,
@@ -18,6 +19,16 @@ function TileFrame({ children }: { children: ReactNode }) {
 }
 
 function ArchiveMedia({ item }: { item: ArchiveItem }) {
+  if (item.frames && item.frames.length > 0) {
+    return (
+      <ArchiveCycleTile
+        frames={item.frames}
+        alt={item.alt ?? ""}
+        aspect={item.aspect}
+      />
+    );
+  }
+
   const kind = archiveMediaKind(item);
   const cropped = Boolean(item.aspect && item.src);
   const frameStyle: CSSProperties | undefined = item.aspect
@@ -96,9 +107,9 @@ function ArchiveTile({ item }: { item: ArchiveItem }) {
 }
 
 /**
- * CSS-columns mosaic for Archive media. Items without `src` are surface
- * placeholders; mixed image / video heights flow as a masonry. Optional
- * `aspect` crops letterboxed captures with `object-cover`.
+ * CSS-columns mosaic for Archive media. Items without `src` / `frames` are
+ * surface placeholders; mixed heights flow as a masonry. Optional `aspect`
+ * crops letterboxed captures; `frames` runs a hover-only still cycle.
  */
 export function ArchiveMosaic({ items }: ArchiveMosaicProps) {
   return (
