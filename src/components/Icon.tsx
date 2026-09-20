@@ -12,6 +12,7 @@ export type IconName =
   | "arrow-right"
   | "arrow-up"
   | "arrow-down"
+  | "arrow-up-right"
   | "refresh"
   | "zoom-in"
   | "zoom-out"
@@ -69,6 +70,10 @@ const ICONS: Record<IconName, IconDef> = {
   "arrow-down": {
     stroke: true,
     d: "M5 12L12 19L19 12M12 19V5",
+  },
+  "arrow-up-right": {
+    stroke: true,
+    d: "M7 17L17 7M10 7H17V14",
   },
   refresh: {
     stroke: true,

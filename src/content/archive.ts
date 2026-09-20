@@ -109,6 +109,12 @@ export const archive: ArchiveContent = {
       alt: "SPIN Product Space story prototype",
     },
     {
+      id: "ps-figma-workshop-cover",
+      src: "/photos/archive/ps-figma-workshop-cover.webp",
+      alt: "Product Space Figma workshop cover",
+      href: "https://www.figma.com/design/TX5h0FGdOowdMOc5cuhTpW/Product-Space-Figma-Workshop?node-id=139-1505&t=EJd6JfRDIbTdYlIX-1",
+    },
+    {
       id: "placeholder-1",
     },
     {

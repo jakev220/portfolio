@@ -145,6 +145,29 @@ Helpers live in `src/lib/links.ts` (`isExternalHref`, `externalLinkProps`).
 
 In MDX bodies, links currently render with color + underline only; prefer migrating
 call sites to `<Link>` when touching them.
+
+### Media overlay icon buttons
+
+When a **media frame** (image / tile / cover) needs a corner control — expand,
+external outbound, etc. — **do not** invent a one-off pill (no raw `↗` text, no
+ad-hoc black translucent circle). Match `<ExpandableMedia>`:
+
+| Piece | Spec |
+|-------|------|
+| Position | `absolute right-3 top-3 z-10` (`sm:right-4 sm:top-4`) |
+| Chrome | `rounded-lg border border-border bg-lightbox-panel p-2 shadow-md` |
+| Icon | `<Icon>` stroke glyph at **20px**, `text-primary` (or `text-cs-ink` inside case-study toned surfaces) |
+| Reveal | `opacity-0` → `group-hover:opacity-100 group-focus-visible:opacity-100`; `transition-opacity duration-200` |
+| Hit target | `pointer-events-none` on the badge when the whole frame is the link/button |
+
+**Glyphs** (register in `src/components/Icon.tsx` if missing — never hardcode SVG in call sites):
+
+| Affordance | Icon name | Used by |
+|------------|-----------|---------|
+| Expand / lightbox | `expand` | `<ExpandableMedia>` |
+| External outbound | `arrow-up-right` | Archive mosaic tiles with `href` |
+
+Always pair outbound media links with `externalLinkProps(href)` on the anchor.
 ---
 
 ## Motion
@@ -267,7 +290,7 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | Component | Purpose |
 |-----------|---------|
 | `<CaseStudyHeader>` | Frontmatter-driven: full-width name `h1`, 8-col subtitle, optional skip CTA (`skipLabel` + `skipHref` + optional `skipTone` / `skipPreview` stills) bottom-right at `lg+`, cover media, divider. |
-| `<KeepExploring>` | Case-study end collage: “Keep exploring” + About / Play stack (4-col) + next project (8-col). Gutters `gap-4`. Tiles zoom like case-study cards; About/Play cycle stills on hover. |
+| `<KeepExploring>` | Case-study end collage: “Keep exploring” + About / Archive stack (4-col) + next project (8-col). Gutters `gap-4`. Tiles zoom like case-study cards; About/Archive cycle stills on hover. |
 | `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
 | `<Section>` | The section unit: `<section>` that stacks its children with the case-study stack rhythm (`gap-12` / `sm:gap-16` / `lg:gap-20`). Between top-level sections, `.mdx-content` uses `gap-24` / `sm:gap-32` / `lg:gap-48`. Compose rows + media inside. |
 | `<SectionLead>` | Optional eyebrow + lead headline for a section opener. Labeled leads set `id` from the slugified label (or an explicit `id`) + `data-case-study-toc` for the sticky TOC (label-less leads are omitted). |

@@ -2,10 +2,12 @@ import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { ArchiveCarouselTile } from "@/components/archive/ArchiveCarouselTile";
 import { ArchiveCycleTile } from "@/components/archive/ArchiveCycleTile";
+import { Icon } from "@/components/Icon";
 import {
   archiveMediaKind,
   type ArchiveItem,
 } from "@/content/archive";
+import { externalLinkProps, isExternalHref } from "@/lib/links";
 
 export interface ArchiveMosaicProps {
   items: ArchiveItem[];
@@ -102,13 +104,23 @@ function ArchiveTile({ item }: { item: ArchiveItem }) {
   const media = <ArchiveMedia item={item} />;
 
   if (item.href) {
+    const external = isExternalHref(item.href);
     return (
       <TileFrame>
         <a
           href={item.href}
-          className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="group relative block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          {...externalLinkProps(item.href)}
         >
           {media}
+          {external ? (
+            <span
+              aria-hidden
+              className="pointer-events-none absolute right-3 top-3 z-10 rounded-lg border border-border bg-lightbox-panel p-2 text-primary opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 sm:right-4 sm:top-4"
+            >
+              <Icon name="arrow-up-right" size={20} />
+            </span>
+          ) : null}
         </a>
       </TileFrame>
     );
