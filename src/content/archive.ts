@@ -52,6 +52,11 @@ export interface ArchiveItem {
    */
   frames?: ArchiveFrame[];
   /**
+   * Manual carousel slides (arrows + dots). When set, replaces the single
+   * `src` display; prefer keeping `src` as the first slide for fallbacks.
+   */
+  slides?: { src: string; alt?: string }[];
+  /**
    * Optional destination when the tile should link out (project, case study,
    * external URL). Omit for a non-interactive still.
    */
@@ -107,9 +112,12 @@ export const archive: ArchiveContent = {
       id: "placeholder-1",
     },
     {
-      id: "lake-arrowhead-memento",
-      src: "/photos/archive/lake-arrowhead-memento.webp",
-      alt: "Lake Arrowhead memento",
+      id: "placeholder-3",
+    },
+    {
+      id: "give-a-dam-poster-bg",
+      src: "/photos/archive/give-a-dam-poster-bg.webp",
+      alt: "Give a Dam poster background",
     },
     {
       id: "growing-connotative-type",
@@ -120,17 +128,25 @@ export const archive: ArchiveContent = {
       id: "placeholder-2",
     },
     {
-      id: "placeholder-3",
+      id: "lake-arrowhead-memento",
+      src: "/photos/archive/lake-arrowhead-memento.webp",
+      alt: "Lake Arrowhead memento",
     },
     {
-      id: "cses-dev-pm-recruitment",
+      id: "cses-dev-recruitment",
       src: "/photos/archive/cses-dev-pm-recruitment.webp",
-      alt: "CSES Dev PM recruitment graphic",
-    },
-    {
-      id: "cses-dev-sde-recruitment",
-      src: "/photos/archive/cses-dev-sde-recruitment.webp",
-      alt: "CSES Dev SDE recruitment graphic",
+      alt: "CSES Dev recruitment graphics",
+      aspect: "1 / 1",
+      slides: [
+        {
+          src: "/photos/archive/cses-dev-pm-recruitment.webp",
+          alt: "CSES Dev PM recruitment graphic",
+        },
+        {
+          src: "/photos/archive/cses-dev-sde-recruitment.webp",
+          alt: "CSES Dev SDE recruitment graphic",
+        },
+      ],
     },
     {
       id: "placeholder-4",

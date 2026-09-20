@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
+import { ArchiveCarouselTile } from "@/components/archive/ArchiveCarouselTile";
 import { ArchiveCycleTile } from "@/components/archive/ArchiveCycleTile";
 import {
   archiveMediaKind,
@@ -19,6 +20,16 @@ function TileFrame({ children }: { children: ReactNode }) {
 }
 
 function ArchiveMedia({ item }: { item: ArchiveItem }) {
+  if (item.slides && item.slides.length > 0) {
+    return (
+      <ArchiveCarouselTile
+        slides={item.slides}
+        label={item.alt ?? "Archive carousel"}
+        aspect={item.aspect}
+      />
+    );
+  }
+
   if (item.frames && item.frames.length > 0) {
     return (
       <ArchiveCycleTile
@@ -107,9 +118,10 @@ function ArchiveTile({ item }: { item: ArchiveItem }) {
 }
 
 /**
- * CSS-columns mosaic for Archive media. Items without `src` / `frames` are
- * surface placeholders; mixed heights flow as a masonry. Optional `aspect`
- * crops letterboxed captures; `frames` runs a hover-only still cycle.
+ * CSS-columns mosaic for Archive media. Items without `src` / `frames` /
+ * `slides` are surface placeholders; mixed heights flow as a masonry.
+ * Optional `aspect` crops letterboxed captures; `frames` runs a hover-only
+ * still cycle; `slides` runs a manual arrow/dot carousel.
  */
 export function ArchiveMosaic({ items }: ArchiveMosaicProps) {
   return (
