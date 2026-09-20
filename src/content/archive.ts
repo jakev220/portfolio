@@ -112,10 +112,25 @@ export const archive: ArchiveContent = {
       alt: "Lake Arrowhead memento",
     },
     {
+      id: "growing-connotative-type",
+      src: "/photos/archive/growing-connotative-type.webp",
+      alt: "Growing connotative type",
+    },
+    {
       id: "placeholder-2",
     },
     {
       id: "placeholder-3",
+    },
+    {
+      id: "cses-dev-pm-recruitment",
+      src: "/photos/archive/cses-dev-pm-recruitment.webp",
+      alt: "CSES Dev PM recruitment graphic",
+    },
+    {
+      id: "cses-dev-sde-recruitment",
+      src: "/photos/archive/cses-dev-sde-recruitment.webp",
+      alt: "CSES Dev SDE recruitment graphic",
     },
     {
       id: "placeholder-4",
