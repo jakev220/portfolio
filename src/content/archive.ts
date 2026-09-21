@@ -14,9 +14,10 @@ export interface ArchiveImageFrame {
 }
 
 /**
- * 2×2 grid on a solid background. Outer padding equals the gap between cells.
- * In the cycle, cells appear one at a time in reading order (TL → TR → BL → BR),
- * accumulating until the full 2×2 is visible, then each still plays full-bleed.
+ * 2×2 grid on a solid background. Outer padding equals the gap between cells
+ * when `gutters` is true (default). In the cycle, cells appear one at a time in
+ * reading order (TL → TR → BL → BR), accumulating until the full 2×2 is visible,
+ * then each still plays full-bleed.
  */
 export interface ArchiveQuadFrame {
   type: "quad";
@@ -24,9 +25,24 @@ export interface ArchiveQuadFrame {
   background: string;
   /** Four stills in reading order: TL, TR, BL, BR. */
   images: [string, string, string, string];
+  /** When false, cells are flush (no padding/gap). Default true. */
+  gutters?: boolean;
 }
 
-export type ArchiveFrame = ArchiveImageFrame | ArchiveQuadFrame;
+/** Letterboxed video beat — advances on `ended` (honors `playbackRate`). */
+export interface ArchiveVideoFrame {
+  type: "video";
+  src: string;
+  /** CSS color behind the letterboxed video. */
+  background: string;
+  /** HTML video `playbackRate`. Default `1`. */
+  playbackRate?: number;
+}
+
+export type ArchiveFrame =
+  | ArchiveImageFrame
+  | ArchiveQuadFrame
+  | ArchiveVideoFrame;
 
 export interface ArchiveItem {
   /** Unique key (also used for React lists). */
@@ -70,7 +86,7 @@ export interface ArchiveContent {
 }
 
 /** Instant-cut cadence for archive hover cycles (avatar-reel speed). */
-export const ARCHIVE_CYCLE_MS = 400;
+export const ARCHIVE_CYCLE_MS = 500;
 
 export function archiveMediaKind(item: ArchiveItem): ArchiveMediaKind | null {
   if (!item.src) return null;
@@ -107,6 +123,31 @@ export const archive: ArchiveContent = {
       id: "spin-ps-story",
       src: "/photos/archive/spin-ps-story.webp",
       alt: "SPIN Product Space story prototype",
+    },
+    {
+      id: "chibi-k-run",
+      src: "/photos/archive/chibi-k-mobile-home.webp",
+      alt: "Chibi-K Run site and Figma files",
+      aspect: "1 / 1",
+      frames: [
+        {
+          type: "quad",
+          background: "#000000",
+          gutters: false,
+          images: [
+            "/photos/archive/chibi-k-mobile-home.webp",
+            "/photos/archive/chibi-k-mobile-events.webp",
+            "/photos/archive/chibi-k-mobile-volunteer.webp",
+            "/photos/archive/chibi-k-mobile-support.webp",
+          ],
+        },
+        {
+          type: "video",
+          src: "/photos/archive/chibi-k-demo.mp4",
+          background: "#e3efff",
+          playbackRate: 0.25,
+        },
+      ],
     },
     {
       id: "ps-figma-workshop-cover",
