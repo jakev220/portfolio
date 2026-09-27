@@ -15,6 +15,8 @@ export interface ArchiveCycleTileProps {
   alt: string;
   /** CSS aspect-ratio value; defaults to square. */
   aspect?: string;
+  /** How image beats fit the tile. Default `cover`. */
+  fit?: "cover" | "contain";
 }
 
 /** One beat in the flattened cycle. */
@@ -183,11 +185,13 @@ function StepLayer({
   step,
   active,
   playing,
+  fit,
   onVideoEnded,
 }: {
   step: CycleStep;
   active: boolean;
   playing: boolean;
+  fit: "cover" | "contain";
   onVideoEnded: () => void;
 }) {
   return (
@@ -200,7 +204,7 @@ function StepLayer({
           src={step.src}
           alt=""
           fill
-          className="object-cover"
+          className={fit === "contain" ? "object-contain" : "object-cover"}
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
         />
       ) : step.kind === "video" ? (
@@ -242,6 +246,7 @@ export function ArchiveCycleTile({
   frames,
   alt,
   aspect = "1 / 1",
+  fit = "cover",
 }: ArchiveCycleTileProps) {
   const reduceMotion = useReducedMotion();
   const steps = useMemo(() => expandFrames(frames), [frames]);
@@ -337,6 +342,7 @@ export function ArchiveCycleTile({
           step={step}
           active={i === index}
           playing={playing}
+          fit={fit}
           onVideoEnded={advance}
         />
       ))}

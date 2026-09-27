@@ -63,6 +63,12 @@ export interface ArchiveItem {
    */
   aspect?: string;
   /**
+   * How cycle stills fit the tile. Default `cover`. Use `contain` when frames
+   * share a fixed tile aspect but have mixed intrinsic ratios (equal height,
+   * letterboxed width).
+   */
+  fit?: "cover" | "contain";
+  /**
    * Hover-only still cycle (avatar-style cuts). When set, replaces the single
    * `src` display; prefer keeping `src` as the first frame for fallbacks.
    */
@@ -77,6 +83,11 @@ export interface ArchiveItem {
    * external URL). Omit for a non-interactive still.
    */
   href?: string;
+  /**
+   * For mosaic videos: ms to hold on the last frame before restarting the
+   * loop. Omit (or `0`) for an immediate loop.
+   */
+  loopDelayMs?: number;
 }
 
 export interface ArchiveContent {
@@ -125,6 +136,12 @@ export const archive: ArchiveContent = {
       alt: "SPIN Product Space story prototype",
     },
     {
+      id: "spin-messaging-redesign",
+      src: "/photos/archive/spin-messaging-redesign.mp4",
+      alt: "SPIN messaging redesign prototype",
+      loopDelayMs: 1000,
+    },
+    {
       id: "chibi-k-run",
       src: "/photos/archive/chibi-k-mobile-home.webp",
       alt: "Chibi-K Run site and Figma files",
@@ -156,10 +173,25 @@ export const archive: ArchiveContent = {
       href: "https://www.figma.com/design/TX5h0FGdOowdMOc5cuhTpW/Product-Space-Figma-Workshop?node-id=139-1505&t=EJd6JfRDIbTdYlIX-1",
     },
     {
-      id: "placeholder-1",
+      id: "tj-card-shuffle",
+      src: "/photos/archive/tj-card-shuffle.mp4",
+      alt: "TJ card shuffle prototype",
+      aspect: "1 / 1",
     },
     {
-      id: "placeholder-3",
+      id: "superlative",
+      src: "/photos/archive/superlative-1.webp",
+      alt: "Superlative design explorations",
+      // First frame — shared tile size; other stills cover and crop as needed.
+      aspect: "3168 / 2448",
+      frames: [
+        { type: "image", src: "/photos/archive/superlative-1.webp" },
+        { type: "image", src: "/photos/archive/superlative-2.webp" },
+        { type: "image", src: "/photos/archive/superlative-3.webp" },
+        { type: "image", src: "/photos/archive/superlative-4.webp" },
+        { type: "image", src: "/photos/archive/superlative-5.webp" },
+        { type: "image", src: "/photos/archive/superlative-6.webp" },
+      ],
     },
     {
       id: "give-a-dam-poster-bg",
@@ -172,7 +204,9 @@ export const archive: ArchiveContent = {
       alt: "Growing connotative type",
     },
     {
-      id: "placeholder-2",
+      id: "style-seek",
+      src: "/photos/archive/style-seek.mp4",
+      alt: "Style Seek prototype",
     },
     {
       id: "lake-arrowhead-memento",
@@ -196,7 +230,9 @@ export const archive: ArchiveContent = {
       ],
     },
     {
-      id: "placeholder-4",
+      id: "walkman-app-photo",
+      src: "/photos/archive/walkman-app-photo.webp",
+      alt: "Walkman app photo",
     },
   ],
 };

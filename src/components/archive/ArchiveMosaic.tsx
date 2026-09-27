@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { ArchiveCarouselTile } from "@/components/archive/ArchiveCarouselTile";
 import { ArchiveCycleTile } from "@/components/archive/ArchiveCycleTile";
+import { ArchiveVideoTile } from "@/components/archive/ArchiveVideoTile";
 import { Icon } from "@/components/Icon";
 import {
   archiveMediaKind,
@@ -38,37 +39,34 @@ function ArchiveMedia({ item }: { item: ArchiveItem }) {
         frames={item.frames}
         alt={item.alt ?? ""}
         aspect={item.aspect}
+        fit={item.fit}
       />
     );
   }
 
   const kind = archiveMediaKind(item);
+
+  if (kind === "video" && item.src) {
+    return (
+      <ArchiveVideoTile
+        src={item.src}
+        alt={item.alt ?? ""}
+        aspect={item.aspect}
+        loopDelayMs={item.loopDelayMs}
+      />
+    );
+  }
+
   const cropped = Boolean(item.aspect && item.src);
   const frameStyle: CSSProperties | undefined = item.aspect
     ? { aspectRatio: item.aspect }
     : undefined;
-  const mediaClassName = cropped
-    ? "absolute inset-0 h-full w-full object-cover"
-    : "h-auto w-full";
 
   let media: ReactNode = (
     <div className="aspect-[3/4] w-full" aria-hidden />
   );
 
-  if (kind === "video" && item.src) {
-    media = (
-      <video
-        src={item.src}
-        className={mediaClassName}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-label={item.alt || undefined}
-      />
-    );
-  } else if (kind === "image" && item.src) {
+  if (kind === "image" && item.src) {
     media = cropped ? (
       <Image
         src={item.src}
