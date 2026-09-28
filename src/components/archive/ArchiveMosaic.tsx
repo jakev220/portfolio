@@ -48,18 +48,27 @@ function estimateHeight(item: ArchiveItem): number {
 /**
  * Greedy masonry: each item (including stacked pairs as one unit) goes into
  * the current shortest column so heights stay balanced and pairs stay together.
+ * `packAfter` pins a tile into the same column as an earlier item.
  */
 function packColumns(items: ArchiveItem[], count: number): ArchiveItem[][] {
   const columns: ArchiveItem[][] = Array.from({ length: count }, () => []);
   const heights = Array.from({ length: count }, () => 0);
+  const columnOf = new Map<string, number>();
 
   for (const item of items) {
-    let shortest = 0;
-    for (let i = 1; i < count; i++) {
-      if (heights[i] < heights[shortest]) shortest = i;
+    let target = 0;
+    const anchor =
+      item.packAfter != null ? columnOf.get(item.packAfter) : undefined;
+    if (anchor !== undefined) {
+      target = anchor;
+    } else {
+      for (let i = 1; i < count; i++) {
+        if (heights[i] < heights[target]) target = i;
+      }
     }
-    columns[shortest].push(item);
-    heights[shortest] += estimateHeight(item) + 0.04;
+    columns[target].push(item);
+    columnOf.set(item.id, target);
+    heights[target] += estimateHeight(item) + 0.04;
   }
 
   return columns;

@@ -101,6 +101,11 @@ export interface ArchiveItem {
   loopDelayMs?: number;
   /** For mosaic videos: HTML video `playbackRate`. Default `1`. */
   playbackRate?: number;
+  /**
+   * Pack into the same mosaic column as this item id (must appear earlier in
+   * `items`). Keeps a follow-on tile directly under its anchor.
+   */
+  packAfter?: string;
 }
 
 export interface ArchiveContent {
@@ -209,30 +214,15 @@ export const archive: ArchiveContent = {
       alt: "Walkman app photo",
     },
     {
-      id: "style-seek",
-      src: "/photos/archive/style-seek.mp4",
-      alt: "Style Seek prototype",
-    },
-    {
       id: "growing-connotative-type",
       src: "/photos/archive/growing-connotative-type.webp",
       alt: "Growing connotative type",
     },
     {
-      id: "cses-dev-recruitment",
-      src: "/photos/archive/cses-dev-pm-recruitment.webp",
-      alt: "CSES Dev recruitment graphics",
-      aspect: "1 / 1",
-      slides: [
-        {
-          src: "/photos/archive/cses-dev-pm-recruitment.webp",
-          alt: "CSES Dev PM recruitment graphic",
-        },
-        {
-          src: "/photos/archive/cses-dev-sde-recruitment.webp",
-          alt: "CSES Dev SDE recruitment graphic",
-        },
-      ],
+      id: "ps-figma-workshop-cover",
+      src: "/photos/archive/ps-figma-workshop-cover.webp",
+      alt: "Product Space Figma workshop cover",
+      href: "https://www.figma.com/design/TX5h0FGdOowdMOc5cuhTpW/Product-Space-Figma-Workshop?node-id=139-1505&t=EJd6JfRDIbTdYlIX-1",
     },
     {
       id: "superlative",
@@ -250,6 +240,12 @@ export const archive: ArchiveContent = {
       ],
     },
     {
+      id: "style-seek",
+      src: "/photos/archive/style-seek.mp4",
+      alt: "Style Seek prototype",
+      packAfter: "superlative",
+    },
+    {
       id: "memorylook-demo",
       src: "/photos/archive/memorylook-demo.mp4",
       alt: "Memorylook demo",
@@ -258,10 +254,20 @@ export const archive: ArchiveContent = {
       playbackRate: 0.5,
     },
     {
-      id: "ps-figma-workshop-cover",
-      src: "/photos/archive/ps-figma-workshop-cover.webp",
-      alt: "Product Space Figma workshop cover",
-      href: "https://www.figma.com/design/TX5h0FGdOowdMOc5cuhTpW/Product-Space-Figma-Workshop?node-id=139-1505&t=EJd6JfRDIbTdYlIX-1",
+      id: "cses-dev-recruitment",
+      src: "/photos/archive/cses-dev-pm-recruitment.webp",
+      alt: "CSES Dev recruitment graphics",
+      aspect: "1 / 1",
+      slides: [
+        {
+          src: "/photos/archive/cses-dev-pm-recruitment.webp",
+          alt: "CSES Dev PM recruitment graphic",
+        },
+        {
+          src: "/photos/archive/cses-dev-sde-recruitment.webp",
+          alt: "CSES Dev SDE recruitment graphic",
+        },
+      ],
     },
   ],
 };
