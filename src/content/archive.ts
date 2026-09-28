@@ -79,6 +79,17 @@ export interface ArchiveItem {
    */
   slides?: { src: string; alt?: string }[];
   /**
+   * Media stacked in one `break-inside-avoid` unit so CSS columns can’t split
+   * a thematic pair across the mosaic. Videos inferred from extension.
+   */
+  stack?: {
+    src: string;
+    alt?: string;
+    aspect?: string;
+    loopDelayMs?: number;
+    playbackRate?: number;
+  }[];
+  /**
    * Optional destination when the tile should link out (project, case study,
    * external URL). Omit for a non-interactive still.
    */
@@ -88,6 +99,8 @@ export interface ArchiveItem {
    * loop. Omit (or `0`) for an immediate loop.
    */
   loopDelayMs?: number;
+  /** For mosaic videos: HTML video `playbackRate`. Default `1`. */
+  playbackRate?: number;
 }
 
 export interface ArchiveContent {
@@ -110,37 +123,8 @@ export const archive: ArchiveContent = {
   description:
     "Prototypes, design explorations, and other fun stuff I've worked on.",
   items: [
-    {
-      id: "lex",
-      src: "/photos/archive/lex-tshirt.webp",
-      alt: "Lex design explorations",
-      aspect: "1 / 1",
-      frames: [
-        { type: "image", src: "/photos/archive/lex-tshirt.webp" },
-        {
-          type: "quad",
-          background: "#000000",
-          images: [
-            "/photos/archive/lex-long-type.webp",
-            "/photos/archive/lex-brat-theme.webp",
-            "/photos/archive/lex-kiss-theme.webp",
-            "/photos/archive/lex-dither.webp",
-          ],
-        },
-        { type: "image", src: "/photos/archive/lex-mask.webp" },
-      ],
-    },
-    {
-      id: "spin-ps-story",
-      src: "/photos/archive/spin-ps-story.webp",
-      alt: "SPIN Product Space story prototype",
-    },
-    {
-      id: "spin-messaging-redesign",
-      src: "/photos/archive/spin-messaging-redesign.mp4",
-      alt: "SPIN messaging redesign prototype",
-      loopDelayMs: 1000,
-    },
+    // Thematic pairs stay adjacent; playable tiles are spaced through the
+    // mosaic so motion isn’t concentrated at the bottom.
     {
       id: "chibi-k-run",
       src: "/photos/archive/chibi-k-mobile-home.webp",
@@ -167,10 +151,51 @@ export const archive: ArchiveContent = {
       ],
     },
     {
-      id: "ps-figma-workshop-cover",
-      src: "/photos/archive/ps-figma-workshop-cover.webp",
-      alt: "Product Space Figma workshop cover",
-      href: "https://www.figma.com/design/TX5h0FGdOowdMOc5cuhTpW/Product-Space-Figma-Workshop?node-id=139-1505&t=EJd6JfRDIbTdYlIX-1",
+      id: "spin-pair",
+      stack: [
+        {
+          src: "/photos/archive/spin-ps-story.webp",
+          alt: "SPIN Product Space story prototype",
+        },
+        {
+          src: "/photos/archive/spin-messaging-redesign.mp4",
+          alt: "SPIN messaging redesign prototype",
+          loopDelayMs: 1000,
+        },
+      ],
+    },
+    {
+      id: "lex",
+      src: "/photos/archive/lex-tshirt.webp",
+      alt: "Lex design explorations",
+      aspect: "1 / 1",
+      frames: [
+        { type: "image", src: "/photos/archive/lex-tshirt.webp" },
+        {
+          type: "quad",
+          background: "#000000",
+          images: [
+            "/photos/archive/lex-long-type.webp",
+            "/photos/archive/lex-brat-theme.webp",
+            "/photos/archive/lex-kiss-theme.webp",
+            "/photos/archive/lex-dither.webp",
+          ],
+        },
+        { type: "image", src: "/photos/archive/lex-mask.webp" },
+      ],
+    },
+    {
+      id: "memento-give-a-dam",
+      stack: [
+        {
+          src: "/photos/archive/lake-arrowhead-memento.webp",
+          alt: "Lake Arrowhead memento",
+        },
+        {
+          src: "/photos/archive/give-a-dam-poster-bg.webp",
+          alt: "Give a Dam poster background",
+        },
+      ],
     },
     {
       id: "tj-card-shuffle",
@@ -179,29 +204,9 @@ export const archive: ArchiveContent = {
       aspect: "1 / 1",
     },
     {
-      id: "superlative",
-      src: "/photos/archive/superlative-1.webp",
-      alt: "Superlative design explorations",
-      // First frame — shared tile size; other stills cover and crop as needed.
-      aspect: "3168 / 2448",
-      frames: [
-        { type: "image", src: "/photos/archive/superlative-1.webp" },
-        { type: "image", src: "/photos/archive/superlative-2.webp" },
-        { type: "image", src: "/photos/archive/superlative-3.webp" },
-        { type: "image", src: "/photos/archive/superlative-4.webp" },
-        { type: "image", src: "/photos/archive/superlative-5.webp" },
-        { type: "image", src: "/photos/archive/superlative-6.webp" },
-      ],
-    },
-    {
-      id: "give-a-dam-poster-bg",
-      src: "/photos/archive/give-a-dam-poster-bg.webp",
-      alt: "Give a Dam poster background",
-    },
-    {
-      id: "growing-connotative-type",
-      src: "/photos/archive/growing-connotative-type.webp",
-      alt: "Growing connotative type",
+      id: "walkman-app-photo",
+      src: "/photos/archive/walkman-app-photo.webp",
+      alt: "Walkman app photo",
     },
     {
       id: "style-seek",
@@ -209,9 +214,9 @@ export const archive: ArchiveContent = {
       alt: "Style Seek prototype",
     },
     {
-      id: "lake-arrowhead-memento",
-      src: "/photos/archive/lake-arrowhead-memento.webp",
-      alt: "Lake Arrowhead memento",
+      id: "growing-connotative-type",
+      src: "/photos/archive/growing-connotative-type.webp",
+      alt: "Growing connotative type",
     },
     {
       id: "cses-dev-recruitment",
@@ -230,9 +235,33 @@ export const archive: ArchiveContent = {
       ],
     },
     {
-      id: "walkman-app-photo",
-      src: "/photos/archive/walkman-app-photo.webp",
-      alt: "Walkman app photo",
+      id: "superlative",
+      src: "/photos/archive/superlative-1.webp",
+      alt: "Superlative design explorations",
+      // First frame — shared tile size; other stills cover and crop as needed.
+      aspect: "3168 / 2448",
+      frames: [
+        { type: "image", src: "/photos/archive/superlative-1.webp" },
+        { type: "image", src: "/photos/archive/superlative-2.webp" },
+        { type: "image", src: "/photos/archive/superlative-3.webp" },
+        { type: "image", src: "/photos/archive/superlative-4.webp" },
+        { type: "image", src: "/photos/archive/superlative-5.webp" },
+        { type: "image", src: "/photos/archive/superlative-6.webp" },
+      ],
+    },
+    {
+      id: "memorylook-demo",
+      src: "/photos/archive/memorylook-demo.mp4",
+      alt: "Memorylook demo",
+      // Vertical crop centered on the phone (source is 16:9 with side margins).
+      aspect: "9 / 16",
+      playbackRate: 0.5,
+    },
+    {
+      id: "ps-figma-workshop-cover",
+      src: "/photos/archive/ps-figma-workshop-cover.webp",
+      alt: "Product Space Figma workshop cover",
+      href: "https://www.figma.com/design/TX5h0FGdOowdMOc5cuhTpW/Product-Space-Figma-Workshop?node-id=139-1505&t=EJd6JfRDIbTdYlIX-1",
     },
   ],
 };

@@ -239,8 +239,8 @@ function stepKey(step: CycleStep, index: number): string {
  * Video beats play through at their `playbackRate` and advance on `ended`.
  * Cycles that open with a quad rest on the completed gallery; after the last
  * beat they wrap back to that gallery (skipping the progressive rebuild).
- * Click pauses / resumes while hovered. Resets on mouse leave. Honors
- * `prefers-reduced-motion`.
+ * Click pauses / resumes while hovered. Plays on hover; resets on mouse leave.
+ * Honors `prefers-reduced-motion`.
  */
 export function ArchiveCycleTile({
   frames,

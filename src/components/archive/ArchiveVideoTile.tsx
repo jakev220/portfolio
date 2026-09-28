@@ -14,17 +14,20 @@ export interface ArchiveVideoTileProps {
    * disables the native `loop` attribute.
    */
   loopDelayMs?: number;
+  /** HTML video `playbackRate`. Default `1`. */
+  playbackRate?: number;
 }
 
 /**
- * Archive mosaic video tile: muted loop with a top-right play/pause affordance
- * matching `<ArchiveCycleTile>` (bare `text-secondary` icon).
+ * Archive mosaic video tile: muted autoplay loop with a top-right play/pause
+ * affordance matching `<ArchiveCycleTile>` (bare `text-secondary` icon).
  */
 export function ArchiveVideoTile({
   src,
   alt,
   aspect,
   loopDelayMs = 0,
+  playbackRate = 1,
 }: ArchiveVideoTileProps) {
   const reduceMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -57,18 +60,18 @@ export function ArchiveVideoTile({
   useEffect(() => {
     const node = videoRef.current;
     if (!node) return;
+    node.playbackRate = playbackRate;
     if (reduceMotion || paused) {
       clearLoopTimeout();
       node.pause();
       return;
     }
-    // Resume after an end-hold pause: clip has already finished.
     if (delayedLoop && node.ended) {
       restartFromStart();
       return;
     }
     void node.play().catch(() => {});
-  }, [paused, reduceMotion, src, delayedLoop]);
+  }, [paused, reduceMotion, src, delayedLoop, playbackRate]);
 
   const onEnded = () => {
     if (!delayedLoop || pausedRef.current || reduceMotion) return;
@@ -90,7 +93,7 @@ export function ArchiveVideoTile({
       src={src}
       className={
         cropped
-          ? "absolute inset-0 h-full w-full object-cover"
+          ? "absolute inset-0 h-full w-full object-cover object-center"
           : "h-auto w-full"
       }
       autoPlay={!reduceMotion}
