@@ -8,20 +8,24 @@ import { avatars } from "@/content/avatars";
 export const hero: HeroProps = {
   name: "Jake Villaseñor",
   lead: "is a",
-  role: "digital product designer",
+  role: "product designer",
   avatarImages: avatars,
   tagline: [
-    "untangling complexity and optimizing experiences",
-    "for ease, connection, and delight.",
+    "building digital experiences that help people",
+    "find answers and decide what to do next.",
   ],
   current: {
-    prefix: "Currently building developer tools to optimize dashboard production at",
+    prefix: "Currently designing an internal catalog for 850+ BI dashboards at",
     link: { label: "StepStone Group", href: "https://www.stepstonegroup.com/" },
     suffix: ".",
   },
   previous: {
-    prefix: "Previously designing multi-agent LLM systems at",
-    link: { label: "ProtoLab", href: "https://protolab.ucsd.edu/" },
+    prefix: "Previously designed the interface and interaction model for a multi-agent LLM system at",
+    link: {
+      label: "ScienceJury",
+      href: "/work/science-jury",
+      previewImage: "/work/science-jury/sj-cover-image.webp",
+    },
     suffix: ".",
   },
 };

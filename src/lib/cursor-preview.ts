@@ -1,7 +1,8 @@
 /**
  * Shared geometry for cursor-following media previews (inline case-study
- * rows + skip CTA). Width matches `w-60`; height is derived from the
- * `aspect-[842/540]` ratio so the frame can sit above the cursor reliably.
+ * rows + skip CTA + hero links). Width matches `w-60`; height is derived
+ * from the `aspect-[842/540]` ratio so the frame can sit above the cursor
+ * reliably.
  */
 export const CURSOR_PREVIEW_WIDTH = 240; // px (w-60)
 export const CURSOR_PREVIEW_HEIGHT = Math.round(
@@ -9,6 +10,11 @@ export const CURSOR_PREVIEW_HEIGHT = Math.round(
 );
 /** px to the right of the cursor (`top-right` placement). */
 export const CURSOR_PREVIEW_HORIZONTAL_GAP = 40;
+/**
+ * px to the right of the cursor (`right` placement — hero links). Larger so
+ * the frame clears inline copy beside the pointer.
+ */
+export const CURSOR_PREVIEW_HORIZONTAL_GAP_RIGHT = 72;
 /** px above the cursor (`top-right` placement — inline rows). */
 export const CURSOR_PREVIEW_VERTICAL_GAP = 16;
 /**
@@ -17,7 +23,7 @@ export const CURSOR_PREVIEW_VERTICAL_GAP = 16;
  */
 export const CURSOR_PREVIEW_VERTICAL_GAP_ABOVE = 56;
 
-export type CursorPreviewPlacement = "top-right" | "top";
+export type CursorPreviewPlacement = "top-right" | "top" | "right";
 
 /** Fixed `left` / `top` for a cursor-follow frame at `point`. */
 export function cursorPreviewPosition(
@@ -28,6 +34,12 @@ export function cursorPreviewPosition(
     return {
       left: point.x - CURSOR_PREVIEW_WIDTH / 2,
       top: point.y - CURSOR_PREVIEW_HEIGHT - CURSOR_PREVIEW_VERTICAL_GAP_ABOVE,
+    };
+  }
+  if (placement === "right") {
+    return {
+      left: point.x + CURSOR_PREVIEW_HORIZONTAL_GAP_RIGHT,
+      top: point.y - CURSOR_PREVIEW_HEIGHT / 2,
     };
   }
   return {

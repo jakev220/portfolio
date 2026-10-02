@@ -103,7 +103,7 @@ export const about: AboutContent = {
   ],
   lede: {
     label: "About",
-    body: "I'm a designer, systems-thinker, and strategist that specializes in untangling messy workflows so people can get on with their day better and faster. Currently building internal developer tools to reduce friction and improve visual consistency in dashboard production at StepStone Group.",
+    body: "I'm a product designer who specializes in untangling messy workflows and turning them into experiences that help people move on with their day. At StepStone Group, I'm designing and building internal tools that keep a growing collection of 850+ business intelligence dashboards findable, usable, and visually consistent.",
   },
   blocks: [
     {

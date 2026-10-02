@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import { CursorFollowPreview } from "@/components/CursorFollowPreview";
 import { HeroAvatar, type AvatarImage } from "@/components/HeroAvatar";
 import { HeroFolder } from "@/components/HeroFolder";
-import { externalLinkProps, isExternalHref } from "@/lib/links";
+import { Link } from "@/components/Link";
 import {
   EXIT_EASE,
   HOME_EXIT_EVENT,
@@ -12,10 +14,15 @@ import {
 } from "@/lib/about-transition";
 
 export interface HeroLink {
-  /** Visible link text (the trailing ↗ is added by the component). */
+  /** Visible link text (trailing → / ↗ added by `Link`). */
   label: string;
   /** Destination. */
   href: string;
+  /**
+   * Optional single still for a cursor-follow preview on fine-pointer hover
+   * (e.g. case-study cover). Decorative; omit for a plain text link.
+   */
+  previewImage?: string;
 }
 
 export interface HeroSubItem {
@@ -44,23 +51,54 @@ export interface HeroProps {
   avatarImages?: AvatarImage[];
 }
 
-/**
- * Subhero sentence with a single inline accent link. The link styling mirrors
- * the case-study cards and will be replaced by the shared Link component later.
- */
+/** Subhero sentence with a single inline accent link (`→` in-site, `↗` out). */
 function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
+  const hoverCapable = useRef(false);
+  const [visible, setVisible] = useState(false);
+  const [point, setPoint] = useState({ x: 0, y: 0 });
+
+  const previewImage = link.previewImage;
+  const hasPreview = Boolean(previewImage);
+
+  useEffect(() => {
+    hoverCapable.current = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    ).matches;
+  }, []);
+
+  const showPreview = () => {
+    if (!hasPreview || !hoverCapable.current) return;
+    setVisible(true);
+  };
+  const trackCursor = (event: MouseEvent) => {
+    if (!hasPreview || !hoverCapable.current) return;
+    setPoint({ x: event.clientX, y: event.clientY });
+  };
+  const hidePreview = () => setVisible(false);
+
   return (
     <p>
       {prefix}{" "}
-      <a
-        href={link.href}
-        {...externalLinkProps(link.href)}
-        className="text-accent underline underline-offset-2 transition-opacity hover:opacity-70"
+      <span
+        className="inline"
+        onMouseEnter={showPreview}
+        onMouseMove={trackCursor}
+        onMouseLeave={hidePreview}
       >
-        {link.label}
-        {isExternalHref(link.href) && <span aria-hidden> ↗</span>}
-      </a>
+        <Link href={link.href}>{link.label}</Link>
+      </span>
       {suffix}
+      {previewImage ? (
+        <CursorFollowPreview visible={visible} point={point} placement="right">
+          <Image
+            src={previewImage}
+            alt=""
+            fill
+            sizes="240px"
+            className="object-cover"
+          />
+        </CursorFollowPreview>
+      ) : null}
     </p>
   );
 }
