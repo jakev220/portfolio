@@ -16,7 +16,11 @@ export const hero: HeroProps = {
   ],
   current: {
     prefix: "Currently designing an internal catalog for 850+ BI dashboards at",
-    link: { label: "StepStone Group", href: "https://www.stepstonegroup.com/" },
+    link: {
+      label: "StepStone Group",
+      disabled: true,
+      previewLabel: "Work in progress...",
+    },
     suffix: ".",
   },
   previous: {

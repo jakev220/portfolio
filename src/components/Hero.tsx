@@ -16,13 +16,23 @@ import {
 export interface HeroLink {
   /** Visible link text (trailing → / ↗ added by `Link`). */
   label: string;
-  /** Destination. */
-  href: string;
+  /** Destination. Omit when `disabled` — nothing to navigate to yet. */
+  href?: string;
+  /**
+   * Non-navigating in-site link (trailing `→`). Pair with `previewLabel` for
+   * a “work in progress” cursor-follow frame.
+   */
+  disabled?: boolean;
   /**
    * Optional single still for a cursor-follow preview on fine-pointer hover
    * (e.g. case-study cover). Decorative; omit for a plain text link.
    */
   previewImage?: string;
+  /**
+   * Empty cursor-follow frame with this label centered (e.g. “Work in
+   * progress”). Ignored when `previewImage` is set.
+   */
+  previewLabel?: string;
 }
 
 export interface HeroSubItem {
@@ -58,7 +68,8 @@ function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
   const [point, setPoint] = useState({ x: 0, y: 0 });
 
   const previewImage = link.previewImage;
-  const hasPreview = Boolean(previewImage);
+  const previewLabel = previewImage ? undefined : link.previewLabel;
+  const hasPreview = Boolean(previewImage || previewLabel);
 
   useEffect(() => {
     hoverCapable.current = window.matchMedia(
@@ -85,18 +96,28 @@ function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
         onMouseMove={trackCursor}
         onMouseLeave={hidePreview}
       >
-        <Link href={link.href}>{link.label}</Link>
+        <Link href={link.href} disabled={link.disabled}>
+          {link.label}
+        </Link>
       </span>
       {suffix}
-      {previewImage ? (
+      {hasPreview ? (
         <CursorFollowPreview visible={visible} point={point} placement="right">
-          <Image
-            src={previewImage}
-            alt=""
-            fill
-            sizes="240px"
-            className="object-cover"
-          />
+          {previewImage ? (
+            <Image
+              src={previewImage}
+              alt=""
+              fill
+              sizes="240px"
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center px-4">
+              <p className="text-label text-secondary m-0 text-center">
+                {previewLabel}
+              </p>
+            </div>
+          )}
         </CursorFollowPreview>
       ) : null}
     </p>
