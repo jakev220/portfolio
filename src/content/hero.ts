@@ -20,9 +20,9 @@ export const hero: HeroProps = {
     suffix: ".",
   },
   previous: {
-    prefix: "Previously designed the interface and interaction model for a multi-agent LLM system at",
+    prefix: "Previously designed a multi-agent LLM system for academic writing at",
     link: {
-      label: "ScienceJury",
+      label: "ProtoLab",
       href: "/work/science-jury",
       previewImage: "/work/science-jury/sj-cover-image.webp",
     },

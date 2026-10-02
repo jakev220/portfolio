@@ -10,6 +10,7 @@ import { keepExploring } from "@/content/keep-exploring";
 import { CaseStudyHeader } from "@/components/CaseStudyHeader";
 import { CaseStudyToc } from "@/components/case-study/CaseStudyToc";
 import { KeepExploring } from "@/components/case-study/KeepExploring";
+import { stripAccentMarkers } from "@/components/case-study/Accent";
 import { MDXContent } from "@/components/MDXContent";
 import { MediaLightboxProvider } from "@/components/media-lightbox/MediaLightboxProvider";
 
@@ -42,7 +43,7 @@ export async function generateMetadata({
   if (!work) return {};
   return {
     title: work.name,
-    description: work.description || work.title,
+    description: stripAccentMarkers(work.description || work.title),
   };
 }
 

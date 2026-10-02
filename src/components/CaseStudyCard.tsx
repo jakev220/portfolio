@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Accent, parseAccentedText } from "@/components/case-study/Accent";
 import { CaseStudyCardInline } from "@/components/CaseStudyCardInline";
 import { Link } from "@/components/Link";
 import { externalLinkProps } from "@/lib/links";
@@ -80,8 +81,16 @@ export function CaseStudyCard({
         {/* title — text-h3 (subordinate to the hero's text-h2) */}
         <h3 className="text-h3 text-heading">{title}</h3>
 
-        {/* description */}
-        <p className="text-body">{description}</p>
+        {/* description — `**phrase**` in content becomes an Accent span */}
+        <p className="text-body">
+          {parseAccentedText(description).map((part, index) =>
+            part.accent ? (
+              <Accent key={index}>{part.text}</Accent>
+            ) : (
+              <span key={index}>{part.text}</span>
+            ),
+          )}
+        </p>
       </div>
 
       {/* Text CTA — shared Link owns accent style + inbound `→` / outbound `↗`. */}
