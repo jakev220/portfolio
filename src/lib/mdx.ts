@@ -71,7 +71,10 @@ const DEFAULT_FRONTMATTER: WorkFrontmatter = {
 
 function readWorkFiles(): string[] {
   if (!fs.existsSync(WORK_DIR)) return [];
-  return fs.readdirSync(WORK_DIR).filter((file) => file.endsWith(".mdx"));
+  // Skip `_*.mdx` private/draft helpers — not public case studies.
+  return fs
+    .readdirSync(WORK_DIR)
+    .filter((file) => file.endsWith(".mdx") && !file.startsWith("_"));
 }
 
 function toSlug(filename: string): string {
@@ -124,14 +127,18 @@ export function getNextWork(slug: string): WorkMeta | null {
 }
 
 /**
- * Reads a single case study (metadata + raw MDX body) by slug.
- * Returns `null` when the file does not exist.
+ * Reads a single published case study (metadata + raw MDX body) by slug.
+ * Returns `null` when the file is missing, private (`_*.mdx`), or unpublished.
  */
 export function getWorkBySlug(slug: string): Work | null {
+  if (slug.startsWith("_")) return null;
+
   const filePath = path.join(WORK_DIR, `${slug}.mdx`);
   if (!fs.existsSync(filePath)) return null;
 
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
-  return { slug, ...parseFrontmatter(data), content };
+  const work = { slug, ...parseFrontmatter(data), content };
+  if (!work.published) return null;
+  return work;
 }

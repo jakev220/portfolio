@@ -14,7 +14,9 @@ import { stripAccentMarkers } from "@/components/case-study/Accent";
 import { MDXContent } from "@/components/MDXContent";
 import { MediaLightboxProvider } from "@/components/media-lightbox/MediaLightboxProvider";
 
-/** Pre-render published case studies; drafts still resolve on-demand in dev. */
+/** Only published case studies are routable (unknown slugs → 404). */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return getAllWorkSlugs().map((slug) => ({ slug }));
 }
@@ -51,10 +53,6 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   const { slug } = await params;
   const work = getWorkBySlug(slug);
   if (!work) notFound();
-
-  // NOTE: intentionally not gating on `work.published` yet so drafts are
-  // previewable while writing. Add a `!work.published && notFound()` guard
-  // here before launch.
 
   const paletteStyle = caseStudyPaletteStyle(slug);
   const nextWork = getNextWork(slug);
