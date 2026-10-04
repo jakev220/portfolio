@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { about } from "@/content/about";
+import { keepExploring, keepExploringPair } from "@/content/keep-exploring";
 import { AboutHero } from "@/components/about/AboutHero";
 import { AboutProse } from "@/components/about/AboutProse";
 import { AboutJourney } from "@/components/about/AboutJourney";
 import { HangStatement } from "@/components/HangStatement";
+import { KeepExploring } from "@/components/case-study/KeepExploring";
 
 export const metadata: Metadata = {
   title: "About",
@@ -47,6 +49,11 @@ export default function AboutPage() {
             gallery={block.gallery}
           />
         ))}
+
+        <KeepExploring
+          heading={keepExploring.heading}
+          tiles={keepExploringPair("about")}
+        />
       </div>
     </article>
   );

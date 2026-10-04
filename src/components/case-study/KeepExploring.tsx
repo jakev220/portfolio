@@ -13,32 +13,76 @@ export interface KeepExploringNext {
   image?: string;
 }
 
-export interface KeepExploringProps {
+export interface KeepExploringCollageProps {
   heading: string;
+  /** Case-study collage: About + Archive stacked, next project spanning. */
   about: KeepExploringTile;
   archive: KeepExploringTile;
   next: KeepExploringNext;
+  /** Ignored when collage props are set — use {@link KeepExploringPairProps}. */
+  tiles?: never;
 }
 
-/**
- * Case-study end collage: About + Archive stacked on a 4-col rail, next project
- * spanning 8 cols / both rows. Gutters match case-study rows (`gap-4`).
- */
-export function KeepExploring({
+export interface KeepExploringPairProps {
+  heading: string;
+  /** Equal two-column tiles (About / Archive pages). */
+  tiles: KeepExploringTile[];
+  about?: never;
+  archive?: never;
+  next?: never;
+}
+
+export type KeepExploringProps = KeepExploringCollageProps | KeepExploringPairProps;
+
+function PairGrid({
   heading,
-  about,
-  archive,
-  next,
-}: KeepExploringProps) {
+  tiles,
+}: {
+  heading: string;
+  tiles: KeepExploringTile[];
+}) {
   return (
     <section
       className="flex flex-col gap-6 sm:gap-8"
       aria-labelledby="keep-exploring-heading"
     >
-      <h2
-        id="keep-exploring-heading"
-        className="text-h2 text-heading m-0"
-      >
+      <h2 id="keep-exploring-heading" className="text-h2 text-heading m-0">
+        {heading}
+      </h2>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {tiles.map((tile) => (
+          <ExploreTile
+            key={tile.href}
+            label={tile.label}
+            href={tile.href}
+            images={tile.images}
+            className="aspect-[5/3]"
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * End-of-page collage. Case studies use About + Archive + next project;
+ * About / Archive pass `tiles` for an equal two-column pair.
+ */
+export function KeepExploring(props: KeepExploringProps) {
+  if ("tiles" in props && props.tiles) {
+    return <PairGrid heading={props.heading} tiles={props.tiles} />;
+  }
+
+  const { heading, about, archive, next } = props as KeepExploringCollageProps;
+
+  return (
+    <section
+      className="flex flex-col gap-6 sm:gap-8"
+      aria-labelledby="keep-exploring-heading"
+    >
+      <h2 id="keep-exploring-heading" className="text-h2 text-heading m-0">
         {heading}
       </h2>
 

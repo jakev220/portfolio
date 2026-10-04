@@ -112,16 +112,16 @@ export const about: AboutContent = {
       body: [
         "I've always been drawn to digital experiences that make life feel a little smoother and keep people connected long before I even considered design as a career.", 
         "That curiosity led me to study human-computer interaction at UC San Diego, where I learned to look under the hood of how people interact with technology and how we can apply design principles to make those experiences better.",
-        "My work aims to strike a balance between empathy, logic, and innovation. I believe every good solution starts with listening to the people you're designing for and deeply understanding their frustrations and what helps them accomplish their goals. I view problems as puzzles to be solved, and use constraints as a means to a solution that brings value to everyone involved.",
+        "My work aims to strike a balance between empathy, logic, and innovation. I believe every good solution starts with listening to the people you're designing for, deeply understanding their frustrations, and understanding what helps them accomplish their goals. I view problems as puzzles to be solved, and use constraints as a means to a solution that brings value to everyone involved.",
       ],
     },
     {
       type: "prose",
-      heading: "Me, outside of design",
+      heading: "Hobbies",
       body: [
-        "When I'm not designing, you might find me sipping an iced lemon black tea, getting outdoors with my friends, cycling through genres of music, working out, and documenting my life on BeReal.",
+        "Outside of work, you’ll usually find me keeping active, chasing down new music, or trying a recipe I saw online. I’m a big fan of San Diego sunsets, live concerts, and spending time at the beach with good food and better company.",
+        "I’m also the kind of person who loves streaks. I have a streak of 1,600+ days on BeReal, plus a daily rotation of NYT and LinkedIn puzzles. At this point, breaking the streak feels almost disrespectful.",
       ],
-      gallery: [{ alt: "" }, { alt: "" }, { alt: "" }, { alt: "" }],
     },
   ],
   resumeHeading: "Journey",

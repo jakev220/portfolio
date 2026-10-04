@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { archive } from "@/content/archive";
+import { keepExploring, keepExploringPair } from "@/content/keep-exploring";
 import { ArchiveMosaic } from "@/components/archive/ArchiveMosaic";
+import { KeepExploring } from "@/components/case-study/KeepExploring";
 
 export const metadata: Metadata = {
   title: archive.title,
@@ -24,6 +26,11 @@ export default function ArchivePage() {
         </header>
 
         <ArchiveMosaic items={archive.items} />
+
+        <KeepExploring
+          heading={keepExploring.heading}
+          tiles={keepExploringPair("archive")}
+        />
       </div>
     </main>
   );

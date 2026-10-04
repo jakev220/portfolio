@@ -1,9 +1,7 @@
-import { avatars } from "@/content/avatars";
-
 export interface ExploreLinkTile {
   label: string;
   href: string;
-  /** Stills cycled on hover (avatar-style instant cuts). */
+  /** Cover still(s). Multiple enable hover cycling; one is a static zoom. */
   images: string[];
 }
 
@@ -13,34 +11,39 @@ export interface ExploreProjectFallback {
 }
 
 /**
- * Case-study end collage (“Keep exploring”). Edit copy / stills here —
- * components stay content-agnostic. Next-project cover comes from work
- * frontmatter via {@link getNextWork}.
+ * “Keep exploring” collage copy / stills. Case-study pages use about + archive
+ * + next-project; About / Archive use a two-up pair via {@link keepExploringPair}.
  */
 export const keepExploring = {
   heading: "Keep exploring",
   about: {
     label: "About",
     href: "/about",
-    images: [
-      avatars[0].src,
-      avatars[1].src,
-      avatars[2].src,
-      avatars[3].src,
-      "/photos/jake-speaking.webp",
-    ],
+    // Wide still — square portraits crop poorly in the 5/3 tile.
+    images: ["/avatar/jake-1-wide.webp"],
   } satisfies ExploreLinkTile,
   archive: {
     label: "Archive",
     href: "/archive",
-    images: [
-      "/photos/dfa-ux-panel.webp",
-      "/photos/ps-design-dinner.webp",
-      "/photos/jake-speaking.webp",
-      "/avatar/jake-4-wide.webp",
-    ],
+    images: ["/photos/archive/walkman-app-photo.webp"],
+  } satisfies ExploreLinkTile,
+  /** Featured case study for About / Archive keep-exploring pairs. */
+  featuredWork: {
+    label: "ScienceJury",
+    href: "/work/science-jury",
+    images: ["/work/science-jury/sj-cover-image.webp"],
   } satisfies ExploreLinkTile,
   nextProjectFallback: {
-    label: "More soon",
+    label: "More case studies coming soon",
   } satisfies ExploreProjectFallback,
 } as const;
+
+/** Two-up destinations for a page that isn’t one of these hubs. */
+export function keepExploringPair(
+  exclude: "about" | "archive",
+): [ExploreLinkTile, ExploreLinkTile] {
+  if (exclude === "about") {
+    return [keepExploring.archive, keepExploring.featuredWork];
+  }
+  return [keepExploring.about, keepExploring.featuredWork];
+}

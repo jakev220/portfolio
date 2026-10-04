@@ -5,10 +5,32 @@ import { Footer } from "@/components/Footer";
 import { footer } from "@/content/footer";
 import { navItems } from "@/content/nav";
 
+const siteDescription =
+  "Jake Villaseñor is a product designer building digital experiences that help people find answers and decide what to do next.";
+
 export const metadata: Metadata = {
-  // TODO: replace with real site metadata
-  title: "Portfolio",
-  description: "",
+  metadataBase: new URL("https://jakevillasenor.com"),
+  title: {
+    default: "Jake Villaseñor – Product Designer",
+    template: "%s · Jake Villaseñor",
+  },
+  description: siteDescription,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://jakevillasenor.com",
+    siteName: "Jake Villaseñor",
+    title: "Jake Villaseñor – Product Designer",
+    description: siteDescription,
+    // Drop the file at `public/og.png` (1200×630 recommended).
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Jake Villaseñor" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jake Villaseñor – Product Designer",
+    description: siteDescription,
+    images: ["/og.png"],
+  },
 };
 
 /**
