@@ -8,6 +8,7 @@ import {
 } from "@/lib/case-study-palette";
 import { keepExploring } from "@/content/keep-exploring";
 import { CaseStudyHeader } from "@/components/CaseStudyHeader";
+import { CaseStudyBack } from "@/components/case-study/CaseStudyBack";
 import { CaseStudyToc } from "@/components/case-study/CaseStudyToc";
 import { KeepExploring } from "@/components/case-study/KeepExploring";
 import { stripAccentMarkers } from "@/components/case-study/Accent";
@@ -73,9 +74,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   // those wrappers so `position: fixed` isn’t affected by `transform`.
   return (
     <MediaLightboxProvider>
+      <CaseStudyBack />
       <article
         data-case-study={slug}
-        className="relative mx-auto w-full min-w-0 max-w-7xl px-6 pb-16 pt-32 sm:pb-24 sm:pt-48 lg:pt-64"
+        className="relative mx-auto w-full min-w-0 max-w-7xl px-6 pb-16 pt-40 sm:pb-24 sm:pt-48 lg:pt-64"
         style={paletteStyle}
       >
         <CaseStudyToc />

@@ -18,13 +18,13 @@ export default function HomePage() {
     coverAlt: item.title,
   }));
 
-  // Top padding (pt-64 ≈ 258px) is a Tailwind-default placeholder for the
-  // hero's offset from the top of the page; refine with custom spacing later.
-  // The hero, toggle, and grid stack with no extra gap — each section owns its
-  // own padding. Site footer lives in the root layout.
+  // Desktop: ~90dvh (incl. nav clearance) so Work peeks ~10%.
+  // Mobile/tablet: normal hero bottom padding — the 90dvh spacer is too tall.
   return (
-    <main className="mx-auto w-full max-w-7xl px-6 pt-64">
-      <Hero {...hero} />
+    <main className="mx-auto w-full max-w-7xl px-6">
+      <div className="flex flex-col pt-32 md:pt-48 lg:min-h-[90dvh] lg:pt-64">
+        <Hero {...hero} />
+      </div>
       <HomeExitShell>
         <WorkSection items={work} />
       </HomeExitShell>

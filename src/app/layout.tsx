@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { ThemeInitScript } from "@/components/ThemeInitScript";
 import { footer } from "@/content/footer";
 import { navItems } from "@/content/nav";
 
@@ -34,10 +35,10 @@ export const metadata: Metadata = {
 };
 
 /**
- * Applies the saved (or system) theme before first paint to avoid a flash of
- * the wrong theme. Mirrors the persistence logic in ThemeToggle.
+ * Applies the saved theme before first paint. Unset → light. `system` follows
+ * prefers-color-scheme; `dark` forces dark. Does not follow OS when unset.
  */
-const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();`;
+const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -45,11 +46,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
+    <html lang="en" suppressHydrationWarning>
       <body className="font-sans text-body min-h-dvh bg-bg">
+        <ThemeInitScript script={themeInitScript} />
         <div className="relative flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip">
           <Nav items={navItems} />
           <div className="flex w-full min-w-0 flex-1 flex-col">{children}</div>

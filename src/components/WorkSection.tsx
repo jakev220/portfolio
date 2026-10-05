@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import {
   CaseStudyCard,
   type CaseStudyCardProps,
@@ -16,22 +16,46 @@ export interface WorkSectionProps {
   items: WorkItem[];
 }
 
+const MD_UP = "(min-width: 768px)";
+
+function subscribeMdUp(onChange: () => void) {
+  const mq = window.matchMedia(MD_UP);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function useIsMdUp() {
+  return useSyncExternalStore(
+    subscribeMdUp,
+    () => window.matchMedia(MD_UP).matches,
+    () => false,
+  );
+}
+
 /**
- * Home-page work section: a right-aligned view toggle stacked directly above
- * the case-study grid. The toggle carries no vertical padding; the grid
- * container owns the 64px top/bottom spacing (Tailwind-default placeholders,
- * responsive — refine with custom spacing later).
+ * Home-page work section. Mobile (`< md`): always card grid, no toggle.
+ * Tablet and up: toggle + user-selected view (default stack).
  */
 export function WorkSection({ items }: WorkSectionProps) {
-  const [variant, setVariant] = useState<CaseStudyCardVariant>("stack");
+  const isMdUp = useIsMdUp();
+  const [desktopVariant, setDesktopVariant] =
+    useState<CaseStudyCardVariant>("stack");
+
+  // Viewport wins on mobile so a desktop stack choice can’t stick after resize.
+  const variant: CaseStudyCardVariant = isMdUp ? desktopVariant : "card";
 
   return (
-    <section aria-label="Selected work">
-      <div className="flex justify-end">
-        <WorkViewToggle value={variant} onChange={setVariant} />
+    <section aria-label="Selected work" className="relative">
+      {/* Sit in the hero’s lower empty space so cards can peek at the fold;
+          in-flow placement + grid pt ate the entire ~10% peek. */}
+      <div className="absolute bottom-full right-0 mb-12 hidden justify-end md:flex md:mb-16">
+        <WorkViewToggle
+          value={desktopVariant}
+          onChange={setDesktopVariant}
+        />
       </div>
 
-      <div className="py-12 md:py-16">
+      <div className="pb-12 md:pb-16">
         <WorkGrid variant={variant}>
           {items.map((item, index) => (
             <CaseStudyCard key={index} {...item} variant={variant} />

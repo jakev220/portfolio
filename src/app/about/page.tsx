@@ -20,9 +20,13 @@ const [biography, ...restBlocks] = about.blocks;
  */
 export default function AboutPage() {
   return (
-    <article className="mx-auto w-full max-w-7xl px-6 pt-64 pb-24">
-      <div className="flex flex-col gap-40">
+    <article className="mx-auto w-full max-w-7xl px-6 pb-24">
+      {/* Desktop: 90dvh peek of the lede. Mobile/tablet: token bottom padding. */}
+      <div className="flex flex-col pt-32 pb-32 md:pt-48 md:pb-48 lg:min-h-[90dvh] lg:pt-64 lg:pb-0">
         <AboutHero greeting={about.greeting} photos={about.heroPhotos} />
+      </div>
+
+      <div className="flex flex-col gap-40">
         <HangStatement
           label={about.lede.label}
           body={about.lede.body}

@@ -7,14 +7,15 @@ export interface AboutHeroCollageProps {
 
 /**
  * 2×2 bento collage: wide + square on row 1, square + wide on row 2.
- * Expects four photos in that order. 16px gaps; tiles use `rounded-xl`.
+ * Expects four photos in that order. Gaps step up with viewport (`gap-2` →
+ * `md:gap-3` → `lg:gap-4`); tiles use `rounded-xl`.
  * Entrance stagger is CSS (`.about-hero-tile-*`) so it starts on first paint.
  */
 export function AboutHeroCollage({ photos }: AboutHeroCollageProps) {
   const [topWide, topSquare, bottomSquare, bottomWide] = photos;
 
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-2 md:gap-3 lg:gap-4">
       <CollageRow
         wide={topWide}
         square={topSquare}
@@ -62,7 +63,7 @@ function CollageRow({
 
   return (
     <div
-      className={`grid gap-4 ${
+      className={`grid gap-2 md:gap-3 lg:gap-4 ${
         wideFirst ? "grid-cols-[416fr_200fr]" : "grid-cols-[200fr_416fr]"
       }`}
     >

@@ -91,7 +91,7 @@ function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
     <p>
       {prefix}{" "}
       <span
-        className="inline"
+        className="whitespace-nowrap"
         onMouseEnter={showPreview}
         onMouseMove={trackCursor}
         onMouseLeave={hidePreview}
@@ -99,8 +99,8 @@ function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
         <Link href={link.href} disabled={link.disabled}>
           {link.label}
         </Link>
+        {suffix}
       </span>
-      {suffix}
       {hasPreview ? (
         <CursorFollowPreview visible={visible} point={point} placement="right">
           {previewImage ? (
@@ -174,10 +174,10 @@ export function Hero({
   const play = exiting && !reduceMotion;
 
   return (
-    <section className="hero-enter flex flex-col gap-4 pt-16 pb-32 md:pb-48">
+    <section className="hero-enter flex flex-col gap-4 pt-8 pb-32 md:pt-16 md:pb-48 lg:pb-0">
       {/* hero text — semantic h1, visually text-h2 */}
       <h1 className="text-h2">
-        <span className="flex flex-wrap items-center gap-x-[7px] gap-y-1">
+        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <HeroAvatar name={name} images={avatarImages} />
           <ExitFade play={play} className="text-secondary">
             {lead}
@@ -186,11 +186,11 @@ export function Hero({
             <HeroFolder role={role} />
           </ExitFade>
         </span>
-        <ExitFade play={play} className="block text-secondary">
-          {tagline[0]}
-        </ExitFade>
-        <ExitFade play={play} className="block text-secondary">
-          {tagline[1]}
+        {/* One continuous wrapping block (avoids hard line breaks that reflow
+            oddly on narrow screens), capped so the measure matches the old
+            two-line desktop width. */}
+        <ExitFade play={play} className="block max-w-2xl text-secondary">
+          {tagline[0]} {tagline[1]}
         </ExitFade>
       </h1>
 

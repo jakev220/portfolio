@@ -1,17 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "@/components/Icon";
 import { useMediaLightbox } from "@/components/media-lightbox/MediaLightboxProvider";
+
+const SWIPE_THRESHOLD_PX = 48;
 
 /**
  * Full-viewport media overlay. Near-opaque dark (light theme) / light (dark
  * theme) scrim so the case study is barely visible; white panel holds media,
  * caption, and controls. Esc / scrim click / close to dismiss; scroll locked.
  * Videos: YouTube-style center play/pause (click, Space); play stays centered
- * while paused.
+ * while paused. Touch: horizontal swipe between gallery items (arrows remain).
  */
 export function MediaLightbox() {
   const { items, activeIndex, isOpen, close, next, prev, goTo } =
@@ -19,6 +27,9 @@ export function MediaLightbox() {
   const closeRef = useRef<HTMLButtonElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const flashTimeoutRef = useRef<number | null>(null);
+  const swipeStartX = useRef<number | null>(null);
+  const swipeStartY = useRef<number | null>(null);
+  const swipeLocked = useRef<"h" | "v" | null>(null);
   const [playing, setPlaying] = useState(true);
   const [flash, setFlash] = useState<{
     icon: "play" | "pause";
@@ -75,7 +86,6 @@ export function MediaLightbox() {
       width: body.style.width,
     };
 
-    // Lock scroll without leaving the page free to move behind the overlay.
     documentElement.style.overflow = "hidden";
     body.style.overflow = "hidden";
     body.style.position = "fixed";
@@ -148,6 +158,41 @@ export function MediaLightbox() {
     };
   }, [active?.video, activeIndex]);
 
+  const onSwipePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!showNav) return;
+    swipeStartX.current = event.clientX;
+    swipeStartY.current = event.clientY;
+    swipeLocked.current = null;
+  };
+
+  const onSwipePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (swipeStartX.current === null || swipeStartY.current === null) return;
+    const dx = event.clientX - swipeStartX.current;
+    const dy = event.clientY - swipeStartY.current;
+    if (!swipeLocked.current) {
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      swipeLocked.current = Math.abs(dx) >= Math.abs(dy) ? "h" : "v";
+    }
+  };
+
+  const onSwipePointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (swipeStartX.current === null) return;
+    const dx = event.clientX - swipeStartX.current;
+    const horizontal = swipeLocked.current === "h";
+    swipeStartX.current = null;
+    swipeStartY.current = null;
+    swipeLocked.current = null;
+    if (!horizontal || Math.abs(dx) < SWIPE_THRESHOLD_PX) return;
+    if (dx < 0) next();
+    else prev();
+  };
+
+  const onSwipePointerCancel = () => {
+    swipeStartX.current = null;
+    swipeStartY.current = null;
+    swipeLocked.current = null;
+  };
+
   if (!isOpen || !active || typeof document === "undefined") return null;
 
   return createPortal(
@@ -155,7 +200,7 @@ export function MediaLightbox() {
       role="dialog"
       aria-modal="true"
       aria-label={caption || "Expanded media"}
-      className="fixed inset-0 z-[60] flex cursor-pointer flex-col items-center justify-center bg-lightbox-scrim px-6 py-16 sm:px-10 sm:py-20"
+      className="fixed inset-0 z-[60] flex cursor-pointer flex-col items-center justify-center bg-lightbox-scrim px-4 py-12 sm:px-10 sm:py-20"
       onClick={close}
     >
       <button
@@ -165,28 +210,33 @@ export function MediaLightbox() {
           event.stopPropagation();
           close();
         }}
-        className="absolute right-4 top-4 z-10 cursor-pointer rounded-lg p-2 text-bg transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:right-6 sm:top-6"
+        className="absolute right-3 top-3 z-10 cursor-pointer rounded-lg p-2 text-bg transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:right-6 sm:top-6"
         aria-label="Close"
       >
         <Icon name="close" size={24} />
       </button>
 
       <div
-        className="flex w-full max-w-5xl cursor-default flex-col items-center gap-6 rounded-xl bg-lightbox-panel px-4 py-4 sm:gap-8 sm:px-6 sm:py-6"
+        className="flex w-full min-w-0 max-w-lg cursor-default flex-col items-center gap-4 overflow-hidden rounded-xl bg-lightbox-panel px-3 py-3 sm:gap-6 sm:px-6 sm:py-6 md:max-w-3xl lg:max-w-5xl"
         onClick={(event) => event.stopPropagation()}
       >
         {/*
-          Fixed stage so the panel size stays stable across gallery items.
-          Media is capped to the stage (scale-down only) and centered — smaller
-          assets keep their intrinsic size/quality instead of being upscaled.
+          Fixed stage at every breakpoint (same idea as desktop): panel height
+          stays stable across gallery items; shorter media is centered.
         */}
-        <div className="relative flex h-[min(65vh,680px)] w-full items-center justify-center">
+        <div
+          className="relative flex h-[min(32dvh,260px)] w-full touch-pan-y items-center justify-center sm:h-[min(42dvh,360px)] md:h-[min(56dvh,560px)] lg:h-[min(70dvh,720px)]"
+          onPointerDown={onSwipePointerDown}
+          onPointerMove={onSwipePointerMove}
+          onPointerUp={onSwipePointerUp}
+          onPointerCancel={onSwipePointerCancel}
+        >
           {active.video ? (
             <div className="relative inline-flex max-h-full max-w-full">
               <video
                 ref={videoRef}
                 key={active.video}
-                className="h-auto max-h-[min(65vh,680px)] w-auto max-w-full cursor-pointer rounded-lg object-contain"
+                className="h-auto max-h-full w-auto max-w-full cursor-pointer rounded-lg object-contain"
                 src={active.video}
                 poster={active.poster}
                 muted
@@ -236,31 +286,35 @@ export function MediaLightbox() {
               height={1000}
               unoptimized
               className="h-auto max-h-full w-auto max-w-full rounded-lg object-contain"
-              sizes="(min-width: 1024px) 1024px, 100vw"
+              sizes="(min-width: 1024px) 64rem, (min-width: 768px) 48rem, 100vw"
               priority
+              draggable={false}
             />
           ) : null}
         </div>
 
-        <p className="text-h3 m-0 flex min-h-[3rem] max-w-2xl items-center justify-center text-center text-secondary">
+        <p className="text-caption m-0 w-full text-center text-secondary">
           {caption || "\u00a0"}
         </p>
 
         {showNav ? (
           <nav
-            className="flex items-center gap-4"
+            className="flex w-full min-w-0 max-w-full items-center gap-2 sm:gap-4"
             aria-label="Media gallery"
           >
             <button
               type="button"
               onClick={prev}
-              className="cursor-pointer rounded-lg p-1.5 text-secondary transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="shrink-0 cursor-pointer rounded-lg p-1.5 text-secondary transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               aria-label="Previous media"
             >
               <Icon name="arrow-left" size={20} />
             </button>
 
-            <div className="flex items-center gap-2" role="tablist">
+            <div
+              className="flex min-w-0 flex-1 items-center justify-center gap-1.5 overflow-x-auto sm:gap-2"
+              role="tablist"
+            >
               {items.map((item, index) => {
                 const selected = index === activeIndex;
                 return (
@@ -271,7 +325,7 @@ export function MediaLightbox() {
                     aria-selected={selected}
                     aria-label={`Show media ${index + 1} of ${items.length}`}
                     onClick={() => goTo(index)}
-                    className={`cursor-pointer rounded-full transition-[width,background-color] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                    className={`shrink-0 cursor-pointer rounded-full transition-[width,background-color] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                       selected
                         ? "h-1.5 w-4 bg-secondary"
                         : "h-1.5 w-1.5 bg-divider hover:bg-secondary"
@@ -284,7 +338,7 @@ export function MediaLightbox() {
             <button
               type="button"
               onClick={next}
-              className="cursor-pointer rounded-lg p-1.5 text-secondary transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="shrink-0 cursor-pointer rounded-lg p-1.5 text-secondary transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               aria-label="Next media"
             >
               <Icon name="arrow-right" size={20} />

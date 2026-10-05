@@ -81,13 +81,13 @@ export function HeroFolder({
 
   return (
     <span
-      className="inline-flex items-center gap-x-[7px]"
+      className="inline-flex items-center gap-x-2"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <span className="text-primary">{role}</span>
 
-      <span className="relative inline-block h-10 w-10 shrink-0 align-middle">
+      <span className="relative inline-block h-8 w-8 shrink-0 align-middle sm:h-10 sm:w-10">
         {/* back panel (z-0) — exported at the full 40×40 frame */}
         {showBack ? (
           <Image
@@ -110,7 +110,7 @@ export function HeroFolder({
             <motion.span
               key={index}
               aria-hidden
-              className="absolute left-1 top-1 z-10 block h-8 w-8"
+              className="absolute left-0.5 top-0.5 z-10 block h-6 w-6 sm:left-1 sm:top-1 sm:h-8 sm:w-8"
               initial={false}
               animate={
                 hovered

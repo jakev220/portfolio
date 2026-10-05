@@ -23,16 +23,9 @@ export interface ComparisonChartProps {
 }
 
 /**
- * Light comparison bar chart for case-study research sections. Data is passed
- * as props so the same component can be reused; ScienceJury hardcodes its
- * formative numbers at the call site in MDX via a thin wrapper if needed.
- *
- * Each value label sits `gap-6` (24px) from the end of its bar — not from the
- * trailing edge of a full-width track. Bars use flex-basis % of the row and
- * may shrink so labels stay in view on narrow viewports.
- *
- * NOTE: `next-mdx-remote/rsc` drops JSX expression attributes — complex `groups`
- * data should live in a small case-specific wrapper component, not raw MDX.
+ * Light comparison bar chart for case-study research sections.
+ * Bars are % of a full-width track so relative lengths stay accurate on
+ * narrow viewports (flex-shrink on the bar itself was collapsing values).
  */
 export function ComparisonChart({
   groups,
@@ -71,9 +64,12 @@ export function ComparisonChart({
             </p>
             <div className="flex flex-col gap-3">
               {group.rows.map((row, rowIndex) => {
-                const widthPercent = Math.min((row.value / group.max) * 100, 100);
+                const widthPercent = Math.min(
+                  (row.value / group.max) * 100,
+                  100,
+                );
                 const delay = groupIndex * 0.15 + rowIndex * 0.1;
-                const barClass = `h-3 min-w-0 rounded-full sm:h-4 ${
+                const barClass = `h-3 rounded-full sm:h-4 ${
                   row.variant === "primary"
                     ? "bg-chart-orange"
                     : "bg-chart-orange-muted"
@@ -82,33 +78,28 @@ export function ComparisonChart({
                 return (
                   <div
                     key={row.label}
-                    className="flex min-w-0 items-center gap-6"
+                    className="flex min-w-0 items-center gap-4 sm:gap-6"
                   >
-                    {reduceMotion ? (
-                      <div
-                        className={barClass}
-                        style={{
-                          flex: `0 1 ${widthPercent}%`,
-                          width: `${widthPercent}%`,
-                        }}
-                      />
-                    ) : (
-                      <motion.div
-                        className={barClass}
-                        initial={{ flexBasis: 0, width: 0 }}
-                        whileInView={{
-                          flexBasis: `${widthPercent}%`,
-                          width: `${widthPercent}%`,
-                        }}
-                        viewport={{ once: true, amount: 0.6 }}
-                        transition={{
-                          duration: 0.65,
-                          ease: "easeOut",
-                          delay,
-                        }}
-                        style={{ flexGrow: 0, flexShrink: 1 }}
-                      />
-                    )}
+                    <div className="min-w-0 flex-1">
+                      {reduceMotion ? (
+                        <div
+                          className={barClass}
+                          style={{ width: `${widthPercent}%` }}
+                        />
+                      ) : (
+                        <motion.div
+                          className={barClass}
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${widthPercent}%` }}
+                          viewport={{ once: true, amount: 0.6 }}
+                          transition={{
+                            duration: 0.65,
+                            ease: "easeOut",
+                            delay,
+                          }}
+                        />
+                      )}
+                    </div>
                     <span
                       className={`shrink-0 text-caption sm:text-body ${
                         row.variant === "primary"

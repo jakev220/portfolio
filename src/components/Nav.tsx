@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { useEffect, useId, useState } from "react";
+import { Icon } from "@/components/Icon";
+import { ThemePreferenceList, ThemeToggle } from "@/components/ThemeToggle";
+import { useChromeVisibility } from "@/lib/chrome-visibility";
 import {
-  MEDIA_LIGHTBOX_CLOSE_EVENT,
-  MEDIA_LIGHTBOX_OPEN_EVENT,
-} from "@/lib/media-lightbox-ui";
+  applyThemePreference,
+  readThemePreference,
+  type ThemePreference,
+} from "@/lib/theme";
 
 export interface NavItem {
   label: string;
@@ -22,105 +25,72 @@ function isActive(pathname: string, href: string): boolean {
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
 }
 
-/** Above this scroll position (near the top) the nav is always shown. */
-const TOP_ZONE = 80;
-/** Pointer within this many px of the viewport top reveals the nav (desktop). */
-const HOT_ZONE = 100;
-/** Min scroll delta before flipping hide/show, to avoid jitter. */
-const DELTA = 4;
-
 /**
- * Primary nav: right-aligned to the content edge (same max-width + gutter as the
- * page, matching where the work view toggle sits) and offset 80px from the top.
+ * Primary nav: right-aligned to the content edge (same max-w + gutter as the
+ * page). Desktop keeps inline links + theme cycle. Below `md`, chrome is a
+ * square `menu.svg` control (the L→R collapse is the resting shape vs the
+ * desktop cluster — not the open animation). Open: modal panel with the shared
+ * fade/rise enter; Work / Archive / About, then Light / Dark / System.
  *
- * Behavior (auto-hide + proximity reveal): always visible at the very top of the
- * page; once scrolled past it hides on scroll-down and reveals on scroll-up. On
- * pointer devices it also reveals when the cursor moves to the top edge, and it
- * always reveals when a nav control receives keyboard focus.
- *
- * Rendered as a fixed overlay; the empty area is click-through (pointer-events
- * are re-enabled only on the interactive controls).
+ * Auto-hide + proximity reveal via `useChromeVisibility` (shared with the
+ * case-study back control).
  */
 export function Nav({ items }: NavProps) {
   const pathname = usePathname();
-  const [hidden, setHidden] = useState(false);
-  const [floating, setFloating] = useState(false);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const lastY = useRef(0);
+  const { hidden, floating, suppressed, reveal } = useChromeVisibility();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [preference, setPreference] = useState<ThemePreference>("light");
+  const menuId = useId();
 
   useEffect(() => {
-    const onOpen = () => setLightboxOpen(true);
-    const onClose = () => setLightboxOpen(false);
-    window.addEventListener(MEDIA_LIGHTBOX_OPEN_EVENT, onOpen);
-    window.addEventListener(MEDIA_LIGHTBOX_CLOSE_EVENT, onClose);
-    return () => {
-      window.removeEventListener(MEDIA_LIGHTBOX_OPEN_EVENT, onOpen);
-      window.removeEventListener(MEDIA_LIGHTBOX_CLOSE_EVENT, onClose);
-    };
+    setPreference(readThemePreference());
   }, []);
-
-  const suppressed = lightboxOpen;
 
   useEffect(() => {
-    lastY.current = window.scrollY;
-    let frame = 0;
+    setMenuOpen(false);
+  }, [pathname]);
 
-    const update = () => {
-      const y = window.scrollY;
-      setFloating(y >= TOP_ZONE);
-      if (y < TOP_ZONE) {
-        setHidden(false);
-      } else if (y > lastY.current + DELTA) {
-        setHidden(true);
-      } else if (y < lastY.current - DELTA) {
-        setHidden(false);
-      }
-      lastY.current = y;
-      frame = 0;
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
     };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
 
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
+  useEffect(() => {
+    if (preference !== "system") return;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => applyThemePreference("system");
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [preference]);
 
-    window.addEventListener("scroll", onScroll, { passive: true });
+  const onThemeChange = (next: ThemePreference) => {
+    applyThemePreference(next);
+    setPreference(next);
+  };
 
-    const canHover = window.matchMedia(
-      "(hover: hover) and (pointer: fine)",
-    ).matches;
-    const onPointerMove = (event: PointerEvent) => {
-      if (event.clientY <= HOT_ZONE) setHidden(false);
-    };
-    if (canHover) {
-      window.addEventListener("pointermove", onPointerMove, { passive: true });
-    }
+  const closeMenu = () => setMenuOpen(false);
 
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (canHover) window.removeEventListener("pointermove", onPointerMove);
-      if (frame) cancelAnimationFrame(frame);
-    };
-  }, []);
+  const frostClass =
+    "border border-border bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] backdrop-blur-md";
 
   return (
     <nav
       aria-hidden={suppressed || undefined}
-      onFocusCapture={() => {
-        if (!suppressed) setHidden(false);
-      }}
+      onFocusCapture={reveal}
       className={`pointer-events-none fixed inset-x-0 top-0 z-50 transition-transform duration-300 ease-out motion-reduce:transition-none ${
-        hidden || suppressed ? "-translate-y-full" : "translate-y-0"
+        hidden ? "-translate-y-full" : "translate-y-0"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-end px-6 pt-20">
-        {/* From sm up, -mr-4 (= px-4) optically outsets the box into the gutter
-            so controls align to the content grid. Keep flush on narrow screens
-            so the theme toggle isn’t clipped by the viewport edge. */}
-        <div className="relative inline-flex items-center gap-6 rounded-xl px-4 py-2 sm:-mr-4">
-          {/* Frosted box that hugs the nav cluster; fades in once floating. */}
+        {/* Desktop: inline links + theme toggle */}
+        <div className="relative hidden items-center gap-6 rounded-xl px-4 py-2 sm:-mr-4 md:inline-flex">
           <div
             aria-hidden
-            className={`pointer-events-none absolute inset-0 rounded-xl border border-border bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] backdrop-blur-md transition-opacity duration-300 motion-reduce:transition-none ${
+            className={`pointer-events-none absolute inset-0 rounded-xl ${frostClass} transition-opacity duration-300 motion-reduce:transition-none ${
               floating ? "opacity-100" : "opacity-0"
             }`}
           />
@@ -145,6 +115,69 @@ export function Nav({ items }: NavProps) {
           <div className="pointer-events-auto relative">
             <ThemeToggle />
           </div>
+        </div>
+
+        {/* Mobile: square control; menu opens as a fade/rise modal (not a width slide). */}
+        <div className="relative inline-flex sm:-mr-4 md:hidden">
+          <button
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls={menuId}
+            aria-haspopup="dialog"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((open) => !open)}
+            className={`pointer-events-auto relative z-20 flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-primary transition-opacity duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none ${frostClass} ${
+              floating || menuOpen ? "opacity-100" : "opacity-90"
+            }`}
+          >
+            <Icon name={menuOpen ? "close" : "menu"} size={20} />
+          </button>
+
+          {menuOpen ? (
+            <>
+              <button
+                type="button"
+                aria-label="Dismiss menu"
+                className="pointer-events-auto fixed inset-0 z-10 cursor-default bg-transparent"
+                onClick={closeMenu}
+              />
+              <div
+                id={menuId}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Menu"
+                className={`nav-menu-enter pointer-events-auto absolute right-0 top-full z-20 mt-2 w-56 rounded-xl ${frostClass}`}
+              >
+                <div className="flex flex-col gap-4 px-4 py-3">
+                  <ul className="flex flex-col gap-1">
+                    {items.map(({ label, href }) => {
+                      const active = isActive(pathname, href);
+                      return (
+                        <li key={href}>
+                          <Link
+                            href={href}
+                            aria-current={active ? "page" : undefined}
+                            onClick={closeMenu}
+                            className={`text-body block rounded-lg px-3 py-2 transition-colors hover:bg-surface ${
+                              active ? "text-primary" : "text-secondary"
+                            }`}
+                          >
+                            {label}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <div className="border-t border-border pt-3">
+                    <ThemePreferenceList
+                      preference={preference}
+                      onChange={onThemeChange}
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : null}
         </div>
       </div>
     </nav>

@@ -54,6 +54,19 @@ export function AboutJourney({ heading, sections }: AboutJourneyProps) {
     ).matches;
   }, []);
 
+  // Prefetch resume stills so row-to-row swaps don’t flash the previous image.
+  useEffect(() => {
+    const urls = sections.flatMap((section) =>
+      section.entries
+        .map((entry) => entry.preview)
+        .filter((src): src is string => Boolean(src)),
+    );
+    for (const src of urls) {
+      const img = new window.Image();
+      img.src = src;
+    }
+  }, [sections]);
+
   const applyPosition = (
     nextTop: number,
     nextLeft: number,
@@ -139,10 +152,10 @@ export function AboutJourney({ heading, sections }: AboutJourneyProps) {
           {heading}
         </h2>
 
-        <AnimatePresence>
+        <AnimatePresence mode="sync">
           {active ? (
             <motion.div
-              key="journey-preview"
+              key="journey-preview-frame"
               aria-hidden
               className="pointer-events-none absolute z-10 hidden overflow-hidden rounded-xl border border-border bg-surface shadow-lg lg:block"
               style={{
@@ -172,7 +185,9 @@ export function AboutJourney({ heading, sections }: AboutJourneyProps) {
                   active.fit === "contain" ? "bg-black" : ""
                 }`}
               >
+                {/* Key by src so Next/Image remounts immediately on row change. */}
                 <Image
+                  key={active.src}
                   src={active.src}
                   alt={active.alt}
                   fill
