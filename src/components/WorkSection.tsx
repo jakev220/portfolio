@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import {
   CaseStudyCard,
   type CaseStudyCardProps,
@@ -16,43 +16,19 @@ export interface WorkSectionProps {
   items: WorkItem[];
 }
 
-const MD_UP = "(min-width: 768px)";
-
-function subscribeMdUp(onChange: () => void) {
-  const mq = window.matchMedia(MD_UP);
-  mq.addEventListener("change", onChange);
-  return () => mq.removeEventListener("change", onChange);
-}
-
-function useIsMdUp() {
-  return useSyncExternalStore(
-    subscribeMdUp,
-    () => window.matchMedia(MD_UP).matches,
-    () => false,
-  );
-}
-
 /**
- * Home-page work section. Mobile (`< md`): always card grid, no toggle.
- * Tablet and up: toggle + user-selected view (default stack).
+ * Home-page work section. Stack is the default at every breakpoint; the view
+ * toggle is tablet+ only. Toggle sits in the hero’s lower empty space
+ * (`absolute bottom-full`) so in-flow top padding doesn’t eat the ~10% Work
+ * peek from `lg:min-h-[90dvh]` on the home hero.
  */
 export function WorkSection({ items }: WorkSectionProps) {
-  const isMdUp = useIsMdUp();
-  const [desktopVariant, setDesktopVariant] =
-    useState<CaseStudyCardVariant>("stack");
-
-  // Viewport wins on mobile so a desktop stack choice can’t stick after resize.
-  const variant: CaseStudyCardVariant = isMdUp ? desktopVariant : "card";
+  const [variant, setVariant] = useState<CaseStudyCardVariant>("stack");
 
   return (
     <section aria-label="Selected work" className="relative">
-      {/* Sit in the hero’s lower empty space so cards can peek at the fold;
-          in-flow placement + grid pt ate the entire ~10% peek. */}
       <div className="absolute bottom-full right-0 mb-12 hidden justify-end md:flex md:mb-16">
-        <WorkViewToggle
-          value={desktopVariant}
-          onChange={setDesktopVariant}
-        />
+        <WorkViewToggle value={variant} onChange={setVariant} />
       </div>
 
       <div className="pb-12 md:pb-16">
