@@ -11,7 +11,8 @@ export function prefersReducedMotion(): boolean {
 /**
  * Scroll to an element by id. Uses smooth scrolling unless
  * `prefers-reduced-motion: reduce` is set (then `auto` / instant).
- * Optionally updates the URL hash via `history.pushState` (no jump).
+ * Optionally updates the URL hash via `history.replaceState` (no jump, and
+ * no extra history entry — so Back leaves the page instead of replaying TOC).
  */
 export function scrollToId(
   id: string,
@@ -29,7 +30,7 @@ export function scrollToId(
   if (updateHash) {
     const next = `#${id}`;
     if (window.location.hash !== next) {
-      window.history.pushState(null, "", next);
+      window.history.replaceState(null, "", next);
     }
   }
 
