@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { CursorFollowPreview } from "@/components/CursorFollowPreview";
 import { HeroAvatar, type AvatarImage } from "@/components/HeroAvatar";
 import { HeroFolder } from "@/components/HeroFolder";
 import { Link } from "@/components/Link";
+import { SmartImage } from "@/components/SmartImage";
 import {
   EXIT_EASE,
   HOME_EXIT_EVENT,
@@ -104,7 +104,7 @@ function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
       {hasPreview ? (
         <CursorFollowPreview visible={visible} point={point} placement="right">
           {previewImage ? (
-            <Image
+            <SmartImage
               src={previewImage}
               alt=""
               fill

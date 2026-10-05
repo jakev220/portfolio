@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage } from "@/components/SmartImage";
 import type { AboutHeroPhoto } from "@/content/about";
 
 export interface AboutHeroCollageProps {
@@ -98,7 +98,7 @@ function CollageTile({
       }`}
     >
       {photo?.src ? (
-        <Image
+        <SmartImage
           src={photo.src}
           alt={photo.alt}
           fill

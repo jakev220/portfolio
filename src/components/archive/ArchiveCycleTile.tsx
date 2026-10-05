@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { useReducedMotion } from "framer-motion";
 import { Icon } from "@/components/Icon";
+import { SmartImage } from "@/components/SmartImage";
 import {
   ARCHIVE_CYCLE_MS,
   type ArchiveFrame,
@@ -114,7 +114,7 @@ function QuadCellsFrame({
       {images.map((src, i) => (
         <div key={src} className="relative min-h-0 min-w-0 overflow-hidden">
           {i < visibleCount ? (
-            <Image
+            <SmartImage
               src={src}
               alt=""
               fill
@@ -200,7 +200,7 @@ function StepLayer({
       aria-hidden={!active}
     >
       {step.kind === "image" ? (
-        <Image
+        <SmartImage
           src={step.src}
           alt=""
           fill

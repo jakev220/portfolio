@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import Image from "next/image";
 import { CursorFollowPreview } from "@/components/CursorFollowPreview";
+import { SmartImage } from "@/components/SmartImage";
 
 export interface CaseStudyCardInlineProps {
   /** Project title (grows to fill the row). */
@@ -94,7 +94,7 @@ export function CaseStudyCardInline({
 
       <CursorFollowPreview visible={visible} point={point}>
         {coverImage ? (
-          <Image
+          <SmartImage
             src={coverImage}
             alt={coverAlt ?? title}
             fill

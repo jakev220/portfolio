@@ -1,9 +1,9 @@
 import type { CSSProperties, ReactNode } from "react";
-import Image from "next/image";
 import { ArchiveCarouselTile } from "@/components/archive/ArchiveCarouselTile";
 import { ArchiveCycleTile } from "@/components/archive/ArchiveCycleTile";
 import { ArchiveVideoTile } from "@/components/archive/ArchiveVideoTile";
 import { Icon } from "@/components/Icon";
+import { SmartImage } from "@/components/SmartImage";
 import {
   archiveMediaKind,
   type ArchiveItem,
@@ -95,7 +95,7 @@ function StackStill({
   if (cropped) {
     return (
       <div className="relative w-full" style={{ aspectRatio: aspect }}>
-        <Image
+        <SmartImage
           src={src}
           alt={alt}
           fill
@@ -106,7 +106,7 @@ function StackStill({
     );
   }
   return (
-    <Image
+    <SmartImage
       src={src}
       alt={alt}
       width={800}
@@ -196,7 +196,7 @@ function ArchiveMedia({ item }: { item: ArchiveItem }) {
 
   if (kind === "image" && item.src) {
     media = cropped ? (
-      <Image
+      <SmartImage
         src={item.src}
         alt={item.alt ?? ""}
         fill
@@ -204,7 +204,7 @@ function ArchiveMedia({ item }: { item: ArchiveItem }) {
         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
       />
     ) : (
-      <Image
+      <SmartImage
         src={item.src}
         alt={item.alt ?? ""}
         width={800}

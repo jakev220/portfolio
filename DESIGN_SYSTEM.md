@@ -282,7 +282,7 @@ element mapped to the tokens above in `src/components/mdx-components.tsx`.
 | fenced code | syntax-highlighted via `rehype-pretty-code` + Shiki (`github-light`) |
 | tables | GitHub-flavored (`remark-gfm`) |
 
-### Images (`next/image`)
+### Images (`next/image` + blur placeholders)
 
 Optimized images use **quality 90** site-wide. Configured via `images.qualities: [90]`
 in `next.config.mjs` — Next 16 coerces the component default (75) to the closest
@@ -291,6 +291,15 @@ prop. Do not add `quality={75}` (or other values); they will be coerced or rejec
 
 Exceptions: `unoptimized` images (e.g. the hero avatar cycle) skip the optimizer
 and serve the source file as-is.
+
+Content photos use `<SmartImage>` (thin `next/image` wrapper). At build time,
+`npm run generate:blur-map` (also `prebuild`) walks `public/{avatar,photos,work}`,
+writes ThumbHash strings to `src/lib/blur-map.generated.ts`, and runtime decode
+feeds `placeholder="blur"` + `blurDataURL`. Missing hashes fall back to the
+parent tile’s `bg-surface` (or equivalent). Do **not** hand-author duplicate
+`*.blur.webp` previews — add the source under those roots and regenerate the map.
+Commit the generated map so Cloudflare builds stay simple. Videos keep posters;
+do not blur MP4s.
 
 ### Case-study section components (used as JSX in MDX bodies)
 

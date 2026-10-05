@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   useCallback,
   useEffect,
@@ -10,6 +9,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "@/components/Icon";
+import { SmartImage } from "@/components/SmartImage";
 import { useMediaLightbox } from "@/components/media-lightbox/MediaLightboxProvider";
 
 const SWIPE_THRESHOLD_PX = 48;
@@ -278,7 +278,7 @@ export function MediaLightbox() {
               ) : null}
             </div>
           ) : active.src ? (
-            <Image
+            <SmartImage
               key={active.src}
               src={active.src}
               alt={active.alt}

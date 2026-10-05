@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { FigureVideo } from "@/components/case-study/FigureVideo";
 import { ExpandableMedia } from "@/components/media-lightbox/ExpandableMedia";
+import { SmartImage } from "@/components/SmartImage";
 
 export interface FigureProps {
   /**
@@ -123,7 +123,7 @@ export function Figure({
       fit={fit}
     />
   ) : src ? (
-    <Image
+    <SmartImage
       src={src}
       alt={alt}
       width={w}

@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Accent, parseAccentedText } from "@/components/case-study/Accent";
 import { CaseStudyCardInline } from "@/components/CaseStudyCardInline";
 import { Link } from "@/components/Link";
+import { SmartImage } from "@/components/SmartImage";
 import { externalLinkProps } from "@/lib/links";
 
 /** View states for the home-page work section. */
@@ -113,7 +113,7 @@ export function CaseStudyCard({
       className="group relative block aspect-[842/540] overflow-hidden rounded-xl border border-border bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       {coverImage ? (
-        <Image
+        <SmartImage
           src={coverImage}
           alt=""
           fill

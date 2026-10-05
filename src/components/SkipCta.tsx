@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import Image from "next/image";
+import { SmartImage } from "@/components/SmartImage";
 import { useReducedMotion } from "framer-motion";
 import { Button } from "@/components/Button";
 import { CursorFollowPreview } from "@/components/CursorFollowPreview";
@@ -96,7 +96,7 @@ export function SkipCta({
       {hasPreview ? (
         <CursorFollowPreview visible={visible} point={point} placement="top">
           {previewImages.map((src, i) => (
-            <Image
+            <SmartImage
               key={src}
               src={src}
               alt=""

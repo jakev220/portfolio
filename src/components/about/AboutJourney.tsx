@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import Image from "next/image";
 import {
   AnimatePresence,
   motion,
@@ -9,6 +8,7 @@ import {
   useSpring,
 } from "framer-motion";
 import { AboutResume } from "@/components/about/AboutResume";
+import { SmartImage } from "@/components/SmartImage";
 import {
   CURSOR_PREVIEW_HEIGHT,
   CURSOR_PREVIEW_WIDTH,
@@ -186,7 +186,7 @@ export function AboutJourney({ heading, sections }: AboutJourneyProps) {
                 }`}
               >
                 {/* Key by src so Next/Image remounts immediately on row change. */}
-                <Image
+                <SmartImage
                   key={active.src}
                   src={active.src}
                   alt={active.alt}

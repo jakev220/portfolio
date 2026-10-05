@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
+import { SmartImage } from "@/components/SmartImage";
 
 /** Avatar-reel cadence for About / Archive still cycles. */
 const CYCLE_MS = 400;
@@ -68,7 +68,7 @@ export function ExploreTile({
       >
         {hasMedia
           ? images.map((src, i) => (
-              <Image
+              <SmartImage
                 key={src}
                 src={src}
                 alt=""

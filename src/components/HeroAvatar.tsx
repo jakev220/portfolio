@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, type MouseEvent } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { SmartImage } from "@/components/SmartImage";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -136,7 +136,7 @@ export function HeroAvatar({
         }
       >
         {images.map((img, i) => (
-          <Image
+          <SmartImage
             key={img.src}
             src={img.src}
             alt={i === 0 ? img.alt : ""}
