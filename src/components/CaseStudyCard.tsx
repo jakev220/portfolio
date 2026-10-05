@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Accent, parseAccentedText } from "@/components/case-study/Accent";
 import { CaseStudyCardInline } from "@/components/CaseStudyCardInline";
 import { Link } from "@/components/Link";
+import { SmartImage } from "@/components/SmartImage";
 import { externalLinkProps } from "@/lib/links";
 
 /** View states for the home-page work section. */
@@ -113,7 +113,7 @@ export function CaseStudyCard({
       className="group relative block aspect-[842/540] overflow-hidden rounded-xl border border-border bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
     >
       {coverImage ? (
-        <Image
+        <SmartImage
           src={coverImage}
           alt=""
           fill
@@ -134,12 +134,13 @@ export function CaseStudyCard({
     );
   }
 
-  // stack (default): content (~1/3) beside media (~2/3) on large screens,
-  // stacked on small screens.
+  // stack (default): media above copy on small screens; content (~1/3) beside
+  // media (~2/3) from lg up. CSS order keeps DOM (content, media) for a11y
+  // while leading with the cover on narrow viewports.
   return (
-    <article className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-x-8">
-      <div className="lg:col-span-1">{content}</div>
-      <div className="lg:col-span-2">
+    <article className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-4 lg:gap-x-8">
+      <div className="order-2 lg:order-1 lg:col-span-1">{content}</div>
+      <div className="order-1 lg:order-2 lg:col-span-2">
         {renderMedia("(min-width: 1024px) 66vw, 100vw")}
       </div>
     </article>

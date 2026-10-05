@@ -4,6 +4,8 @@ The current styles governing this portfolio. This is a **reference** — the sou
 truth lives in code:
 
 - `src/lib/tokens.ts` — typography, color-var, and breakpoint constants
+- `src/lib/theme.ts` — appearance preference (`light` / `dark` / `system`) + apply helpers
+- `src/lib/chrome-visibility.ts` — shared show/hide for fixed top chrome (`Nav`, case-study back)
 - `tailwind.config.ts` — maps tokens to Tailwind utilities (type scale generated from tokens)
 - `src/styles/globals.css` — color CSS variables, `@font-face`, base + MDX styles, first-paint enter animations
 - `src/lib/about-transition.ts` — home → About exit timing + shared easing curve
@@ -94,11 +96,17 @@ resolve to the dark values whenever `.dark` is present on `<html>`.
 | destructive | `#FF3B30` | `#FF6961` (lighter for contrast on dark) |
 
 **How the theme is applied:**
-- `ThemeToggle` (in the nav) toggles the `.dark` class on `<html>` and persists the
-  choice to `localStorage`.
-- A tiny inline script in `app/layout.tsx` sets the class **before first paint** (reads
-  `localStorage`, falls back to `prefers-color-scheme`) to avoid a flash of the wrong theme.
-- `color-scheme` is set per theme so native form controls / scrollbars match.
+- Preference is `light` | `dark` | `system`, stored under `localStorage` key `theme`
+  (`src/lib/theme.ts`). **Unset / first visit → Light** (does not follow OS until the
+  user chooses System).
+- `dark` class on `<html>` when preference is `dark`, or `system` and
+  `prefers-color-scheme: dark`.
+- `ThemeInitScript` in `app/layout.tsx` runs the bootstrap **before first paint**. It
+  only emits the `<script>` on the server/hydration snapshot (React 19 / Next 16
+  warn if a raw script is created during later client navigations).
+- Desktop nav: compact `ThemeToggle` cycles Light → Dark → System.
+- Mobile nav menu: explicit **Light / Dark / System** list (`ThemePreferenceList`).
+- `color-scheme` is set per resolved theme so native form controls / scrollbars match.
 - For one-off translucency over a theme color, use `color-mix(in srgb, var(--color-…) N%,
   transparent)` (Tailwind's `/opacity` modifier doesn't work on these var-based colors).
 
@@ -166,6 +174,8 @@ ad-hoc black translucent circle). Match `<ExpandableMedia>`:
 |------------|-----------|---------|
 | Expand / lightbox | `expand` | `<ExpandableMedia>` |
 | External outbound | `arrow-up-right` | Archive mosaic tiles with `href` |
+| Mobile nav menu | `menu` | `Nav` square control (`< md`) |
+| Flow view disclosure | `chevron-right` | `FlowDiagram` mobile view picker (rotates 90° open) |
 
 Always pair outbound media links with `externalLinkProps(href)` on the anchor.
 ---
@@ -217,6 +227,7 @@ Signal: `beginHomeAboutExit()` dispatches `HOME_EXIT_EVENT`; `HomeExitShell` and
 | `.about-hero-tile-0` … `-3` | — | 0.12s + n×0.14s | — | Stagger L→R, T→B |
 | `.about-hero-greeting` | 0.85s | 0.8s | `translateY(8px)` → 0 | About “Hi, I'm Jake!” block |
 | `.about-lede-enter` | 0.85s | 1.1s | `translateY(8px)` → 0 | About hang statement (`HangStatement`) |
+| `.nav-menu-enter` | 0.4s | — | `translateY(8px)` → 0 | Mobile nav menu modal (same curve as `.hero-enter`, snappier) |
 
 Fill mode is `both` so elements stay at the `from` state until the delay elapses.
 Soft navigations remount the nodes and replay the same CSS animations.
@@ -229,16 +240,17 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Avatar cycle + lift | `HeroAvatar` | Hover/focus cycles frames; slight `-translate-y` lift; accent name color |
 | Folder icons | `HeroFolder` | Hover opens tool icons (Framer) |
 | Accordion | `AccordionItem` | Ease-out **400ms** expand/collapse |
-| Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) + control-pad buttons to zoom; plain scroll does not zoom. View resets on tab change |
+| Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) to zoom; control pad **`md+` only**. Plain scroll does not zoom. View resets on tab change. Mobile: title stacks above a label + `chevron-right` disclosure (rotates 90° open, **400ms** ease-out) |
 | Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); handle + panel use nav-matching frost (`color-bg` 70% + `backdrop-blur-md`); scroll-spy active dash (`text-primary`, slightly larger); sliding `bg-surface` pill in the panel; section jumps via `scrollToId` (smooth / instant for reduced motion) |
 | Skip / hash CTA | `SkipCta` + `scroll-to-id` | Hash smooth-scroll (instant when reduced motion). Optional `skipPreview` stills: cursor-follow trailer centered above cursor; instant cuts @ 400ms (avatar reel); static first frame when reduced motion; hover-fine only |
 | Keep exploring tiles | `ExploreTile` | Card zoom `scale-[1.04]` / 500ms; About/Play hover still-cycle @ 400ms (instant cuts); reduced motion skips cycle |
-| Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once) |
+| Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once); widths are `%` of a full track (not flex-shrink bars) |
 | Text marks | `Highlight` / `Underline` | Fill / 4px stroke wipe L→R once on enter (**650ms** ease-out); instant on scroll when reduced motion |
 | Tone grain | `ToneGrain` | Living film grain on `InsightCard` / `FullBleedBanner` — lighter `--cs-*` mix via soft-light (preserves fill); static when reduced motion |
 | Metric count-up | `Metric` | Value springs from 0 → target when scrolled into view |
-| Nav chrome | `Nav` | Show/hide + backdrop opacity; `motion-reduce:transition-none` |
-| Lightbox video | `MediaLightbox` | Expanded MP4s: YouTube-style center play/pause flash (click / Space); play stays centered while paused |
+| Nav chrome | `Nav` | Show/hide + backdrop via `useChromeVisibility`; desktop inline links + theme cycle; below `md` square `menu` control opens a fade/rise modal (`.nav-menu-enter`) with links + Light/Dark/System |
+| Case-study back | `CaseStudyBack` | Same chrome visibility as nav; same-origin referrer → `router.back()`, else `/` |
+| Lightbox | `MediaLightbox` | Fixed stage height (centered short media); swipe + arrows; caption `text-caption`; video play/pause flash (click / Space) |
 
 ### When adding new motion
 
@@ -270,7 +282,7 @@ element mapped to the tokens above in `src/components/mdx-components.tsx`.
 | fenced code | syntax-highlighted via `rehype-pretty-code` + Shiki (`github-light`) |
 | tables | GitHub-flavored (`remark-gfm`) |
 
-### Images (`next/image`)
+### Images (`next/image` + blur placeholders)
 
 Optimized images use **quality 90** site-wide. Configured via `images.qualities: [90]`
 in `next.config.mjs` — Next 16 coerces the component default (75) to the closest
@@ -279,6 +291,15 @@ prop. Do not add `quality={75}` (or other values); they will be coerced or rejec
 
 Exceptions: `unoptimized` images (e.g. the hero avatar cycle) skip the optimizer
 and serve the source file as-is.
+
+Content photos use `<SmartImage>` (thin `next/image` wrapper). At build time,
+`npm run generate:blur-map` (also `prebuild`) walks `public/{avatar,photos,work}`,
+writes ThumbHash strings to `src/lib/blur-map.generated.ts`, and runtime decode
+feeds `placeholder="blur"` + `blurDataURL`. Missing hashes fall back to the
+parent tile’s `bg-surface` (or equivalent). Do **not** hand-author duplicate
+`*.blur.webp` previews — add the source under those roots and regenerate the map.
+Commit the generated map so Cloudflare builds stay simple. Videos keep posters;
+do not blur MP4s.
 
 ### Case-study section components (used as JSX in MDX bodies)
 
@@ -307,7 +328,7 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | `<Underline>` | Inline underline mark. Same `accent` rules; ~4px rounded stroke with `box-decoration-break: clone` (continuous on one line, per-line when wrapped). Reveals L→R once on enter. |
 | `<Accordion>` | Stack of collapsible rows; place inside a `<Section>`. |
 | `<AccordionItem>` | One accordion row: `title` (+ optional `subtitle`); body as MDX children. Optional `mediaSrc` / `mediaVideo` (+ `mediaAlt`, `mediaRatio`, …) render a `<Figure>` in a centered 10-col band below the title/body row; body and media share one unfold. |
-| `<FlowDiagram>` | Full-width interactive canvas for **read-only** user-flow diagrams. Optional `title`; `ratio` locks the stage (default `16/9`). White header (title + line tabs) above an ink-08 stage; pan/zoom via drag, pinch, and the control pad. |
+| `<FlowDiagram>` | Full-width interactive canvas for **read-only** user-flow diagrams. Optional `title`; `ratio` locks the stage (default `16/9`). Header: desktop line tabs; mobile stacked title + active-view disclosure. Ink-08 stage; pan/pinch zoom; control pad from `md` up. |
 | `<FlowDiagramTab>` | One diagram tab (`label` + children). Registers with the parent; **content mounts only while selected** so inactive assets stay unloaded. |
 | `<FlowDiagramImage>` | Diagram WebP/SVG for a tab (`src`, `alt`; optional `width`/`height` strings for MDX). `draggable={false}`; already-compressed files are not re-encoded. |
 | `<MediaCarousel>` / `<MediaCarouselSlide>` | Inline carousel with lightbox-aware slides. |

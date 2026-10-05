@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { SkipCta } from "@/components/SkipCta";
 import { ExpandableMedia } from "@/components/media-lightbox/ExpandableMedia";
+import { SmartImage } from "@/components/SmartImage";
 import type { CaseStudyTone } from "@/lib/case-study-palette";
 
 export interface CaseStudyHeaderProps {
@@ -80,7 +80,7 @@ export function CaseStudyHeader({
       <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-surface sm:aspect-[1024/500]">
         {coverImage ? (
           <ExpandableMedia src={coverImage} alt={name} caption={name} fill>
-            <Image
+            <SmartImage
               src={coverImage}
               alt={name}
               fill

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SmartImage } from "@/components/SmartImage";
 import type { AboutPhoto } from "@/content/about";
 
 export interface AboutPhotoGridProps {
@@ -21,7 +21,7 @@ export function AboutPhotoGrid({ photos }: AboutPhotoGridProps) {
           className="relative aspect-square overflow-hidden rounded-xl bg-surface md:col-span-3"
         >
           {photo.src ? (
-            <Image
+            <SmartImage
               src={photo.src}
               alt={photo.alt}
               fill

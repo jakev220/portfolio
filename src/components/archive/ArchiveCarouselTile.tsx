@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Icon } from "@/components/Icon";
+import { SmartImage } from "@/components/SmartImage";
 
 export interface ArchiveCarouselSlide {
   src: string;
@@ -46,7 +46,7 @@ export function ArchiveCarouselTile({
       aria-label={label}
     >
       {slides.map((slide, i) => (
-        <Image
+        <SmartImage
           key={slide.src}
           src={slide.src}
           alt={slide.alt ?? ""}

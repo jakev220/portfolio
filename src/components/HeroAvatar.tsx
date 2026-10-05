@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, type MouseEvent } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { SmartImage } from "@/components/SmartImage";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -95,7 +95,7 @@ export function HeroAvatar({
     <Link
       href={href}
       onClick={handleClick}
-      className="group inline-flex items-center gap-x-[7px] rounded-sm outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+      className="group inline-flex items-center gap-x-2 rounded-sm outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setHovered(true)}
@@ -111,7 +111,7 @@ export function HeroAvatar({
       </motion.span>
 
       <motion.span
-        className="relative inline-block h-10 w-10 shrink-0 overflow-hidden rounded-full bg-surface align-middle"
+        className="relative inline-block h-8 w-8 shrink-0 overflow-hidden rounded-full bg-surface align-middle sm:h-10 sm:w-10"
         animate={
           exiting
             ? { y: -40, opacity: 0, scale: 0.94 }
@@ -136,7 +136,7 @@ export function HeroAvatar({
         }
       >
         {images.map((img, i) => (
-          <Image
+          <SmartImage
             key={img.src}
             src={img.src}
             alt={i === 0 ? img.alt : ""}

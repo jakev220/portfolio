@@ -37,6 +37,14 @@ export function Link({
   className = "",
   disabled = false,
 }: LinkProps) {
+  // Keep the trailing mark on the same line as the label (no orphan → / ↗).
+  const mark = (symbol: string) => (
+    <span aria-hidden className="whitespace-nowrap">
+      {"\u00a0"}
+      {symbol}
+    </span>
+  );
+
   if (disabled) {
     return (
       <span
@@ -46,7 +54,7 @@ export function Link({
         className={[disabledClasses, className].filter(Boolean).join(" ")}
       >
         {children}
-        <span aria-hidden> →</span>
+        {mark("→")}
       </span>
     );
   }
@@ -61,7 +69,7 @@ export function Link({
     return (
       <a href={href} className={classes} {...externalLinkProps(href)}>
         {children}
-        <span aria-hidden> ↗</span>
+        {mark("↗")}
       </a>
     );
   }
@@ -70,7 +78,7 @@ export function Link({
     return (
       <a href={href} className={classes}>
         {children}
-        <span aria-hidden> ↗</span>
+        {mark("↗")}
       </a>
     );
   }
@@ -78,7 +86,7 @@ export function Link({
   return (
     <NextLink href={href} className={classes}>
       {children}
-      <span aria-hidden> →</span>
+      {mark("→")}
     </NextLink>
   );
 }

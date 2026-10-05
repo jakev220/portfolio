@@ -336,50 +336,70 @@ export function FlowDiagram({
   return (
     <FlowDiagramContext.Provider value={value}>
       <div className="my-0 flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-bg">
-        <div className="flex min-w-0 items-stretch bg-bg">
+        {/* Mobile: stack title + view picker so the menu isn’t squeezed beside
+            a shrink-0 title. Desktop: title | tabs in one row. */}
+        <div className="relative z-20 flex min-w-0 flex-col bg-bg md:flex-row md:items-stretch">
           {title ? (
             <>
               <p
                 id={titleId}
-                className="text-body-large text-heading m-0 shrink-0 px-5 py-3.5 font-medium sm:px-6 sm:py-4"
+                className="text-body-large text-heading m-0 truncate px-5 py-3.5 font-medium sm:px-6 sm:py-4 md:shrink-0 md:overflow-visible md:whitespace-normal"
               >
                 {title}
               </p>
-              <div aria-hidden className="w-px shrink-0 self-stretch bg-border" />
+              <div
+                aria-hidden
+                className="hidden w-px shrink-0 self-stretch bg-border md:block"
+              />
+              <div
+                aria-hidden
+                className="h-px w-full bg-border md:hidden"
+              />
             </>
           ) : null}
 
           {sorted.length > 0 ? (
-            <div
-              id={tablistId}
-              role="tablist"
-              aria-label={title ? undefined : "Flow diagrams"}
-              aria-labelledby={titleId}
-              className="flex min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-1 px-5 py-3.5 sm:gap-x-6 sm:px-6 sm:py-4"
-            >
-              {sorted.map((tab) => {
-                const selected = tab.id === safeActiveId;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    role="tab"
-                    id={`${tab.id}-tab`}
-                    aria-selected={selected}
-                    aria-controls={`${tab.id}-panel`}
-                    tabIndex={selected ? 0 : -1}
-                    onClick={() => setActiveId(tab.id)}
-                    className={`cursor-pointer border-b-2 pb-1 text-body transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-                      selected
-                        ? "border-heading text-heading"
-                        : "border-transparent text-secondary hover:text-heading"
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                );
-              })}
-            </div>
+            <>
+              {/* Desktop: line tabs */}
+              <div
+                id={tablistId}
+                role="tablist"
+                aria-label={title ? undefined : "Flow diagrams"}
+                aria-labelledby={titleId}
+                className="hidden min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-1 px-5 py-3.5 sm:gap-x-6 sm:px-6 sm:py-4 md:flex"
+              >
+                {sorted.map((tab) => {
+                  const selected = tab.id === safeActiveId;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      role="tab"
+                      id={`${tab.id}-tab`}
+                      aria-selected={selected}
+                      aria-controls={`${tab.id}-panel`}
+                      tabIndex={selected ? 0 : -1}
+                      onClick={() => setActiveId(tab.id)}
+                      className={`cursor-pointer border-b-2 pb-1 text-body transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                        selected
+                          ? "border-heading text-heading"
+                          : "border-transparent text-secondary hover:text-heading"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Mobile: active label + chevron disclosure */}
+              <FlowViewMenu
+                tabs={sorted}
+                activeId={safeActiveId}
+                onSelect={setActiveId}
+                labelledBy={titleId}
+              />
+            </>
           ) : null}
         </div>
 
@@ -404,7 +424,7 @@ export function FlowDiagram({
           </div>
 
           <div
-            className="absolute bottom-5 right-5 z-20 grid grid-cols-3 gap-1.5 sm:bottom-6 sm:right-6 sm:gap-2"
+            className="absolute bottom-5 right-5 z-20 hidden grid-cols-3 gap-2 md:bottom-6 md:right-6 md:grid"
             role="group"
             aria-label="Diagram controls"
             onPointerDown={(event) => event.stopPropagation()}
@@ -436,6 +456,96 @@ export function FlowDiagram({
         </div>
       </div>
     </FlowDiagramContext.Provider>
+  );
+}
+
+function FlowViewMenu({
+  tabs,
+  activeId,
+  onSelect,
+  labelledBy,
+}: {
+  tabs: FlowTabData[];
+  activeId: string | null;
+  onSelect: (id: string) => void;
+  labelledBy?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const active = tabs.find((tab) => tab.id === activeId) ?? tabs[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  if (!active) return null;
+
+  return (
+    <div
+      ref={rootRef}
+      className="relative flex w-full min-w-0 items-center px-5 py-3.5 md:hidden"
+    >
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-labelledby={labelledBy}
+        onClick={() => setOpen((prev) => !prev)}
+        className="text-body text-heading flex min-w-0 max-w-full cursor-pointer items-center gap-2 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        <span className="min-w-0 truncate">{active.label}</span>
+        <span
+          aria-hidden
+          className={`inline-flex shrink-0 transition-transform duration-[400ms] ease-out motion-reduce:transition-none ${
+            open ? "rotate-90" : "rotate-0"
+          }`}
+        >
+          <Icon name="chevron-right" size={20} />
+        </span>
+      </button>
+
+      {open ? (
+        <ul
+          role="listbox"
+          aria-label="Flow diagram views"
+          className="absolute inset-x-3 top-full z-30 mt-1 max-h-64 min-w-48 overflow-auto rounded-xl border border-border bg-bg py-2 shadow-lg"
+        >
+          {tabs.map((tab) => {
+            const selected = tab.id === active.id;
+            return (
+              <li key={tab.id} role="option" aria-selected={selected}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelect(tab.id);
+                    setOpen(false);
+                  }}
+                  className={`text-body w-full cursor-pointer px-4 py-2.5 text-left transition-colors hover:bg-surface focus-visible:bg-surface focus-visible:outline-none ${
+                    selected ? "text-heading" : "text-secondary"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+    </div>
   );
 }
 

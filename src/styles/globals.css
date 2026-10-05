@@ -195,10 +195,19 @@
   animation: hero-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
 }
 
+/*
+ * Mobile nav menu modal — same fade/rise as page enters, snappier (accordion-
+ * adjacent 400ms) so chrome doesn’t feel like a page transition.
+ */
+.nav-menu-enter {
+  animation: hero-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-enter,
   .case-study-enter,
-  .case-study-body-enter {
+  .case-study-body-enter,
+  .nav-menu-enter {
     animation: none;
   }
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   createContext,
   useCallback,
@@ -14,6 +13,7 @@ import {
 import { Icon } from "@/components/Icon";
 import { FigureVideo } from "@/components/case-study/FigureVideo";
 import { ExpandableMedia } from "@/components/media-lightbox/ExpandableMedia";
+import { SmartImage } from "@/components/SmartImage";
 
 interface CarouselSlideData {
   id: string;
@@ -240,7 +240,7 @@ export function MediaCarouselSlide({
             />
           ) : null
         ) : src ? (
-          <Image
+          <SmartImage
             src={src}
             alt={alt}
             fill

@@ -1,12 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
-import Image from "next/image";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { CursorFollowPreview } from "@/components/CursorFollowPreview";
 import { HeroAvatar, type AvatarImage } from "@/components/HeroAvatar";
 import { HeroFolder } from "@/components/HeroFolder";
 import { Link } from "@/components/Link";
+import { SmartImage } from "@/components/SmartImage";
 import {
   EXIT_EASE,
   HOME_EXIT_EVENT,
@@ -91,7 +99,7 @@ function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
     <p>
       {prefix}{" "}
       <span
-        className="inline"
+        className="whitespace-nowrap"
         onMouseEnter={showPreview}
         onMouseMove={trackCursor}
         onMouseLeave={hidePreview}
@@ -99,12 +107,12 @@ function SubheroLine({ prefix, link, suffix }: HeroSubItem) {
         <Link href={link.href} disabled={link.disabled}>
           {link.label}
         </Link>
+        {suffix}
       </span>
-      {suffix}
       {hasPreview ? (
         <CursorFollowPreview visible={visible} point={point} placement="right">
           {previewImage ? (
-            <Image
+            <SmartImage
               src={previewImage}
               alt=""
               fill
@@ -128,14 +136,17 @@ function ExitFade({
   play,
   children,
   className,
+  style,
 }: {
   play: boolean;
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 }) {
   return (
     <motion.span
       className={className}
+      style={style}
       animate={{ opacity: play ? 0 : 1 }}
       transition={{
         duration: play ? HOME_EXIT_MS / 1000 : 0,
@@ -145,6 +156,80 @@ function ExitFade({
       {children}
     </motion.span>
   );
+}
+
+/** Min phrase that should stay on one tagline row when space allows. */
+const TAGLINE_OPENER = "building digital experiences";
+
+/**
+ * Tagline max-width: at least the longest name/role flex line, expanded if
+ * needed so `TAGLINE_OPENER` fits on one line (capped by the row’s available
+ * width).
+ */
+function useTaglineMaxWidth(ref: RefObject<HTMLElement | null>) {
+  const [width, setWidth] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const measure = () => {
+      const kids = Array.from(el.children) as HTMLElement[];
+      if (kids.length === 0) return;
+
+      // Group by vertical overlap — `items-center` makes tops differ across
+      // the same flex line when children have different heights.
+      const lines: HTMLElement[][] = [];
+      for (const kid of kids) {
+        const kidBox = kid.getBoundingClientRect();
+        const group = lines.find((line) =>
+          line.some((other) => {
+            const otherBox = other.getBoundingClientRect();
+            return (
+              kidBox.top < otherBox.bottom && otherBox.top < kidBox.bottom
+            );
+          }),
+        );
+        if (group) group.push(kid);
+        else lines.push([kid]);
+      }
+
+      let longest = 0;
+      for (const group of lines) {
+        const left = Math.min(
+          ...group.map((k) => k.getBoundingClientRect().left),
+        );
+        const right = Math.max(
+          ...group.map((k) => k.getBoundingClientRect().right),
+        );
+        longest = Math.max(longest, right - left);
+      }
+
+      const cs = getComputedStyle(el);
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      let openerWidth = 0;
+      if (ctx) {
+        ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        openerWidth = ctx.measureText(TAGLINE_OPENER).width;
+      }
+
+      const available = el.getBoundingClientRect().width;
+      const target = Math.max(longest, Math.ceil(openerWidth));
+      setWidth(Math.ceil(Math.min(target, available || target)));
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [ref]);
+
+  return width;
 }
 
 /**
@@ -164,6 +249,8 @@ export function Hero({
 }: HeroProps) {
   const reduceMotion = useReducedMotion();
   const [exiting, setExiting] = useState(false);
+  const nameRowRef = useRef<HTMLSpanElement>(null);
+  const taglineMaxWidth = useTaglineMaxWidth(nameRowRef);
 
   useEffect(() => {
     const onExit = () => setExiting(true);
@@ -174,10 +261,12 @@ export function Hero({
   const play = exiting && !reduceMotion;
 
   return (
-    <section className="hero-enter flex flex-col gap-4 pt-16 pb-32 md:pb-48">
-      {/* hero text — semantic h1, visually text-h2 */}
-      <h1 className="text-h2">
-        <span className="flex flex-wrap items-center gap-x-[7px] gap-y-1">
+    <section className="hero-enter flex flex-col gap-4 pt-8 pb-32 md:pt-16 md:pb-48 lg:pb-0">
+      <h1 className="text-h2 max-w-2xl">
+        <span
+          ref={nameRowRef}
+          className="flex flex-wrap items-center gap-x-2 gap-y-1"
+        >
           <HeroAvatar name={name} images={avatarImages} />
           <ExitFade play={play} className="text-secondary">
             {lead}
@@ -186,11 +275,14 @@ export function Hero({
             <HeroFolder role={role} />
           </ExitFade>
         </span>
-        <ExitFade play={play} className="block text-secondary">
-          {tagline[0]}
-        </ExitFade>
-        <ExitFade play={play} className="block text-secondary">
-          {tagline[1]}
+        {/* Prefer the name/role line measure; widen enough for the opener
+            phrase to sit on one line when the column allows. */}
+        <ExitFade
+          play={play}
+          className="block text-secondary"
+          style={taglineMaxWidth ? { maxWidth: taglineMaxWidth } : undefined}
+        >
+          {tagline[0]} {tagline[1]}
         </ExitFade>
       </h1>
 
