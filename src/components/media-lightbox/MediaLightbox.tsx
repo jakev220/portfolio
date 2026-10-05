@@ -221,22 +221,23 @@ export function MediaLightbox() {
         onClick={(event) => event.stopPropagation()}
       >
         {/*
-          Fixed stage at every breakpoint (same idea as desktop): panel height
-          stays stable across gallery items; shorter media is centered.
+          Mobile/sm: fixed stage height (stable swipe, current look).
+          md+: min-height keeps swipe from collapsing; media sets height up to
+          a viewport max so portrait frames aren’t trapped in a tall empty box.
         */}
         <div
-          className="relative flex h-[min(32dvh,260px)] w-full touch-pan-y items-center justify-center sm:h-[min(42dvh,360px)] md:h-[min(56dvh,560px)] lg:h-[min(70dvh,720px)]"
+          className="relative flex h-[min(32dvh,260px)] w-full touch-pan-y items-center justify-center sm:h-[min(42dvh,360px)] md:h-auto md:min-h-[min(40dvh,360px)]"
           onPointerDown={onSwipePointerDown}
           onPointerMove={onSwipePointerMove}
           onPointerUp={onSwipePointerUp}
           onPointerCancel={onSwipePointerCancel}
         >
           {active.video ? (
-            <div className="relative inline-flex max-h-full max-w-full">
+            <div className="relative inline-flex max-h-full max-w-full md:max-h-[min(70dvh,720px)]">
               <video
                 ref={videoRef}
                 key={active.video}
-                className="h-auto max-h-full w-auto max-w-full cursor-pointer rounded-lg object-contain"
+                className="h-auto max-h-full w-auto max-w-full cursor-pointer rounded-lg object-contain md:max-h-[min(70dvh,720px)]"
                 src={active.video}
                 poster={active.poster}
                 muted
@@ -285,7 +286,7 @@ export function MediaLightbox() {
               width={1600}
               height={1000}
               unoptimized
-              className="h-auto max-h-full w-auto max-w-full rounded-lg object-contain"
+              className="h-auto max-h-full w-auto max-w-full rounded-lg object-contain md:max-h-[min(70dvh,720px)]"
               sizes="(min-width: 1024px) 64rem, (min-width: 768px) 48rem, 100vw"
               priority
               draggable={false}
@@ -293,7 +294,11 @@ export function MediaLightbox() {
           ) : null}
         </div>
 
-        <p className="text-caption m-0 w-full text-center text-secondary">
+        {/*
+          Reserve two caption lines so 1- vs 2-line copy doesn’t resize the
+          panel (and jump the centered dialog) while swiping the gallery.
+        */}
+        <p className="text-caption m-0 line-clamp-2 min-h-[2lh] w-full text-center text-secondary">
           {caption || "\u00a0"}
         </p>
 
