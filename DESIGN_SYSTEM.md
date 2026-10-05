@@ -250,7 +250,7 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Metric count-up | `Metric` | Value springs from 0 → target when scrolled into view |
 | Nav chrome | `Nav` | Show/hide + backdrop via `useChromeVisibility`; desktop inline links + theme cycle; below `md` square `menu` control opens a fade/rise modal (`.nav-menu-enter`) with links + Light/Dark/System |
 | Case-study back | `CaseStudyBack` | Same chrome visibility as nav; same-origin referrer → `router.back()`, else `/` |
-| Lightbox | `MediaLightbox` | Mobile/sm: fixed stage height; md+: min-height + media-driven height (max 70dvh). Caption reserves 2 lines (`min-h-[2lh]` + clamp) so swipes don’t jump. Swipe + arrows; video play/pause flash (click / Space) |
+| Lightbox | `MediaLightbox` | Fixed stage heights (mobile unchanged; md/lg moderated). Panel `shrink-0 max-h-full` so dialog flex can’t crush media over captions. Caption reserves 2 lines. Swipe + arrows; video play/pause flash (click / Space) |
 
 ### When adding new motion
 

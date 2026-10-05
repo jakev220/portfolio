@@ -217,27 +217,28 @@ export function MediaLightbox() {
       </button>
 
       <div
-        className="flex w-full min-w-0 max-w-lg cursor-default flex-col items-center gap-4 overflow-hidden rounded-xl bg-lightbox-panel px-3 py-3 sm:gap-6 sm:px-6 sm:py-6 md:max-w-3xl lg:max-w-5xl"
+        className="flex max-h-full w-full min-w-0 max-w-lg shrink-0 cursor-default flex-col items-center gap-4 overflow-hidden rounded-xl bg-lightbox-panel px-3 py-3 sm:gap-6 sm:px-6 sm:py-6 md:max-w-3xl lg:max-w-5xl"
         onClick={(event) => event.stopPropagation()}
       >
         {/*
-          Mobile/sm: fixed stage height (stable swipe, current look).
-          md+: min-height keeps swipe from collapsing; media sets height up to
-          a viewport max so portrait frames aren’t trapped in a tall empty box.
+          Fixed stage heights keep swipe layout stable. Media object-contains
+          inside; stage clips so nothing can paint over the caption. Panel is
+          shrink-0 + max-h-full so the dialog flexbox can’t crush it and cause
+          overflow-bleed when chrome + media exceed the viewport.
         */}
         <div
-          className="relative flex h-[min(32dvh,260px)] w-full touch-pan-y items-center justify-center sm:h-[min(42dvh,360px)] md:h-auto md:min-h-[min(40dvh,360px)]"
+          className="relative flex h-[min(32dvh,260px)] w-full shrink-0 touch-pan-y items-center justify-center overflow-hidden sm:h-[min(42dvh,360px)] md:h-[min(48dvh,480px)] lg:h-[min(56dvh,600px)]"
           onPointerDown={onSwipePointerDown}
           onPointerMove={onSwipePointerMove}
           onPointerUp={onSwipePointerUp}
           onPointerCancel={onSwipePointerCancel}
         >
           {active.video ? (
-            <div className="relative inline-flex max-h-full max-w-full md:max-h-[min(70dvh,720px)]">
+            <div className="relative inline-flex max-h-full max-w-full">
               <video
                 ref={videoRef}
                 key={active.video}
-                className="h-auto max-h-full w-auto max-w-full cursor-pointer rounded-lg object-contain md:max-h-[min(70dvh,720px)]"
+                className="h-auto max-h-full w-auto max-w-full cursor-pointer rounded-lg object-contain"
                 src={active.video}
                 poster={active.poster}
                 muted
@@ -286,7 +287,7 @@ export function MediaLightbox() {
               width={1600}
               height={1000}
               unoptimized
-              className="h-auto max-h-full w-auto max-w-full rounded-lg object-contain md:max-h-[min(70dvh,720px)]"
+              className="h-auto max-h-full w-auto max-w-full rounded-lg object-contain"
               sizes="(min-width: 1024px) 64rem, (min-width: 768px) 48rem, 100vw"
               priority
               draggable={false}
@@ -298,13 +299,13 @@ export function MediaLightbox() {
           Reserve two caption lines so 1- vs 2-line copy doesn’t resize the
           panel (and jump the centered dialog) while swiping the gallery.
         */}
-        <p className="text-caption m-0 line-clamp-2 min-h-[2lh] w-full text-center text-secondary">
+        <p className="text-caption m-0 line-clamp-2 min-h-[2lh] w-full shrink-0 text-center text-secondary">
           {caption || "\u00a0"}
         </p>
 
         {showNav ? (
           <nav
-            className="flex w-full min-w-0 max-w-full items-center gap-2 sm:gap-4"
+            className="flex w-full min-w-0 max-w-full shrink-0 items-center justify-center gap-2 sm:gap-3"
             aria-label="Media gallery"
           >
             <button
@@ -317,7 +318,7 @@ export function MediaLightbox() {
             </button>
 
             <div
-              className="flex min-w-0 flex-1 items-center justify-center gap-1.5 overflow-x-auto sm:gap-2"
+              className="flex min-w-0 max-w-full items-center justify-center gap-1.5 overflow-x-auto sm:gap-2"
               role="tablist"
             >
               {items.map((item, index) => {
