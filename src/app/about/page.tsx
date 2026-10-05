@@ -16,21 +16,27 @@ const [biography, ...restBlocks] = about.blocks;
 
 /**
  * About page v3 — home-page shell (`max-w-7xl` → ~80px side margins at 1440)
- * with a 12-col / 16px-gap content system. Hero → lede uses a tighter step so
- * the lede can naturally peek on tall viewports; sections below stack at 160px.
+ * with a 12-col / 16px-gap content system. Desktop: hero sits in a ~95dvh
+ * band (nav + hero→lede padding inside) so the About lede peeks ~5% with
+ * the same step as before (`pb-16/24/32`). Sections below stack at 160px.
  */
 export default function AboutPage() {
   return (
-    <article className="mx-auto w-full max-w-7xl px-6 pt-32 pb-24 md:pt-48 lg:pt-64">
+    <article className="mx-auto w-full max-w-7xl px-6 pb-24">
+      {/*
+        Nav clearance + hero→lede step live inside the 95dvh band so the lede
+        still peeks ~5% without sitting flush under the collage.
+      */}
+      <div className="flex flex-col pb-16 pt-32 md:pb-24 md:pt-48 lg:min-h-[95dvh] lg:pb-32 lg:pt-64">
+        <AboutHero greeting={about.greeting} photos={about.heroPhotos} />
+      </div>
+
       <div className="flex flex-col gap-40">
-        <div className="flex flex-col gap-16 md:gap-24 lg:gap-32">
-          <AboutHero greeting={about.greeting} photos={about.heroPhotos} />
-          <HangStatement
-            label={about.lede.label}
-            body={about.lede.body}
-            className="about-lede-enter"
-          />
-        </div>
+        <HangStatement
+          label={about.lede.label}
+          body={about.lede.body}
+          className="about-lede-enter"
+        />
 
         {biography ? (
           <AboutProse

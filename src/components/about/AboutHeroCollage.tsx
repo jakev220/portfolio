@@ -105,8 +105,8 @@ function CollageTile({
           className="object-cover"
           sizes={
             aspect === "wide"
-              ? "(min-width: 1024px) 416px, 66vw"
-              : "(min-width: 1024px) 200px, 33vw"
+              ? "(min-width: 768px) 40vw, 66vw"
+              : "(min-width: 768px) 20vw, 33vw"
           }
           priority={order < 2}
         />

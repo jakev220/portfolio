@@ -19,8 +19,8 @@ export interface WorkSectionProps {
 /**
  * Home-page work section. Stack is the default at every breakpoint; the view
  * toggle is tablet+ only. Toggle sits in the hero’s lower empty space
- * (`absolute bottom-full`) so in-flow top padding doesn’t eat the ~10% Work
- * peek from `lg:min-h-[90dvh]` on the home hero.
+ * (`absolute bottom-full`) so in-flow top padding doesn’t eat the ~5% Work
+ * peek from `lg:min-h-[95dvh]` on the home hero.
  */
 export function WorkSection({ items }: WorkSectionProps) {
   const [variant, setVariant] = useState<CaseStudyCardVariant>("stack");
