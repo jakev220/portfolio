@@ -261,7 +261,7 @@ export function Hero({
   const play = exiting && !reduceMotion;
 
   return (
-    <section className="hero-enter flex flex-col gap-4 pt-8 pb-32 md:pt-16 md:pb-48 lg:pb-0">
+    <section className="hero-enter flex flex-col gap-4 pt-8 pb-32 md:pt-16 md:pb-48 lg:pt-0 lg:pb-0">
       <h1 className="text-h2 max-w-2xl">
         <span
           ref={nameRowRef}

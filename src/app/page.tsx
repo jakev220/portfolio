@@ -18,12 +18,15 @@ export default function HomePage() {
     coverAlt: item.title,
   }));
 
-  // Desktop: ~95dvh (incl. nav clearance) so Work peeks ~5%.
-  // Mobile/tablet: normal hero bottom padding — the 95dvh spacer is too tall.
+  // Desktop: ~95dvh band so Work peeks ~5%. Equal flex spacers center the
+  // hero in that band (nav is fixed, so no extra top bias). Mobile/tablet:
+  // normal stacking — the 95dvh spacer is too tall.
   return (
     <main className="mx-auto w-full max-w-7xl px-6">
-      <div className="flex flex-col pt-32 md:pt-48 lg:min-h-[95dvh] lg:pt-64">
+      <div className="flex flex-col pt-32 md:pt-48 lg:min-h-[95dvh] lg:pt-0">
+        <div className="hidden lg:block lg:flex-1" aria-hidden />
         <Hero {...hero} />
+        <div className="hidden lg:block lg:flex-1" aria-hidden />
       </div>
       <HomeExitShell>
         <WorkSection items={work} />
