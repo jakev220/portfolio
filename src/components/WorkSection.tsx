@@ -20,13 +20,14 @@ export interface WorkSectionProps {
  * Home-page work section. Stack is the default at every breakpoint; the view
  * toggle is tablet+ only. Toggle sits in the hero’s lower empty space
  * (`absolute bottom-full`) so in-flow top padding doesn’t eat the ~5% Work
- * peek from `lg:min-h-[95dvh]` on the home hero.
+ * peek from `lg:min-h-[95dvh]` on the home hero. `.work-enter` lags the hero
+ * so the peek doesn’t flash before the hero settle.
  */
 export function WorkSection({ items }: WorkSectionProps) {
   const [variant, setVariant] = useState<CaseStudyCardVariant>("stack");
 
   return (
-    <section aria-label="Selected work" className="relative">
+    <section aria-label="Selected work" className="work-enter relative">
       <div className="absolute bottom-full right-0 mb-12 hidden justify-end md:flex md:mb-16">
         <WorkViewToggle value={variant} onChange={setVariant} />
       </div>

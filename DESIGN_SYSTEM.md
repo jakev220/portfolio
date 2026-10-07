@@ -221,6 +221,7 @@ Signal: `beginHomeAboutExit()` dispatches `HOME_EXIT_EVENT`; `HomeExitShell` and
 | Class | Duration | Delay | Travel | Used by |
 |-------|----------|-------|--------|---------|
 | `.hero-enter` | 0.85s | — | `translateY(8px)` → 0 | Home `<Hero>` section |
+| `.work-enter` | 0.85s | 0.28s | `translateY(8px)` → 0 | Home Work section (lags hero so the peek doesn’t flash early) |
 | `.case-study-enter` | 0.85s | — | `translateY(8px)` → 0 | Case-study header (same keyframes as `.hero-enter`) |
 | `.case-study-body-enter` | 0.85s | 0.12s | `translateY(8px)` → 0 | Case-study MDX body (soft cascade after header) |
 | `.about-hero-tile` | 0.7s | — | `translateY(10px)` → 0 | About collage tiles (base) |

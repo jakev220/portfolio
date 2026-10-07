@@ -183,6 +183,14 @@
 }
 
 /*
+ * Home work peek — same fade/rise, delayed so the hero leads and the
+ * case-study card doesn’t appear before the hero enter finishes settling.
+ */
+.work-enter {
+  animation: hero-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
+}
+
+/*
  * Case-study enter — same fade/rise as the home hero. Applied to header and
  * body wrappers (not the article) so the fixed TOC isn’t trapped by transform.
  * Body lags slightly so the page reads as one soft cascade.
@@ -205,6 +213,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-enter,
+  .work-enter,
   .case-study-enter,
   .case-study-body-enter,
   .nav-menu-enter {
