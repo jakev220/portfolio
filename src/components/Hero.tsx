@@ -165,8 +165,9 @@ function ExitFade({
  * transition, surrounding copy fades out while the avatar reel rises and fades
  * on its own timeline.
  *
- * Tagline lines are authored as a pair and rendered with a hard break — avoids
- * the post-hydration wrap snap from measuring a fluid max-width.
+ * Tagline lines are authored as a pair. From `md` up they’re split with a
+ * hard break (stable, no measure snap); on small screens they flow as one
+ * phrase so the wrap stays even.
  */
 export function Hero({
   name,
@@ -201,8 +202,8 @@ export function Hero({
           </ExitFade>
         </span>
         <ExitFade play={play} className="block text-secondary">
-          {tagline[0]}
-          <br />
+          {tagline[0]}{" "}
+          <br className="hidden md:block" />
           {tagline[1]}
         </ExitFade>
       </h1>
