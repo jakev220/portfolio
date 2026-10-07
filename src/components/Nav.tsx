@@ -85,7 +85,7 @@ export function Nav({ items }: NavProps) {
         hidden ? "-translate-y-full" : "translate-y-0"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-end px-6 pt-20">
+      <div className="mx-auto flex max-w-7xl items-center justify-end px-6 pt-6 md:pt-12 lg:pt-20">
         {/* Desktop: inline links + theme toggle */}
         <div className="relative hidden items-center gap-6 rounded-xl px-4 py-2 sm:-mr-4 md:inline-flex">
           <div

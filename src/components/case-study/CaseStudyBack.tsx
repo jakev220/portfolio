@@ -36,7 +36,7 @@ export function CaseStudyBack() {
         hidden ? "-translate-y-full" : "translate-y-0"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-start px-6 pt-20">
+      <div className="mx-auto flex max-w-7xl items-center justify-start px-6 pt-6 md:pt-12 lg:pt-20">
         <div className="relative inline-flex sm:-ml-4">
           <div
             aria-hidden
