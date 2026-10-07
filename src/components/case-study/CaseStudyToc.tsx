@@ -64,15 +64,17 @@ function prefersHover(): boolean {
 /**
  * Desktop-only sticky case-study table of contents. Discovers sections from
  * {@link SectionLead} nodes marked with `data-case-study-toc`. Fine-pointer
- * hover opens the panel; a safe triangle between the handle and panel keeps
- * it open while the cursor moves diagonally. Click still toggles for
- * keyboard / coarse pointers. Escape closes. Scroll-spy drives a sliding pill
- * behind the active entry; links scroll to the section (smooth, or instant
- * when `prefers-reduced-motion`).
+ * hover opens the panel transiently (safe triangle across the gap); leaving
+ * closes it. Click pins the panel open with the handle surface fill until
+ * outside click, Escape, or clicking the handle again. Scroll-spy drives a
+ * sliding pill; links scroll to the section (smooth / instant for reduced
+ * motion).
  */
 export function CaseStudyToc() {
   const [entries, setEntries] = useState<TocEntry[]>([]);
   const [open, setOpen] = useState(false);
+  /** Click-latched open — ignores hover-leave until dismissed. */
+  const [pinned, setPinned] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [indicator, setIndicator] = useState({
     top: 0,
@@ -84,9 +86,12 @@ export function CaseStudyToc() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const closeTimerRef = useRef<number | null>(null);
+  const pinnedRef = useRef(false);
   /** Cursor exit point from the handle — apex of the safe triangle. */
   const exitPointRef = useRef<{ x: number; y: number } | null>(null);
   const panelId = useId();
+
+  pinnedRef.current = pinned;
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current !== null) {
@@ -95,6 +100,14 @@ export function CaseStudyToc() {
     }
   }, []);
 
+  const closeAll = useCallback(() => {
+    clearCloseTimer();
+    exitPointRef.current = null;
+    pinnedRef.current = false;
+    setPinned(false);
+    setOpen(false);
+  }, [clearCloseTimer]);
+
   const openPanel = useCallback(() => {
     clearCloseTimer();
     exitPointRef.current = null;
@@ -102,11 +115,12 @@ export function CaseStudyToc() {
   }, [clearCloseTimer]);
 
   const scheduleClose = useCallback(() => {
+    if (pinnedRef.current) return;
     clearCloseTimer();
     closeTimerRef.current = window.setTimeout(() => {
       closeTimerRef.current = null;
       exitPointRef.current = null;
-      setOpen(false);
+      if (!pinnedRef.current) setOpen(false);
     }, CLOSE_MS);
   }, [clearCloseTimer]);
 
@@ -199,9 +213,7 @@ export function CaseStudyToc() {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        clearCloseTimer();
-        exitPointRef.current = null;
-        setOpen(false);
+        closeAll();
         triggerRef.current?.focus();
       }
     };
@@ -210,13 +222,13 @@ export function CaseStudyToc() {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, clearCloseTimer]);
+  }, [open, closeAll]);
 
-  // Safe triangle: while open, keep the panel up if the cursor is over the
-  // handle, the panel, or the triangle from the handle-exit point to the
-  // panel’s near edge (covers diagonal travel across the gap).
+  // Safe triangle: while hover-open (not pinned), keep the panel up if the
+  // cursor is over the handle, the panel, or the triangle from the
+  // handle-exit point to the panel’s near edge.
   useEffect(() => {
-    if (!open || !prefersHover()) return;
+    if (!open || pinned || !prefersHover()) return;
 
     const onPointerMove = (event: PointerEvent) => {
       const trigger = triggerRef.current;
@@ -272,7 +284,7 @@ export function CaseStudyToc() {
     return () => {
       document.removeEventListener("pointermove", onPointerMove);
     };
-  }, [open, clearCloseTimer, scheduleClose]);
+  }, [open, pinned, clearCloseTimer, scheduleClose]);
 
   useEffect(() => {
     return () => clearCloseTimer();
@@ -281,9 +293,7 @@ export function CaseStudyToc() {
   const goTo = (id: string) => {
     scrollToId(id);
     setActiveId(id);
-    clearCloseTimer();
-    exitPointRef.current = null;
-    setOpen(false);
+    closeAll();
   };
 
   const onTriggerEnter = (event: ReactPointerEvent<HTMLButtonElement>) => {
@@ -293,7 +303,7 @@ export function CaseStudyToc() {
   };
 
   const onTriggerLeave = (event: ReactPointerEvent<HTMLButtonElement>) => {
-    if (!prefersHover()) return;
+    if (!prefersHover() || pinnedRef.current) return;
     exitPointRef.current = { x: event.clientX, y: event.clientY };
     // Don’t close immediately — pointermove + triangle decide.
   };
@@ -305,7 +315,7 @@ export function CaseStudyToc() {
   };
 
   const onPanelLeave = (event: ReactPointerEvent<HTMLElement>) => {
-    if (!prefersHover()) return;
+    if (!prefersHover() || pinnedRef.current) return;
     // Leaving the panel away from the handle → close; toward handle is
     // covered by moving back onto the trigger.
     const trigger = triggerRef.current;
@@ -324,25 +334,48 @@ export function CaseStudyToc() {
     scheduleClose();
   };
 
+  const onTriggerClick = () => {
+    clearCloseTimer();
+    exitPointRef.current = null;
+    if (pinned) {
+      closeAll();
+      return;
+    }
+    pinnedRef.current = true;
+    setPinned(true);
+    setOpen(true);
+  };
+
   if (entries.length === 0) return null;
 
   return (
-    <div className="pointer-events-none fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 lg:left-6 lg:block">
-      <div className="pointer-events-auto flex items-center">
+    <>
+      {pinned ? (
+        <button
+          type="button"
+          aria-label="Close table of contents"
+          className="fixed inset-0 z-30 hidden cursor-default bg-transparent lg:block"
+          onClick={closeAll}
+        />
+      ) : null}
+      {/*
+        Only the handle + panel take hits. The gap / safe-triangle region stays
+        pointer-events-none so a pinned outside-click can dismiss through it.
+      */}
+      <div className="pointer-events-none fixed left-4 top-1/2 z-40 hidden -translate-y-1/2 lg:left-6 lg:block">
+      <div className="flex items-center">
         <button
           ref={triggerRef}
           type="button"
           aria-expanded={open}
           aria-controls={panelId}
           aria-label={open ? "Close table of contents" : "Open table of contents"}
-          onClick={() => {
-            clearCloseTimer();
-            exitPointRef.current = null;
-            setOpen((prev) => !prev);
-          }}
+          onClick={onTriggerClick}
           onPointerEnter={onTriggerEnter}
           onPointerLeave={onTriggerLeave}
-          className="flex flex-col items-center justify-center gap-2.5 rounded-lg border border-transparent bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md transition-colors hover:bg-surface aria-expanded:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className={`pointer-events-auto flex flex-col items-center justify-center gap-2.5 rounded-lg border border-transparent bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md transition-colors hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+            open || pinned ? "bg-surface" : ""
+          }`}
         >
           <svg
             aria-hidden
@@ -380,7 +413,7 @@ export function CaseStudyToc() {
             aria-label="Case study contents"
             onPointerEnter={onPanelEnter}
             onPointerLeave={onPanelLeave}
-            className="ml-2 w-56 rounded-xl border border-border bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md"
+            className="pointer-events-auto ml-2 w-56 rounded-xl border border-border bg-[color-mix(in_srgb,var(--color-bg)_70%,transparent)] px-3 py-3.5 backdrop-blur-md"
           >
             <p className="text-label text-secondary m-0 px-2">Contents</p>
             <hr className="border-divider my-3" />
@@ -429,5 +462,6 @@ export function CaseStudyToc() {
         ) : null}
       </div>
     </div>
+    </>
   );
 }

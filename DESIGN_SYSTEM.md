@@ -241,7 +241,7 @@ Soft navigations remount the nodes and replay the same CSS animations.
 | Folder icons | `HeroFolder` | Hover opens tool icons (Framer) |
 | Accordion | `AccordionItem` | Ease-out **400ms** expand/collapse |
 | Flow diagram viewport | `FlowDiagram` | Drag to pan; **pinch** (trackpad `ctrlKey` wheel) to zoom; control pad **`md+` only**. Plain scroll does not zoom. View resets on tab change. Mobile: title stacks above a label + `chevron-right` disclosure (rotates 90° open, **400ms** ease-out) |
-| Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); fine-pointer hover opens panel with a safe triangle across the gap (click still toggles); handle + panel use nav-matching frost; scroll-spy active dash + sliding `bg-surface` pill; section jumps via `scrollToId` |
+| Case study TOC | `CaseStudyToc` | Fixed to viewport left (`left-4` / `lg:left-6`); hover opens transiently (safe triangle); click pins until outside click / Escape; handle `bg-surface` while open; scroll-spy pill; `scrollToId` jumps |
 | Skip / hash CTA | `SkipCta` + `scroll-to-id` | Hash smooth-scroll (instant when reduced motion). Optional `skipPreview` stills: cursor-follow trailer centered above cursor; instant cuts @ 400ms (avatar reel); static first frame when reduced motion; hover-fine only |
 | Keep exploring tiles | `ExploreTile` | Card zoom `scale-[1.04]` / 500ms; About/Play hover still-cycle @ 400ms (instant cuts); reduced motion skips cycle |
 | Formative bars | `ComparisonChart` / `ScienceJuryFormativeChart` | Bars grow on scroll into view (`whileInView`, once); widths are `%` of a full track (not flex-shrink bars) |
@@ -315,7 +315,7 @@ wraps with `<RightProse>` (6 of 7 cols); media can fill all 7 or use a centered
 | `<ProjectDetails>` | Beneath the header: meta column (Timeline / Team / Venue …) + project brief. Meta via nested `<Detail>`; brief as MDX prose. |
 | `<Section>` | The section unit: `<section>` that stacks its children with the case-study stack rhythm (`gap-12` / `sm:gap-16` / `lg:gap-20`). Between top-level sections, `.mdx-content` uses `gap-24` / `sm:gap-32` / `lg:gap-48`. Compose rows + media inside. |
 | `<SectionLead>` | Optional eyebrow + lead headline for a section opener. Labeled leads set `id` from the slugified label (or an explicit `id`) + `data-case-study-toc` for the sticky TOC (label-less leads are omitted). |
-| `<CaseStudyToc>` | Desktop-only (`lg+`) sticky contents widget. Mounted on the case-study page (not MDX). Auto-discovers labeled `SectionLead`s; hover (safe triangle) or click to expand; scroll-spy + smooth jump; handle stays viewport-left at all widths. |
+| `<CaseStudyToc>` | Desktop-only (`lg+`) sticky contents widget. Mounted on the case-study page (not MDX). Auto-discovers labeled `SectionLead`s; hover opens briefly, click pins; scroll-spy + smooth jump; handle stays viewport-left at all widths. |
 | `<Split>` | Lead row: heading (via `<SplitHeading>`) on the 4-col left + body prose on the right rail. |
 | `<WideHeading>` | Heading-only row at the same 8-col width as `SectionLead` leads. Default `h3` (optional `level="h2"`). |
 | `<MediaRow>` | Sub-row: `h3` heading (via `<SplitHeading>`) on the left + a `<Figure>` on the right. |
