@@ -167,7 +167,8 @@ function ExitFade({
  *
  * Tagline lines are authored as a pair. From `md` up they’re split with a
  * hard break (stable, no measure snap); on small screens they flow as one
- * phrase so the wrap stays even.
+ * phrase. The `h1` is slightly under full content width below `md` so wraps
+ * land cleaner without changing the desktop measure.
  */
 export function Hero({
   name,
@@ -191,7 +192,7 @@ export function Hero({
 
   return (
     <section className="hero-enter flex flex-col gap-4 pt-8 pb-32 md:pt-16 md:pb-48 lg:pt-0 lg:pb-0">
-      <h1 className="text-h2 max-w-2xl">
+      <h1 className="text-h2 max-w-[90%] md:max-w-2xl">
         <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <HeroAvatar name={name} images={avatarImages} />
           <ExitFade play={play} className="text-secondary">
